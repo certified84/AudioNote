@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <settings default="Audio notes copyright">
+    <module2copyright>
+      <element module="All" copyright="Audio notes copyright" />
+    </module2copyright>
+  </settings>
+</component>
