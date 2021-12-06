@@ -20,13 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.certified.audionote.R
 import com.certified.audionote.databinding.FragmentHomeBinding
+import com.certified.audionote.utils.Extensions.flags
+import com.certified.audionote.utils.colors
 
 class HomeFragment : Fragment() {
 
@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding?.root
     }
 
@@ -49,10 +49,10 @@ class HomeFragment : Fragment() {
         navController = Navigation.findNavController(view)
 
         binding?.apply {
-            val navOptions = NavOptions.Builder().setPopUpTo(R.id.homeFragment, false).build()
             btnSettings.setOnClickListener { navController.navigate(R.id.action_homeFragment_to_settingsFragment) }
             fabAddNote.setOnClickListener {
-                val action = HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(-1)
+                val action =
+                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(-1, colors.random())
                 navController.navigate(action)
 
             }
@@ -61,11 +61,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        val window = requireActivity().window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = this.resources.getColor(R.color.fragment_background)
+        flags(R.color.fragment_background)
     }
 
     override fun onDestroyView() {

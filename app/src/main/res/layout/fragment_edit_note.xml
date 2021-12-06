@@ -46,8 +46,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/_2sdp"
                 android:layout_gravity="center"
+                android:layout_margin="@dimen/_2sdp"
                 android:alpha=".15"
                 android:background="@color/black" />
 
@@ -64,18 +64,18 @@
             android:id="@+id/btn_share"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardUseCompatPadding="false"
             app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/_16sdp"
             app:layout_constraintTop_toTopOf="@+id/materialTextView">
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/_2sdp"
                 android:layout_gravity="center"
+                android:layout_margin="@dimen/_2sdp"
                 android:alpha=".15"
                 android:background="@color/black" />
 
@@ -124,8 +124,8 @@
             android:layout_marginStart="@dimen/_32sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:text="New Note "
-            android:textColor="@color/black_day_white_night"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+            android:textColor="@color/black_day_white_night"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/btn_back"
             app:layout_constraintTop_toTopOf="parent" />
@@ -168,8 +168,8 @@
                     android:gravity="start|top"
                     android:hint="@string/description"
                     android:inputType="textMultiLine"
-                    android:textStyle="normal"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textStyle="normal"
                     app:layout_constraintBottom_toTopOf="@+id/guideline2"
                     app:layout_constraintEnd_toEndOf="@+id/tv_note_title"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -198,9 +198,9 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/btn_record"
                     android:layout_width="wrap_content"
-                    android:layout_marginBottom="@dimen/_8sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -216,9 +216,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
             android:backgroundTint="@color/fab_background_tint"
             android:text="Save"
-            android:layout_marginBottom="@dimen/_16sdp"
             app:icon="@drawable/ic_done_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -237,9 +237,9 @@
                 android:id="@+id/parent_add_reminder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#AD9C00"
                 android:backgroundTint="#27FFFFFF"
                 android:backgroundTintMode="screen"
-                android:background="#AD9C00"
                 android:padding="@dimen/_8sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView

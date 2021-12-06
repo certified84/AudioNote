@@ -28,6 +28,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.certified.audionote.R
 import com.certified.audionote.databinding.FragmentEditNoteBinding
+import com.certified.audionote.utils.colors
 
 class EditNoteFragment : Fragment() {
 
@@ -35,6 +36,7 @@ class EditNoteFragment : Fragment() {
     private val binding: FragmentEditNoteBinding?
         get() = _binding
     private lateinit var navController: NavController
+    private val args: EditNoteFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +51,9 @@ class EditNoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        val args: EditNoteFragmentArgs by navArgs()
-
         binding?.apply {
             btnBack.setOnClickListener {
-                val navOptions = NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build()
-                navController.navigate(R.id.homeFragment, null, navOptions)
+                navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
             }
 
             var clickCount = 0
@@ -85,13 +84,7 @@ class EditNoteFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        val colors = listOf(
-            -504764, -740056, -1544140, -2277816, -3246217, -4024195,
-            -4224594, -7305542, -7551917, -7583749, -10712898, -10896368, -10965321,
-            -11419154, -14654801
-        )
-        val color = colors.random()
-
+        val color = args.noteColor
         val window = requireActivity().window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)

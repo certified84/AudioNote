@@ -16,54 +16,52 @@
 
 package com.certified.audionote.ui
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.certified.audionote.R
+import com.certified.audionote.databinding.FragmentSettingsBinding
+import com.certified.audionote.utils.Extensions.flags
 
-class SettingsFragment : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private var _binding: FragmentSettingsBinding? = null
+    private val binding: FragmentSettingsBinding?
+        get() = _binding
+    private lateinit var navController: NavController
 
-        PreferenceManager.getDefaultSharedPreferences(context)
-            .registerOnSharedPreferenceChangeListener(this)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        val darkModePreference = getString(R.string.key_theme)
-        key?.let {
-            if (it == darkModePreference) sharedPreferences?.let { pref ->
-                val darkModeValues = resources.getStringArray(R.array.pref_theme_values)
-                when (pref.getString(darkModePreference, darkModeValues[0])) {
-                    darkModeValues[0] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    darkModeValues[1] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    darkModeValues[2] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                }
-            }
+        navController = Navigation.findNavController(view)
+
+        binding?.apply {
+            btnBack.setOnClickListener { navController.navigate(R.id.action_settingsFragment_to_homeFragment) }
         }
     }
 
     override fun onResume() {
         super.onResume()
 
-        val window = requireActivity().window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = this.resources.getColor(R.color.fragment_background)
+        flags(R.color.fragment_background)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        PreferenceManager.getDefaultSharedPreferences(context)
-            .unregisterOnSharedPreferenceChangeListener(this)
+        _binding = null
     }
 }
