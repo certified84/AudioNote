@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2021 Samson Achiaga
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/fragment_background"
+        tools:context=".ui.HomeFragment">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardUseCompatPadding="false"
+            app:layout_constraintBottom_toBottomOf="@+id/materialTextView3"
+            app:layout_constraintEnd_toEndOf="@+id/fab_add_note"
+            app:layout_constraintTop_toTopOf="@+id/materialTextView2">
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_2sdp"
+                android:alpha=".15"
+                android:background="@color/black" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:tint="@color/black_day_white_night"
+                app:srcCompat="@drawable/ic_settings_black_24dp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialTextView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:text="Hi there,"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
+            android:textColor="@color/black_day_white_night"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialTextView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha=".7"
+            android:text="Welcome back"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            app:layout_constraintStart_toStartOf="@+id/materialTextView2"
+            app:layout_constraintTop_toBottomOf="@+id/materialTextView2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            tools:listitem="@layout/item_note"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_add_note"
+            app:layout_constraintEnd_toEndOf="@+id/fab_add_note"
+            app:layout_constraintStart_toStartOf="@+id/materialTextView2"
+            app:layout_constraintTop_toBottomOf="@+id/materialTextView3" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_empty_notes"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_undraw_empty"
+            app:layout_constraintBottom_toTopOf="@+id/fab_add_note"
+            app:layout_constraintEnd_toEndOf="@+id/fab_add_note"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/materialTextView3"
+            app:layout_constraintTop_toBottomOf="@+id/materialTextView3"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_empty_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_16sdp"
+            android:text="Your record list is empty. Click the button below to get started"
+            android:textAlignment="center"
+            android:alpha=".7"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_empty_notes"
+            app:layout_constraintEnd_toEndOf="@+id/iv_empty_notes"
+            app:layout_constraintStart_toStartOf="@+id/iv_empty_notes" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:backgroundTint="@color/fab_background_tint"
+            android:contentDescription="Add note button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_mic_black_24dp" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_empty_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tv_empty_notes,iv_empty_notes" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

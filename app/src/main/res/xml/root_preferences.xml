@@ -1,0 +1,73 @@
+<!--
+  ~ Copyright (c) 2021 Samson Achiaga
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/display">
+
+        <ListPreference
+            app:defaultValue="@string/default_theme"
+            app:dialogTitle="@string/choose_theme"
+            app:entries="@array/pref_theme"
+            app:entryValues="@array/pref_theme_values"
+            app:icon="@drawable/ic_brightness_medium_black_24dp"
+            app:key="@string/key_theme"
+            app:title="@string/theme"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="About">
+        <Preference
+            android:icon="@drawable/ic_person_black_24"
+            app:summary="Sammie_kt"
+            app:title="Developer">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/certified84" />
+        </Preference>
+
+        <Preference
+            android:icon="@drawable/ic_code_black_24dp"
+            app:summary="View project on Github"
+            app:title="Contribute">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/certified84/AudioNote" />
+        </Preference>
+
+        <Preference
+            android:icon="@drawable/ic_contact_support_black_24dp"
+            app:summary="Sammie_kt@pm.me"
+            app:title="Contact &amp; Feedback">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:mimeType="text/plain"
+                android:data="mailto:Sammie_kt@pm.me?subject=Feedback" />
+        </Preference>
+
+        <Preference
+            android:icon="@drawable/ic_info_black_24dp"
+            app:summary="App version, Licence and more"
+            app:title="About">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/shazomii/notely" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

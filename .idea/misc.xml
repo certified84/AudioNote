@@ -3,7 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_arrow_back_black_24dp.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_audio_not_playing.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_audio_playing.xml" value="0.25" />
+        <entry key="app/src/main/res/drawable/ic_brightness_medium_black_24dp.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_code_black_24dp.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_contact_support_black_24dp.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_info_black_24dp.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_person_black_24.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_undraw_empty.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_edit_note.xml" value="0.11865942028985507" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_record.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/item_note.xml" value="0.22" />
+        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.33" />
+        <entry key="app/src/main/res/xml/settings.xml" value="0.1" />
       </map>
     </option>
   </component>

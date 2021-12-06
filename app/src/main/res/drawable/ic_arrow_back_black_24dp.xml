@@ -14,13 +14,12 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="app_name">Audio Note</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="display">Display</string>
-    <string name="theme">Theme</string>
-    <string name="default_theme">MODE_NIGHT_FOLLOW_SYSTEM</string>
-    <string name="choose_theme">Choose theme</string>
-    <string name="key_theme">theme</string>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="@dimen/_24sdp"
+    android:height="@dimen/_24sdp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M16.62,2.99c-0.49,-0.49 -1.28,-0.49 -1.77,0L6.54,11.3c-0.39,0.39 -0.39,1.02 0,1.41l8.31,8.31c0.49,0.49 1.28,0.49 1.77,0s0.49,-1.28 0,-1.77L9.38,12l7.25,-7.25c0.48,-0.48 0.48,-1.28 -0.01,-1.76z"
+      android:fillColor="@color/black_day_white_night"/>
+</vector>

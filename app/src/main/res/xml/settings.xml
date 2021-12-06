@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2021 Samson Achiaga
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +14,6 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="app_name">Audio Note</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="display">Display</string>
-    <string name="theme">Theme</string>
-    <string name="default_theme">MODE_NIGHT_FOLLOW_SYSTEM</string>
-    <string name="choose_theme">Choose theme</string>
-    <string name="key_theme">theme</string>
-</resources>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+</PreferenceScreen>

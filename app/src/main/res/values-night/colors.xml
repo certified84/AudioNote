@@ -24,12 +24,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="black_day_white_night">@color/black</color>
-    <color name="fragment_background">@color/accent</color>
-    <color name="primary">#EFB8C8</color>
-    <color name="primary_dark">#D29DAC</color>
-    <color name="primary_darker">#986977</color>
-    <color name="accent">#FFECF1</color>
+    <color name="black_day_white_night">@color/white</color>
+    <color name="fragment_background">@color/primary</color>
+    <color name="primary">#313033</color>
+    <color name="primary_dark">#1C1B1F</color>
+    <color name="primary_darker">@color/black</color>
+    <color name="accent">@color/white</color>
     <color name="mic_accent">#939094</color>
-    <color name="fab_background_tint">@color/primary</color>
+    <color name="fab_background_tint">#EFB8C8</color>
 </resources>

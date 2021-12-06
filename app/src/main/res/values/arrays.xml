@@ -15,12 +15,23 @@
   -->
 
 <resources>
-    <string name="app_name">Audio Note</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="display">Display</string>
-    <string name="theme">Theme</string>
-    <string name="default_theme">MODE_NIGHT_FOLLOW_SYSTEM</string>
-    <string name="choose_theme">Choose theme</string>
-    <string name="key_theme">theme</string>
+    <!-- Theme Preference -->
+    <string-array name="pref_theme">
+        <item>System default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+    <string-array name="pref_theme_values">
+        <item>MODE_NIGHT_FOLLOW_SYSTEM</item>
+        <item>MODE_NIGHT_NO</item>
+        <item>MODE_NIGHT_YES</item>
+    </string-array>
+
+    <string-array name="filter_array">
+        <item>All</item>
+        <item>Today</item>
+        <item>Upcoming</item>
+        <item>Completed</item>
+    </string-array>
 </resources>
