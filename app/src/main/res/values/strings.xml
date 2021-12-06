@@ -23,4 +23,6 @@
     <string name="default_theme">MODE_NIGHT_FOLLOW_SYSTEM</string>
     <string name="choose_theme">Choose theme</string>
     <string name="key_theme">theme</string>
+    <string name="description">Description</string>
+    <string name="note_title_required">Note title (required)</string>
 </resources>

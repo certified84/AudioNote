@@ -13,7 +13,7 @@
         <entry key="app/src/main/res/drawable/ic_person_black_24.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_undraw_empty.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_edit_note.xml" value="0.11865942028985507" />
+        <entry key="app/src/main/res/layout/fragment_edit_note.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_record.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_note.xml" value="0.22" />

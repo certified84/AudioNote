@@ -26,18 +26,17 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="#27FFFFFF"
-        android:backgroundTintMode="screen"
-        android:background="#52FF00"
+        android:background="#AD9C00"
         tools:context=".ui.EditNoteFragment">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btn_back"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
-            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_16sdp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardUseCompatPadding="false"
             app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
@@ -68,7 +67,8 @@
             app:cardBackgroundColor="@android:color/transparent"
             app:cardUseCompatPadding="false"
             app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
-            app:layout_constraintEnd_toEndOf="@+id/tv_note_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/_16sdp"
             app:layout_constraintTop_toTopOf="@+id/materialTextView">
 
             <View
@@ -124,74 +124,92 @@
             android:layout_marginStart="@dimen/_32sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:text="New Note "
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textColor="@color/black_day_white_night"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/btn_back"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tv_note_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:background="@null"
-            android:gravity="start|top"
-            android:hint="Note title (required)"
-            android:inputType="textMultiLine"
-            android:maxLength="50"
-            android:text="@{note.title}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/btn_back"
-            app:layout_constraintTop_toBottomOf="@+id/materialTextView" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tv_note_description"
+        <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@null"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="Description"
-            android:inputType="textMultiLine"
-            android:textAppearance="?attr/textAppearanceBody1"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintEnd_toEndOf="@+id/tv_note_title"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/tv_note_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_note_title" />
+            android:paddingTop="@dimen/_16sdp"
+            app:layout_constraintBottom_toTopOf="@+id/materialCardView"
+            app:layout_constraintEnd_toEndOf="@+id/extendedFloatingActionButton"
+            app:layout_constraintStart_toStartOf="@+id/btn_back"
+            app:layout_constraintTop_toBottomOf="@+id/materialTextView">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".4" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <Chronometer
-            android:id="@+id/chronometer_note_timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="11dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
-            app:layout_constraintBottom_toTopOf="@+id/appCompatImageView4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_note_description" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_note_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="start|top"
+                    android:hint="@string/note_title_required"
+                    android:inputType="textMultiLine"
+                    android:maxLength="50"
+                    android:text="@{note.title}"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/appCompatImageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/extendedFloatingActionButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chronometer_note_timer"
-            app:srcCompat="@drawable/ic_mic_not_recording" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_note_description"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@null"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:hint="@string/description"
+                    android:inputType="textMultiLine"
+                    android:textStyle="normal"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_note_title"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/tv_note_title"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_note_title" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent=".4" />
+
+                <Chronometer
+                    android:id="@+id/chronometer_note_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_record"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_note_description" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/btn_record"
+                    android:layout_width="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/chronometer_note_timer"
+                    app:srcCompat="@drawable/ic_mic_not_recording" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/extendedFloatingActionButton"
@@ -210,14 +228,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:elevation="@dimen/_4sdp"
+            app:cardBackgroundColor="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:cardBackgroundColor="#52FF00">
+            app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/parent_add_reminder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:backgroundTint="#27FFFFFF"
+                android:backgroundTintMode="screen"
+                android:background="#AD9C00"
                 android:padding="@dimen/_8sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView

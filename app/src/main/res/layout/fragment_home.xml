@@ -25,6 +25,7 @@
         tools:context=".ui.HomeFragment">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btn_settings"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             app:cardBackgroundColor="@android:color/transparent"
@@ -34,7 +35,6 @@
             app:layout_constraintTop_toTopOf="@+id/materialTextView2">
 
             <View
-                android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"

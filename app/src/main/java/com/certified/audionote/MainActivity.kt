@@ -16,12 +16,30 @@
 
 package com.certified.audionote
 
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.PreferenceManager
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        isDarkModeEnabled()
+    }
+
+    private fun isDarkModeEnabled() {
+        val darkModePreference = getString(R.string.key_theme)
+        val darkModeValues = resources.getStringArray(R.array.pref_theme_values)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        when (preferences.getString(darkModePreference, darkModeValues[0])) {
+            darkModeValues[0] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            darkModeValues[1] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            darkModeValues[2] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
     }
 }

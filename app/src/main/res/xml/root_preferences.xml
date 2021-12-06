@@ -55,8 +55,7 @@
             app:summary="Sammie_kt@pm.me"
             app:title="Contact &amp; Feedback">
             <intent
-                android:action="android.intent.action.VIEW"
-                android:mimeType="text/plain"
+                android:action="android.intent.action.SENDTO"
                 android:data="mailto:Sammie_kt@pm.me?subject=Feedback" />
         </Preference>
 
