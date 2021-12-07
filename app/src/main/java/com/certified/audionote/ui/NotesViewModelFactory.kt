@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package com.certified.audionote.model
+package com.certified.audionote.ui
 
-import com.certified.audionote.utils.colors
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.certified.audionote.model.Note
 
-data class Note(
-    val id: Int = 0,
-    val title: String = "",
-    val description: String = "",
-    val color: Int = colors.random(),
-    val lastModificationDate: String = "",
-    val audioLength: String = "",
-    val size: String = "",
-    val reminder: String = ""
-)
+class NotesViewModelFactory(private val notes: List<Note>?): ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(NotesViewModel::class.java))
+            return NotesViewModel(notes) as T
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}

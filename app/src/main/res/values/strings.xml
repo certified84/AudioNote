@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">Audio Note</string>
+    <string name="app_name">Audio Notes</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="display">Display</string>

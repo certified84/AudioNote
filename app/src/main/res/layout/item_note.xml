@@ -28,13 +28,16 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         app:cardCornerRadius="@dimen/_8sdp"
+        app:cardBackgroundColor="@{note.color}"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="@dimen/_4sdp"
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/_8sdp"
-            android:background="#52FF00">
+            android:background="@{note.color}">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_note_title"
@@ -45,6 +48,7 @@
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="@{note.title}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textColor="@color/black_day_white_night"
                 android:textStyle="bold"
@@ -58,6 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_8sdp"
+                android:text="@{note.lastModificationDate}"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_note_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_note_title"
@@ -79,6 +84,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_record_length"
                 android:layout_width="wrap_content"
+                android:text="@{note.audioLength}"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:textStyle="bold"
@@ -92,6 +98,7 @@
                 android:id="@+id/tv_note_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{note.size}"
                 app:layout_constraintEnd_toEndOf="@+id/tv_note_last_modification_date"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tv_record_length"
@@ -116,6 +123,7 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:text="@{note.reminder}"
                 android:ellipsize="end"
                 android:alpha=".6"
                 app:layout_constraintEnd_toEndOf="@+id/tv_note_size"

@@ -71,10 +71,10 @@ class EditNoteFragment : Fragment() {
                 btnRecord.setImageResource(R.drawable.ic_audio_not_playing)
                 btnRecord.setOnClickListener {
                     if (clickCount == 0)
-                        btnRecord.setImageResource(R.drawable.ic_audio_not_playing)
+                        btnRecord.setImageResource(R.drawable.ic_audio_playing)
                             .run { clickCount++ }
                     else
-                        btnRecord.setImageResource(R.drawable.ic_audio_playing)
+                        btnRecord.setImageResource(R.drawable.ic_audio_not_playing)
                             .run { clickCount-- }
                 }
             }

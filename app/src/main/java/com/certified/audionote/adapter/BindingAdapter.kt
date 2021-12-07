@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package com.certified.audionote.model
+package com.certified.audionote.adapter
 
-import com.certified.audionote.utils.colors
+import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.certified.audionote.model.Note
 
-data class Note(
-    val id: Int = 0,
-    val title: String = "",
-    val description: String = "",
-    val color: Int = colors.random(),
-    val lastModificationDate: String = "",
-    val audioLength: String = "",
-    val size: String = "",
-    val reminder: String = ""
-)
+@BindingAdapter("listItems")
+fun bindItemRecyclerView(recyclerView: RecyclerView, data: List<Note>?) {
+    val adapter = recyclerView.adapter as NoteRecyclerAdapter
+    adapter.submitList(data)
+}

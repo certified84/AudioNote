@@ -21,12 +21,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.GridLayoutManager
 import com.certified.audionote.R
+import com.certified.audionote.adapter.NoteRecyclerAdapter
 import com.certified.audionote.databinding.FragmentHomeBinding
+import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.flags
 import com.certified.audionote.utils.colors
+import com.certified.audionote.utils.notes
 
 class HomeFragment : Fragment() {
 
@@ -48,14 +53,41 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
+        val viewModelFactory = NotesViewModelFactory(notes)
+        val viewModel: NotesViewModel by lazy {
+            ViewModelProvider(this, viewModelFactory)[NotesViewModel::class.java]
+        }
+
+        binding?.viewModel = viewModel
+        binding?.lifecycleOwner = this
+
+        viewModel.showEmptyNotesDesign.observe(viewLifecycleOwner) {
+            if (it)
+                binding?.groupEmptyNotes?.visibility = View.VISIBLE
+            else
+                binding?.groupEmptyNotes?.visibility = View.GONE
+        }
+
         binding?.apply {
             btnSettings.setOnClickListener { navController.navigate(R.id.action_homeFragment_to_settingsFragment) }
             fabAddNote.setOnClickListener {
                 val action =
                     HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(-1, colors.random())
                 navController.navigate(action)
-
             }
+
+            val layoutManager = GridLayoutManager(requireContext(), 2)
+            recyclerViewNotes.layoutManager = layoutManager
+
+            val adapter = NoteRecyclerAdapter(notes)
+            recyclerViewNotes.adapter = adapter
+            adapter.setOnItemClickedListener(object : NoteRecyclerAdapter.OnItemClickedListener{
+                override fun onItemClick(item: Note) {
+                    val action =
+                        HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(item.id, item.color)
+                    navController.navigate(action)
+                }
+            })
         }
     }
 
