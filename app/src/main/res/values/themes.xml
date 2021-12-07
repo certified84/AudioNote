@@ -31,4 +31,8 @@
 <!--        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>-->
     </style>
 
+    <style name="ShapeAppearanceOverlay.AudioNotes" parent="">
+        <item name="cornerSize">15%</item>
+    </style>
+
 </resources>

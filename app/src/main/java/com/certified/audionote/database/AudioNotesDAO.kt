@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package com.certified.audionote.model
+package com.certified.audionote.database
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.certified.audionote.utils.colors
+import androidx.lifecycle.LiveData
+import androidx.room.*
+import com.certified.audionote.model.Note
 
-@Entity(tableName = "notes_table")
-data class Note(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val title: String = "",
-    val description: String = "",
-    val color: Int = colors.random(),
-    val lastModificationDate: String = "",
-    val audioLength: String = "",
-    val size: String = "",
-    val reminder: String = ""
-)
+@Dao
+interface AudioNotesDAO {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNote(note: Note)
+
+    @Update
+    suspend fun updateNote(note: Note)
+
+    @Delete
+    suspend fun deleteNote(note: Note)
+
+    @Query("SELECT * FROM notes_table WHERE id = :noteId")
+    fun getNote(noteId: Int): Note
+
+    @Query("SELECT * FROM notes_table ORDER BY id")
+    fun getAllNotes(): LiveData<List<Note>?>
+}

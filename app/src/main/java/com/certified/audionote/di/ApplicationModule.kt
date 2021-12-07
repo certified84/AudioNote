@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package com.certified.audionote.model
+package com.certified.audionote.di
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.certified.audionote.utils.colors
+import android.content.Context
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 
-@Entity(tableName = "notes_table")
-data class Note(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val title: String = "",
-    val description: String = "",
-    val color: Int = colors.random(),
-    val lastModificationDate: String = "",
-    val audioLength: String = "",
-    val size: String = "",
-    val reminder: String = ""
-)
+@InstallIn(ActivityRetainedComponent::class)
+@Module
+class ApplicationModule {
+
+    @Provides
+    fun provideAppContext(@ApplicationContext context: Context): Context {
+        return context
+    }
+}

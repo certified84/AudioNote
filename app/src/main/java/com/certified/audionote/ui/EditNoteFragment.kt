@@ -29,7 +29,9 @@ import androidx.navigation.fragment.navArgs
 import com.certified.audionote.R
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.utils.colors
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditNoteFragment : Fragment() {
 
     private var _binding: FragmentEditNoteBinding? = null

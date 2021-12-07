@@ -19,9 +19,15 @@ package com.certified.audionote.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.certified.audionote.database.Repository
 import com.certified.audionote.model.Note
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NotesViewModel(private val noteList: List<Note>?) : ViewModel() {
+@HiltViewModel
+class NotesViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private val _notes = MutableLiveData<List<Note>?>()
     val notes: LiveData<List<Note>?>
@@ -36,7 +42,26 @@ class NotesViewModel(private val noteList: List<Note>?) : ViewModel() {
     }
 
     private fun getNotes() {
-        _notes.value = noteList
-        _showEmptyNotesDesign.value = noteList == null
+        val allNotes = repository.allNotes
+        _notes.value = allNotes.value
+        _showEmptyNotesDesign.value = allNotes.value == null
+    }
+
+    fun insertNote(note: Note) {
+        viewModelScope.launch {
+            repository.insertNote(note)
+        }
+    }
+
+    fun updateNote(note: Note) {
+        viewModelScope.launch {
+            repository.updateNote(note)
+        }
+    }
+
+    fun deleteNote(note: Note) {
+        viewModelScope.launch {
+            repository.deleteNote(note)
+        }
     }
 }

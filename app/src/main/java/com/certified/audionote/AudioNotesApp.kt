@@ -14,21 +14,10 @@
  * limitations under the License.
  */
 
-package com.certified.audionote.model
+package com.certified.audionote
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.certified.audionote.utils.colors
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-@Entity(tableName = "notes_table")
-data class Note(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val title: String = "",
-    val description: String = "",
-    val color: Int = colors.random(),
-    val lastModificationDate: String = "",
-    val audioLength: String = "",
-    val size: String = "",
-    val reminder: String = ""
-)
+@HiltAndroidApp
+class AudioNotesApp : Application()

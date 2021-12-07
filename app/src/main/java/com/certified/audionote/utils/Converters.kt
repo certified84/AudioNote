@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package com.certified.audionote.model
+package com.certified.audionote.utils
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.certified.audionote.utils.colors
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import androidx.room.TypeConverter
+import java.io.ByteArrayOutputStream
+import java.lang.Exception
 
-@Entity(tableName = "notes_table")
-data class Note(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val title: String = "",
-    val description: String = "",
-    val color: Int = colors.random(),
-    val lastModificationDate: String = "",
-    val audioLength: String = "",
-    val size: String = "",
-    val reminder: String = ""
-)
+class Converters {
+
+}

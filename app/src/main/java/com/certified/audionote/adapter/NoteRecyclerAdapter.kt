@@ -16,7 +16,6 @@
 
 package com.certified.audionote.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -25,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.databinding.ItemNoteBinding
 import com.certified.audionote.model.Note
 
-class NoteRecyclerAdapter(private val items: List<Note>) :
+class NoteRecyclerAdapter :
     ListAdapter<Note, NoteRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var listener: OnItemClickedListener
@@ -37,8 +36,8 @@ class NoteRecyclerAdapter(private val items: List<Note>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentItem = items[position]
-        holder.bind(currentItem)
+            val currentItem = getItem(position)
+            holder.bind(currentItem)
     }
 
     inner class ViewHolder(private val binding: ItemNoteBinding) :

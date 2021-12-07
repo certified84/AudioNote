@@ -20,13 +20,14 @@
 
     <application
         android:allowBackup="true"
+        android:name=".AudioNotesApp"
         android:icon="@drawable/ic_logo_audio_note"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_logo_audio_note"
         android:supportsRtl="true"
         android:theme="@style/Theme.AudioNote">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

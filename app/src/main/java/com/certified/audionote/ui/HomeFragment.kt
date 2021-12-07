@@ -21,24 +21,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.certified.audionote.R
 import com.certified.audionote.adapter.NoteRecyclerAdapter
+import com.certified.audionote.database.Repository
 import com.certified.audionote.databinding.FragmentHomeBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.flags
 import com.certified.audionote.utils.colors
-import com.certified.audionote.utils.notes
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding?
         get() = _binding
     private lateinit var navController: NavController
+    private var notes: List<Note>? = null
+
+    @Inject
+    lateinit var repository: Repository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,10 +61,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        val viewModelFactory = NotesViewModelFactory(notes)
-        val viewModel: NotesViewModel by lazy {
-            ViewModelProvider(this, viewModelFactory)[NotesViewModel::class.java]
-        }
+        val viewModelFactory = NotesViewModelFactory(repository)
+        val viewModel: NotesViewModel by viewModels { viewModelFactory }
 
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = this
@@ -79,12 +85,17 @@ class HomeFragment : Fragment() {
             val layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerViewNotes.layoutManager = layoutManager
 
-            val adapter = NoteRecyclerAdapter(notes)
+            val adapter = NoteRecyclerAdapter()
+            viewModel.notes.observe(viewLifecycleOwner, adapter::submitList)
+            adapter.submitList(notes)
             recyclerViewNotes.adapter = adapter
-            adapter.setOnItemClickedListener(object : NoteRecyclerAdapter.OnItemClickedListener{
+            adapter.setOnItemClickedListener(object : NoteRecyclerAdapter.OnItemClickedListener {
                 override fun onItemClick(item: Note) {
                     val action =
-                        HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(item.id, item.color)
+                        HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(
+                            item.id,
+                            item.color
+                        )
                     navController.navigate(action)
                 }
             })

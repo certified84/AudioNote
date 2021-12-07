@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package com.certified.audionote.model
+package com.certified.audionote.utils
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.certified.audionote.utils.colors
+enum class UIState {
+    LOADING,
+    HAS_DATA,
+    EMPTY
+}
 
-@Entity(tableName = "notes_table")
-data class Note(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val title: String = "",
-    val description: String = "",
-    val color: Int = colors.random(),
-    val lastModificationDate: String = "",
-    val audioLength: String = "",
-    val size: String = "",
-    val reminder: String = ""
-)
+enum class ReminderAvailableState {
+    HAS_REMINDER,
+    NO_REMINDER
+}
+
+enum class ReminderCompletionState {
+    COMPLETED,
+    ONGOING
+}

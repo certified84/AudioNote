@@ -18,12 +18,14 @@ package com.certified.audionote.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.certified.audionote.model.Note
+import com.certified.audionote.database.Repository
+import javax.inject.Inject
 
-class NotesViewModelFactory(private val notes: List<Note>?): ViewModelProvider.Factory {
+class NotesViewModelFactory (private val repository: Repository) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(NotesViewModel::class.java))
-            return NotesViewModel(notes) as T
+            return NotesViewModel(repository) as T
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
