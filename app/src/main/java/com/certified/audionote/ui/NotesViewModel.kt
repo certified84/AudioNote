@@ -30,8 +30,8 @@ import javax.inject.Inject
 class NotesViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     private val _notes = MutableLiveData<List<Note>?>()
-    val notes: LiveData<List<Note>?>
-        get() = _notes
+    lateinit var notes: LiveData<List<Note>?>
+//        get() = _notes
 
     private val _showEmptyNotesDesign = MutableLiveData<Boolean>()
     val showEmptyNotesDesign: LiveData<Boolean>
@@ -42,9 +42,9 @@ class NotesViewModel @Inject constructor(private val repository: Repository) : V
     }
 
     private fun getNotes() {
-        val allNotes = repository.allNotes
-        _notes.value = allNotes.value
-        _showEmptyNotesDesign.value = allNotes.value == null
+        val allNotes = repository.allNotes.value
+        notes = repository.allNotes
+        _showEmptyNotesDesign.value = notes.value == null
     }
 
     fun insertNote(note: Note) {
@@ -64,4 +64,6 @@ class NotesViewModel @Inject constructor(private val repository: Repository) : V
             repository.deleteNote(note)
         }
     }
+
+    fun getNote(noteId: Int) = repository.getNote(noteId)
 }

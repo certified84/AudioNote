@@ -29,7 +29,7 @@
         android:id="@+id/parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#AD9C00"
+        android:background="@{note.color}"
         tools:context=".ui.EditNoteFragment">
 
         <com.google.android.material.card.MaterialCardView
@@ -135,7 +135,7 @@
             android:layout_height="0dp"
             android:paddingTop="@dimen/_16sdp"
             app:layout_constraintBottom_toTopOf="@+id/materialCardView"
-            app:layout_constraintEnd_toEndOf="@+id/extendedFloatingActionButton"
+            app:layout_constraintEnd_toEndOf="@+id/fab_save_note"
             app:layout_constraintStart_toStartOf="@+id/btn_back"
             app:layout_constraintTop_toBottomOf="@+id/materialTextView">
 
@@ -212,7 +212,7 @@
         </ScrollView>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/extendedFloatingActionButton"
+            android:id="@+id/fab_save_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_16sdp"
@@ -237,7 +237,7 @@
                 android:id="@+id/parent_add_reminder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#AD9C00"
+                android:background="@{note.color}"
                 android:backgroundTint="#27FFFFFF"
                 android:backgroundTintMode="screen"
                 android:padding="@dimen/_8sdp">

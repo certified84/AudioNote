@@ -22,14 +22,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.certified.audionote.R
+import com.certified.audionote.database.Repository
 import com.certified.audionote.databinding.FragmentEditNoteBinding
-import com.certified.audionote.utils.colors
+import com.certified.audionote.model.Note
+import com.certified.audionote.utils.Extensions.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditNoteFragment : Fragment() {
@@ -37,8 +40,13 @@ class EditNoteFragment : Fragment() {
     private var _binding: FragmentEditNoteBinding? = null
     private val binding: FragmentEditNoteBinding?
         get() = _binding
+
+    @Inject
+    lateinit var repository: Repository
     private lateinit var navController: NavController
     private val args: EditNoteFragmentArgs by navArgs()
+    private val viewModel: NotesViewModel by viewModels()
+    private lateinit var _note: Note
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,42 +68,84 @@ class EditNoteFragment : Fragment() {
 
             var clickCount = 0
             if (args.noteId == -1) {
+//                TODO("Use viewBinding to hide these views")
                 btnShare.visibility = View.GONE
                 btnDelete.visibility = View.GONE
+
                 btnRecord.setOnClickListener {
                     if (clickCount == 0)
+//                        TODO("Start the recording")
                         btnRecord.setImageResource(R.drawable.ic_mic_recording).run { clickCount++ }
                     else
+//                        TODO("Stop the recording")
                         btnRecord.setImageResource(R.drawable.ic_mic_not_recording)
                             .run { clickCount-- }
                 }
+
+                fabSaveNote.setOnClickListener {
+                    val noteTitle = tvNoteTitle.text.toString().trim()
+                    if (noteTitle.isNotBlank()) {
+                        viewModel.insertNote(Note(title = noteTitle, color = args.noteColor))
+                        showToast("Note saved")
+                        navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                    } else {
+                        showToast("The note title is required")
+                        tvNoteTitle.requestFocus()
+                    }
+                }
             } else {
+
+                viewModel.getNote(args.noteId)?.observe(viewLifecycleOwner) { note ->
+                    _note = note
+                    tvNoteTitle.setText(note.title)
+                    tvNoteDescription.setText(note.description)
+                }
+
                 btnRecord.setImageResource(R.drawable.ic_audio_not_playing)
                 btnRecord.setOnClickListener {
-                    if (clickCount == 0)
+                    if (clickCount == 0) {
+//                        TODO("Start playing the recording")
                         btnRecord.setImageResource(R.drawable.ic_audio_playing)
                             .run { clickCount++ }
-                    else
+                    } else {
+//                        TODO("Stop playing the recording")
                         btnRecord.setImageResource(R.drawable.ic_audio_not_playing)
                             .run { clickCount-- }
+                    }
+                }
+
+                btnDelete.setOnClickListener { viewModel.deleteNote(_note) }
+
+                fabSaveNote.setOnClickListener {
+                    val note = Note()
+                    note.id = _note.id
+                    if (note.title.isNotBlank())
+                        viewModel.updateNote(note)
+                    else {
+                        showToast("The note title is required")
+                        tvNoteTitle.requestFocus()
+                    }
                 }
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    fun shareNote(note: Note) {
+        showToast("Coming soon")
+        TODO("Not yet Implemented")
+    }
 
-        val color = args.noteColor
+    private fun updateStatusBarColor(color: Int) {
         val window = requireActivity().window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor = color
+    }
 
-        binding?.apply {
-            parent.setBackgroundColor(color)
-            parentAddReminder.setBackgroundColor(color)
-        }
+    override fun onResume() {
+        super.onResume()
+
+        updateStatusBarColor(args.noteColor)
     }
 
     override fun onDestroyView() {

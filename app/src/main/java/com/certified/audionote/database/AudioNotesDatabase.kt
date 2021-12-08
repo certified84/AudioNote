@@ -16,55 +16,13 @@
 
 package com.certified.audionote.database
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.certified.audionote.model.Note
-import com.certified.audionote.utils.Converters
-import com.certified.audionote.utils.notes
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Database(entities = [Note::class], version = 1, exportSchema = false)
 //@TypeConverters(Converters::class)
 abstract class AudioNotesDatabase : RoomDatabase() {
 
     abstract fun audioNotesDao(): AudioNotesDAO
-
-    companion object {
-        @Volatile
-        private var INSTANCE: AudioNotesDatabase? = null
-
-        private val roomCallback = object : Callback() {
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                for (note in notes)
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val audioNotesDAO = INSTANCE?.audioNotesDao()
-                        audioNotesDAO?.insertNote(note)
-                    }
-            }
-        }
-
-        @Synchronized
-        fun getInstance(context: Context): AudioNotesDatabase {
-            var instance = INSTANCE
-
-            if (instance == null) {
-                instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AudioNotesDatabase::class.java,
-                    "notes_database"
-                ).fallbackToDestructiveMigration()
-                    .addCallback(roomCallback)
-                    .build()
-                INSTANCE = instance
-            }
-            return instance
-        }
-    }
 }

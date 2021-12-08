@@ -17,9 +17,9 @@
 package com.certified.audionote.di
 
 import android.content.Context
+import androidx.room.Room
 import com.certified.audionote.database.AudioNotesDAO
 import com.certified.audionote.database.AudioNotesDatabase
-import com.certified.audionote.database.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,15 +33,14 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context): AudioNotesDatabase {
-        return AudioNotesDatabase.getInstance(context)
-    }
+    fun provideAudioNotesDatabase(@ApplicationContext context: Context) =
+        Room.databaseBuilder(context, AudioNotesDatabase::class.java, "other_database.db")
+            .fallbackToDestructiveMigration()
+            .build()
 
+    @Singleton
     @Provides
     fun provideNoteDao(database: AudioNotesDatabase): AudioNotesDAO {
         return database.audioNotesDao()
     }
-
-    @Provides
-    fun provideRepository(audioNotesDAO: AudioNotesDAO) = Repository(audioNotesDAO)
 }

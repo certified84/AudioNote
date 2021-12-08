@@ -36,8 +36,8 @@ class NoteRecyclerAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val currentItem = getItem(position)
-            holder.bind(currentItem)
+        val currentItem = getItem(position)
+        holder.bind(currentItem)
     }
 
     inner class ViewHolder(private val binding: ItemNoteBinding) :

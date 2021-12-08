@@ -32,4 +32,5 @@
     <color name="accent">#FFECF1</color>
     <color name="mic_accent">#939094</color>
     <color name="fab_background_tint">@color/primary</color>
+    <color name="about_icon_color">#EFB8C8</color>
 </resources>

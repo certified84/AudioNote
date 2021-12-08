@@ -25,7 +25,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 
 @InstallIn(ActivityRetainedComponent::class)
 @Module
-class ApplicationModule {
+object ApplicationModule {
 
     @Provides
     fun provideAppContext(@ApplicationContext context: Context): Context {

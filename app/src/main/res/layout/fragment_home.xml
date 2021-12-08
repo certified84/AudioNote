@@ -96,7 +96,7 @@
             android:id="@+id/iv_empty_notes"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/ic_undraw_empty"
+            android:src="@drawable/ic_undraw_void"
             app:layout_constraintBottom_toTopOf="@+id/fab_add_note"
             app:layout_constraintEnd_toEndOf="@+id/fab_add_note"
             app:layout_constraintHorizontal_bias="1.0"

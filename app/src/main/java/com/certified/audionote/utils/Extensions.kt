@@ -17,6 +17,7 @@
 package com.certified.audionote.utils
 
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.certified.audionote.R
 
@@ -26,5 +27,13 @@ object Extensions {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor = this.resources.getColor(color)
+    }
+
+    fun Fragment.showToast(message: String) {
+        Toast.makeText(
+            requireContext(),
+            message,
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

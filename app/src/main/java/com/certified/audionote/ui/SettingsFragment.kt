@@ -51,6 +51,7 @@ class SettingsFragment : Fragment() {
 
         binding?.apply {
             btnBack.setOnClickListener { navController.navigate(R.id.action_settingsFragment_to_homeFragment) }
+            groupAbout.setOnClickListener { navController.navigate(R.id.action_settingsFragment_to_aboutFragment) }
         }
     }
 
