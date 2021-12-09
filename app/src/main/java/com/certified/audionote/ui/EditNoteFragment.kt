@@ -16,11 +16,13 @@
 
 package com.certified.audionote.ui
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -31,11 +33,13 @@ import com.certified.audionote.database.Repository
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.showToast
+import com.certified.audionote.utils.hasPermission
+import com.certified.audionote.utils.requestPermission
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EditNoteFragment : Fragment() {
+class EditNoteFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentEditNoteBinding? = null
     private val binding: FragmentEditNoteBinding?
@@ -47,6 +51,7 @@ class EditNoteFragment : Fragment() {
     private val args: EditNoteFragmentArgs by navArgs()
     private val viewModel: NotesViewModel by viewModels()
     private lateinit var _note: Note
+    private var clickCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,9 +67,13 @@ class EditNoteFragment : Fragment() {
         navController = Navigation.findNavController(view)
 
         binding?.apply {
+
             btnBack.setOnClickListener {
                 navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
             }
+            btnShare.setOnClickListener { shareNote(_note) }
+            btnRecord.setOnClickListener(this@EditNoteFragment)
+            fabSaveNote.setOnClickListener(this@EditNoteFragment)
 
             if (args.noteId == -1) {
                 _note = Note()
@@ -75,75 +84,42 @@ class EditNoteFragment : Fragment() {
                     binding?.note = note
                 }
 
-            var clickCount = 0
             if (args.noteId == -1) {
 //                TODO("Use viewBinding to hide these views")
                 btnShare.visibility = View.GONE
                 btnDelete.visibility = View.GONE
 
-                btnRecord.setOnClickListener {
-                    if (clickCount == 0)
-//                        TODO("Start the recording")
-                        btnRecord.setImageResource(R.drawable.ic_mic_recording).run { clickCount++ }
-                    else
-//                        TODO("Stop the recording")
-                        btnRecord.setImageResource(R.drawable.ic_mic_not_recording)
-                            .run { clickCount-- }
-                }
-
-                fabSaveNote.setOnClickListener {
-                    val noteTitle = tvNoteTitle.text.toString().trim()
-                    if (noteTitle.isNotBlank()) {
-                        viewModel.insertNote(Note(title = noteTitle, color = args.noteColor))
-                        showToast("Note saved")
-                        navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
-                    } else {
-                        showToast("The note title is required")
-                        tvNoteTitle.requestFocus()
-                    }
-                }
             } else {
-
-                btnRecord.setImageResource(R.drawable.ic_audio_not_playing)
-                btnRecord.setOnClickListener {
-                    if (clickCount == 0) {
-//                        TODO("Start playing the recording")
-                        btnRecord.setImageResource(R.drawable.ic_audio_playing)
-                            .run { clickCount++ }
-                    } else {
-//                        TODO("Stop playing the recording")
-                        btnRecord.setImageResource(R.drawable.ic_audio_not_playing)
-                            .run { clickCount-- }
-                    }
-                }
-
-                btnDelete.setOnClickListener {
-                    navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
-                    viewModel.deleteNote(_note)
-                    showToast("Note deleted")
-                }
-
-                fabSaveNote.setOnClickListener {
-                    val note = _note.copy(
-                        title = tvNoteTitle.text.toString().trim(),
-                        description = tvNoteDescription.text.toString().trim()
+                btnRecord.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_audio_not_playing,
+                        null
                     )
-                    if (note.title.isNotBlank()) {
-                        viewModel.updateNote(note)
-                        navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
-                    }
-                    else {
-                        showToast("The note title is required")
-                        tvNoteTitle.requestFocus()
-                    }
-                }
+                )
             }
         }
     }
 
-    fun shareNote(note: Note) {
+    private fun startRecording() {
+        showToast("Started recording")
+    }
+
+    private fun stopRecording() {
+        showToast("Stopped recording")
+    }
+
+    private fun startPlayingRecording() {
+        showToast("Started playing recording")
+    }
+
+    private fun stopPlayingRecording() {
+        showToast("Stopped playing recording")
+    }
+
+    private fun shareNote(note: Note) {
         showToast("Coming soon")
-        TODO("Not yet Implemented")
+//        TODO("Not yet Implemented")
     }
 
     private fun updateStatusBarColor(color: Int) {
@@ -162,5 +138,98 @@ class EditNoteFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(p0: View?) {
+        binding?.apply {
+            if (args.noteId == -1) {
+                when (p0) {
+                    btnRecord -> {
+                        if (clickCount == 0) {
+                            if (hasPermission(requireContext(), Manifest.permission.RECORD_AUDIO))
+                                btnRecord.setImageDrawable(
+                                    ResourcesCompat.getDrawable(
+                                        resources,
+                                        R.drawable.ic_mic_recording,
+                                        null
+                                    )
+                                ).run {
+                                    clickCount++
+                                    startRecording()
+                                }
+                            else
+                                requestPermission(
+                                    requireActivity(),
+                                    "This permission is required to able to enable audio recording",
+                                    MainActivity.RECORD_AUDIO_PERMISSION_CODE,
+                                    Manifest.permission.RECORD_AUDIO
+                                )
+                        } else {
+                            btnRecord.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    resources, R.drawable.ic_mic_not_recording, null
+                                )
+                            )
+                                .run {
+                                    clickCount--
+                                    stopRecording()
+                                }
+                        }
+                    }
+                    fabSaveNote -> {
+                        val noteTitle = tvNoteTitle.text.toString().trim()
+                        if (noteTitle.isNotBlank()) {
+                            viewModel.insertNote(Note(title = noteTitle, color = args.noteColor))
+                            showToast("Note saved")
+                            navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                        } else {
+                            showToast("The note title is required")
+                            tvNoteTitle.requestFocus()
+                        }
+                    }
+                }
+            } else {
+                when (p0) {
+                    btnRecord -> {
+                        if (clickCount == 0) {
+                            btnRecord.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    resources,
+                                    R.drawable.ic_audio_playing, null
+                                )
+                            )
+                                .run {
+                                    clickCount++
+                                    startPlayingRecording()
+                                }
+                        } else {
+                            btnRecord.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    resources,
+                                    R.drawable.ic_audio_not_playing, null
+                                )
+                            )
+                                .run {
+                                    clickCount--
+                                    stopPlayingRecording()
+                                }
+                        }
+                    }
+                    fabSaveNote -> {
+                        val note = _note.copy(
+                            title = tvNoteTitle.text.toString().trim(),
+                            description = tvNoteDescription.text.toString().trim()
+                        )
+                        if (note.title.isNotBlank()) {
+                            viewModel.updateNote(note)
+                            navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                        } else {
+                            showToast("The note title is required")
+                            tvNoteTitle.requestFocus()
+                        }
+                    }
+                }
+            }
+        }
     }
 }

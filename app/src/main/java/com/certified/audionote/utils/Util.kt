@@ -16,13 +16,27 @@
 
 package com.certified.audionote.utils
 
-import com.certified.audionote.model.Note
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import com.vmadalin.easypermissions.EasyPermissions
 
 val colors = listOf(
     -504764, -740056, -1544140, -2277816, -3246217, -4024195,
     -4224594, -7305542, -7551917, -7583749, -10712898, -10896368, -10965321,
     -11419154, -14654801
 )
+
+fun path(activity: Activity): String? {
+    return activity.getExternalFilesDir("/")?.absolutePath
+}
+
+fun hasPermission(context: Context, permission: String) =
+    EasyPermissions.hasPermissions(context, permission)
+
+fun requestPermission(activity: Activity, message: String, requestCode: Int, permission: String) {
+    EasyPermissions.requestPermissions(activity, message, requestCode, permission)
+}
 
 //val notes = listOf(
 //    Note(

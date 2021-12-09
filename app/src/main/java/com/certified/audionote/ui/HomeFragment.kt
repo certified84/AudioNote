@@ -17,7 +17,6 @@
 package com.certified.audionote.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,7 @@ import com.certified.audionote.databinding.FragmentHomeBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.flags
 import com.certified.audionote.utils.colors
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -86,6 +86,26 @@ class HomeFragment : Fragment() {
             }
 
             setUpRecyclerView(recyclerViewNotes)
+
+            val bottomSheetBehavior =
+                BottomSheetBehavior.from(bottomSheetDialogLayout.bottomSheetDialog)
+            bottomSheetBehavior.addBottomSheetCallback(object :
+                BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    if (newState == BottomSheetBehavior.STATE_HIDDEN)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+                }
+            })
+            bottomSheetDialogLayout.linearLayoutCompat.setOnClickListener {
+                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                else
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
         }
     }
 

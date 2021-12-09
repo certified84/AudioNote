@@ -27,12 +27,13 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:background="@color/fragment_background"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/fragment_background"
+            android:layout_marginBottom="@dimen/_32sdp"
             tools:context=".ui.HomeFragment">
 
             <com.google.android.material.card.MaterialCardView
@@ -145,7 +146,9 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <include layout="@layout/bottom_sheet_dialog" />
+        <include
+            android:id="@+id/bottom_sheet_dialog_layout"
+            layout="@layout/bottom_sheet_dialog" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

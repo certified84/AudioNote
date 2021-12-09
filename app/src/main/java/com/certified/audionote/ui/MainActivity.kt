@@ -16,15 +16,19 @@
 
 package com.certified.audionote.ui
 
+import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import com.certified.audionote.R
+import com.certified.audionote.utils.requestPermission
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,5 +46,36 @@ class MainActivity : AppCompatActivity() {
             darkModeValues[1] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             darkModeValues[2] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        if (requestCode == RECORD_AUDIO_PERMISSION_CODE)
+            if (EasyPermissions.somePermissionDenied(this, perms.first()))
+                SettingsDialog.Builder(this).build().show()
+            else
+                requestPermission(
+                    this,
+                    "This permission is required to able to enable audio recording",
+                    RECORD_AUDIO_PERMISSION_CODE,
+                    Manifest.permission.RECORD_AUDIO
+                )
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+//        TODO("Not yet implemented")
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    companion object {
+        val RECORD_AUDIO_PERMISSION_CODE = 100
     }
 }

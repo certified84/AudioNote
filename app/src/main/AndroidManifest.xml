@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2021 Samson Achiaga
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +17,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.certified.audionote">
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <application
-        android:allowBackup="true"
         android:name=".AudioNotesApp"
+        android:allowBackup="true"
         android:icon="@drawable/ic_logo_audio_note"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_logo_audio_note"
