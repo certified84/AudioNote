@@ -26,6 +26,7 @@
 
     <color name="black_day_white_night">@color/black</color>
     <color name="fragment_background">@color/accent</color>
+    <color name="other_fragment_background">@color/primary_darker</color>
     <color name="primary">#EFB8C8</color>
     <color name="primary_dark">#D29DAC</color>
     <color name="primary_darker">#986977</color>

@@ -17,17 +17,19 @@
 package com.certified.audionote.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.certified.audionote.R
 import com.certified.audionote.databinding.FragmentSplashBinding
 import com.certified.audionote.utils.Extensions.flags
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SplashFragment : Fragment() {
 
@@ -47,10 +49,14 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         navController = Navigation.findNavController(view)
         flags(R.color.fragment_background)
-        val handler = Handler(Looper.myLooper()!!)
-        handler.postDelayed({navController.navigate(R.id.action_splashFragment_to_homeFragment)}, 5000)
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(3000L)
+            navController.navigate(R.id.action_splashFragment_to_homeFragment)
+        }
     }
 
     override fun onDestroyView() {

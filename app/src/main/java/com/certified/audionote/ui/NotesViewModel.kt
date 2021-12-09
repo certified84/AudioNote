@@ -23,6 +23,7 @@ import androidx.lifecycle.viewModelScope
 import com.certified.audionote.database.Repository
 import com.certified.audionote.model.Note
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,19 +49,19 @@ class NotesViewModel @Inject constructor(private val repository: Repository) : V
     }
 
     fun insertNote(note: Note) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.insertNote(note)
         }
     }
 
     fun updateNote(note: Note) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.updateNote(note)
         }
     }
 
     fun deleteNote(note: Note) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.deleteNote(note)
         }
     }

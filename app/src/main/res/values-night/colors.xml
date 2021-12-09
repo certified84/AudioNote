@@ -26,6 +26,7 @@
 
     <color name="black_day_white_night">@color/white</color>
     <color name="fragment_background">@color/primary</color>
+    <color name="other_fragment_background">@color/primary_darker</color>
     <color name="primary">#313033</color>
     <color name="primary_dark">#1C1B1F</color>
     <color name="primary_darker">@color/black</color>

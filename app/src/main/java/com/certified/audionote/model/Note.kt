@@ -20,15 +20,32 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.certified.audionote.utils.colors
 
+/**
+ * The Note class represent the domain model i.e the
+ * object visible to the app user.
+ *
+ * @param id        id of the note
+ * @param title     title of the note
+ * @param description      content of the note
+ * @param color     color of the note
+ * @param lastModificationDate      date the note was created/modified
+ * @param audioLength       The length of the audio recording
+ * @param size      Basically the size of the audio in MB in the device
+ * @param started   whether or note the reminder is active
+ * @param reminder  date set for a reminder in the note
+ *
+ **/
+
 @Entity(tableName = "notes_table")
 data class Note(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    var id: Int = 0,
     val title: String = "",
     val description: String = "",
     val color: Int = colors.random(),
     val lastModificationDate: String = "",
     val audioLength: String = "",
     val size: String = "",
-    val reminder: String = ""
+    var started: Boolean = false,
+    val reminder: String = "Add a reminder to this note"
 )

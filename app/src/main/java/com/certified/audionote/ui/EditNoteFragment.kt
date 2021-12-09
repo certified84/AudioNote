@@ -66,6 +66,15 @@ class EditNoteFragment : Fragment() {
                 navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
             }
 
+            if (args.noteId == -1) {
+                _note = Note()
+                binding?.note = _note
+            } else
+                viewModel.getNote(args.noteId)?.observe(viewLifecycleOwner) { note ->
+                    _note = note
+                    binding?.note = note
+                }
+
             var clickCount = 0
             if (args.noteId == -1) {
 //                TODO("Use viewBinding to hide these views")
@@ -95,12 +104,6 @@ class EditNoteFragment : Fragment() {
                 }
             } else {
 
-                viewModel.getNote(args.noteId)?.observe(viewLifecycleOwner) { note ->
-                    _note = note
-                    tvNoteTitle.setText(note.title)
-                    tvNoteDescription.setText(note.description)
-                }
-
                 btnRecord.setImageResource(R.drawable.ic_audio_not_playing)
                 btnRecord.setOnClickListener {
                     if (clickCount == 0) {
@@ -114,13 +117,21 @@ class EditNoteFragment : Fragment() {
                     }
                 }
 
-                btnDelete.setOnClickListener { viewModel.deleteNote(_note) }
+                btnDelete.setOnClickListener {
+                    navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                    viewModel.deleteNote(_note)
+                    showToast("Note deleted")
+                }
 
                 fabSaveNote.setOnClickListener {
-                    val note = Note()
-                    note.id = _note.id
-                    if (note.title.isNotBlank())
+                    val note = _note.copy(
+                        title = tvNoteTitle.text.toString().trim(),
+                        description = tvNoteDescription.text.toString().trim()
+                    )
+                    if (note.title.isNotBlank()) {
                         viewModel.updateNote(note)
+                        navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                    }
                     else {
                         showToast("The note title is required")
                         tvNoteTitle.requestFocus()

@@ -34,7 +34,7 @@ class DatabaseModule {
     @Singleton
     @Provides
     fun provideAudioNotesDatabase(@ApplicationContext context: Context) =
-        Room.databaseBuilder(context, AudioNotesDatabase::class.java, "other_database.db")
+        Room.databaseBuilder(context, AudioNotesDatabase::class.java, "audio_notes_database.db")
             .fallbackToDestructiveMigration()
             .build()
 
