@@ -17,7 +17,10 @@
 package com.certified.audionote.ui
 
 import android.Manifest
+import android.media.MediaRecorder
 import android.os.Bundle
+import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,9 +36,11 @@ import com.certified.audionote.database.Repository
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.showToast
+import com.certified.audionote.utils.filePath
 import com.certified.audionote.utils.hasPermission
 import com.certified.audionote.utils.requestPermission
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -52,6 +57,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
     private val viewModel: NotesViewModel by viewModels()
     private lateinit var _note: Note
     private var clickCount = 0
+    private var mediaRecorder: MediaRecorder? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +74,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
 
         binding?.apply {
 
+            chronometerNoteTimer.base = SystemClock.elapsedRealtime()
             btnBack.setOnClickListener {
                 navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
             }
@@ -82,6 +89,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                 viewModel.getNote(args.noteId)?.observe(viewLifecycleOwner) { note ->
                     _note = note
                     binding?.note = note
+                    binding?.chronometerNoteTimer?.text = note.audioLength as CharSequence
                 }
 
             if (args.noteId == -1) {
@@ -102,10 +110,36 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
     }
 
     private fun startRecording() {
+        binding?.chronometerNoteTimer?.base = SystemClock.elapsedRealtime()
+        binding?.chronometerNoteTimer?.start()
+        val filePath = filePath(requireActivity())
+        val fileName = "${binding?.tvNoteTitle?.text.toString().trim()}.3gp"
         showToast("Started recording")
+        mediaRecorder = MediaRecorder()
+        mediaRecorder?.apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setOutputFile("$filePath/$fileName")
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+
+            try {
+                prepare()
+            } catch (e: IOException) {
+                showToast("An error occurred")
+            }
+
+            start()
+        }
     }
 
     private fun stopRecording() {
+        binding?.chronometerNoteTimer?.stop()
+        _note.audioLength = binding?.chronometerNoteTimer?.text.toString()
+        mediaRecorder?.apply {
+            stop()
+            release()
+        }
+        mediaRecorder = null
         showToast("Stopped recording")
     }
 
@@ -147,15 +181,20 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                     btnRecord -> {
                         if (clickCount == 0) {
                             if (hasPermission(requireContext(), Manifest.permission.RECORD_AUDIO))
-                                btnRecord.setImageDrawable(
-                                    ResourcesCompat.getDrawable(
-                                        resources,
-                                        R.drawable.ic_mic_recording,
-                                        null
-                                    )
-                                ).run {
-                                    clickCount++
-                                    startRecording()
+                                if (tvNoteTitle.text.toString().trim().isNotBlank())
+                                    btnRecord.setImageDrawable(
+                                        ResourcesCompat.getDrawable(
+                                            resources,
+                                            R.drawable.ic_mic_recording,
+                                            null
+                                        )
+                                    ).run {
+                                        clickCount++
+                                        startRecording()
+                                    }
+                                else {
+                                    showToast("The note title is required")
+                                    tvNoteTitle.requestFocus()
                                 }
                             else
                                 requestPermission(
@@ -179,7 +218,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                     fabSaveNote -> {
                         val noteTitle = tvNoteTitle.text.toString().trim()
                         if (noteTitle.isNotBlank()) {
-                            viewModel.insertNote(Note(title = noteTitle, color = args.noteColor))
+                            viewModel.insertNote(_note.copy(title = noteTitle, color = args.noteColor))
                             showToast("Note saved")
                             navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
                         } else {

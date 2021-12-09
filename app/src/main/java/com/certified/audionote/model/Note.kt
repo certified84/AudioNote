@@ -40,12 +40,12 @@ import com.certified.audionote.utils.colors
 data class Note(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
-    val title: String = "",
-    val description: String = "",
-    val color: Int = colors.random(),
-    val lastModificationDate: String = "",
-    val audioLength: String = "",
-    val size: String = "",
+    var title: String = "",
+    var description: String = "",
+    var color: Int = colors.random(),
+    var lastModificationDate: String = "",
+    var audioLength: String = "",
+    var size: String = "",
     var started: Boolean = false,
     val reminder: String = "Add a reminder to this note"
 )
