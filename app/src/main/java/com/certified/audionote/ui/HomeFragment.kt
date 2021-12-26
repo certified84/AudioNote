@@ -32,11 +32,11 @@ import com.certified.audionote.database.Repository
 import com.certified.audionote.databinding.FragmentHomeBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.flags
+import com.certified.audionote.utils.UIState
 import com.certified.audionote.utils.colors
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -66,14 +66,16 @@ class HomeFragment : Fragment() {
 
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = this
+        binding?.uiState = viewModel.uiState
 
-        viewModel.notes.observe(viewLifecycleOwner, adapter::submitList)
-
-        viewModel.showEmptyNotesDesign.observe(viewLifecycleOwner) {
-            if (it)
-                binding?.groupEmptyNotes?.visibility = View.VISIBLE
-            else
-                binding?.groupEmptyNotes?.visibility = View.GONE
+        viewModel.run {
+            notes.observe(viewLifecycleOwner) {
+                if (it != null && it.isNotEmpty())
+                    uiState.set(UIState.HAS_DATA)
+                else
+                    uiState.set(UIState.EMPTY)
+                adapter.submitList(it)
+            }
         }
 
         binding?.apply {

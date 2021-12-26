@@ -20,6 +20,14 @@
 
     <data>
 
+        <import type="androidx.databinding.ObservableField" />
+
+        <import type="com.certified.audionote.utils.UIState" />
+
+        <variable
+            name="uiState"
+            type="ObservableField&lt;UIState>" />
+
         <variable
             name="note"
             type="com.certified.audionote.model.Note" />
@@ -39,9 +47,9 @@
             android:layout_marginStart="@dimen/_16sdp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardUseCompatPadding="false"
-            app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/materialTextView">
+            app:layout_constraintTop_toTopOf="@+id/tv_title">
 
             <View
                 android:layout_width="match_parent"
@@ -67,9 +75,9 @@
             android:layout_marginEnd="@dimen/_16sdp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardUseCompatPadding="false"
-            app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/materialTextView">
+            app:layout_constraintTop_toTopOf="@+id/tv_title">
 
             <View
                 android:layout_width="match_parent"
@@ -96,9 +104,9 @@
             android:layout_marginEnd="@dimen/_16sdp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardUseCompatPadding="false"
-            app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
             app:layout_constraintEnd_toStartOf="@+id/btn_share"
-            app:layout_constraintTop_toTopOf="@+id/materialTextView">
+            app:layout_constraintTop_toTopOf="@+id/tv_title">
 
             <View
                 android:layout_width="match_parent"
@@ -118,7 +126,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/materialTextView"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_32sdp"
@@ -137,14 +145,14 @@
             app:layout_constraintBottom_toTopOf="@+id/materialCardView"
             app:layout_constraintEnd_toEndOf="@+id/fab_save_note"
             app:layout_constraintStart_toStartOf="@+id/btn_back"
-            app:layout_constraintTop_toBottomOf="@+id/materialTextView">
+            app:layout_constraintTop_toBottomOf="@+id/tv_title">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tv_note_title"
+                    android:id="@+id/et_note_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -160,7 +168,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tv_note_description"
+                    android:id="@+id/et_note_description"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@null"
@@ -172,10 +180,10 @@
                     android:textStyle="normal"
                     android:text="@{note.description}"
                     app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                    app:layout_constraintEnd_toEndOf="@+id/tv_note_title"
+                    app:layout_constraintEnd_toEndOf="@+id/et_note_title"
                     app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/tv_note_title"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_note_title" />
+                    app:layout_constraintStart_toStartOf="@+id/et_note_title"
+                    app:layout_constraintTop_toBottomOf="@+id/et_note_title" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline2"
@@ -194,7 +202,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_note_description" />
+                    app:layout_constraintTop_toBottomOf="@+id/et_note_description" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/btn_record"

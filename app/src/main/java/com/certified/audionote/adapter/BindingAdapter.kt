@@ -16,6 +16,7 @@
 
 package com.certified.audionote.adapter
 
+import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.model.Note
@@ -24,4 +25,9 @@ import com.certified.audionote.model.Note
 fun bindItemRecyclerView(recyclerView: RecyclerView, data: List<Note>?) {
     val adapter = recyclerView.adapter as NoteRecyclerAdapter
     adapter.submitList(data)
+}
+
+@BindingAdapter("visible")
+fun View.setVisible(visible: Boolean) {
+    visibility = if (visible) View.VISIBLE else View.GONE
 }

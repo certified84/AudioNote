@@ -20,6 +20,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import com.vmadalin.easypermissions.EasyPermissions
+import java.io.File
 
 val colors = listOf(
     -504764, -740056, -1544140, -2277816, -3246217, -4024195,
@@ -28,6 +29,7 @@ val colors = listOf(
 )
 
 fun filePath(activity: Activity): String? {
+//    val file = File()
     return activity.getExternalFilesDir("/")?.absolutePath
 }
 

@@ -25,7 +25,7 @@ import javax.inject.Singleton
 @Singleton
 class Repository @Inject constructor(private val audioNotesDAO: AudioNotesDAO) {
 
-    val allNotes: LiveData<List<Note>?> = audioNotesDAO.getAllNotes()
+    val allNotes: LiveData<List<Note>> = audioNotesDAO.getAllNotes()
 
     suspend fun insertNote(note: Note) {
         audioNotesDAO.insertNote(note)
@@ -39,15 +39,15 @@ class Repository @Inject constructor(private val audioNotesDAO: AudioNotesDAO) {
         audioNotesDAO.deleteNote(note)
     }
 
-    fun getNote(noteId: Int): LiveData<Note>? {
-        return try {
-            audioNotesDAO.getNote(noteId)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-            null
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            null
-        }
+    fun getNote(noteId: Int): LiveData<Note> {
+//        return try {
+            return audioNotesDAO.getNote(noteId)
+//        } catch (e: ExecutionException) {
+//            e.printStackTrace()
+//            null
+//        } catch (e: InterruptedException) {
+//            e.printStackTrace()
+//            null
+//        }
     }
 }

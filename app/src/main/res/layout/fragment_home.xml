@@ -20,6 +20,14 @@
 
     <data>
 
+        <import type="androidx.databinding.ObservableField" />
+
+        <import type="com.certified.audionote.utils.UIState" />
+
+        <variable
+            name="uiState"
+            type="ObservableField&lt;UIState>" />
+
         <variable
             name="viewModel"
             type="com.certified.audionote.ui.NotesViewModel" />
@@ -96,6 +104,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/materialTextView3"
                 app:listItems="@{viewModel.notes}"
+                app:visible="@{uiState == UIState.HAS_DATA}"
                 tools:listitem="@layout/item_note" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -142,6 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                app:visible="@{uiState == UIState.EMPTY}"
                 app:constraint_referenced_ids="tv_empty_notes,iv_empty_notes" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

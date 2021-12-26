@@ -18,13 +18,14 @@ package com.certified.audionote.ui
 
 import android.Manifest
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -39,6 +40,7 @@ import com.certified.audionote.utils.Extensions.showToast
 import com.certified.audionote.utils.filePath
 import com.certified.audionote.utils.hasPermission
 import com.certified.audionote.utils.requestPermission
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import javax.inject.Inject
@@ -58,6 +60,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
     private lateinit var _note: Note
     private var clickCount = 0
     private var mediaRecorder: MediaRecorder? = null
+    private val files: Array<String> by lazy { requireContext().fileList() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,30 +77,25 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
 
         binding?.apply {
 
-            chronometerNoteTimer.base = SystemClock.elapsedRealtime()
             btnBack.setOnClickListener {
                 navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
             }
             btnShare.setOnClickListener { shareNote(_note) }
+            btnDelete.setOnClickListener { launchDeleteNoteDialog(_note) }
             btnRecord.setOnClickListener(this@EditNoteFragment)
             fabSaveNote.setOnClickListener(this@EditNoteFragment)
-
-            if (args.noteId == -1) {
-                _note = Note()
-                binding?.note = _note
-            } else
-                viewModel.getNote(args.noteId)?.observe(viewLifecycleOwner) { note ->
-                    _note = note
-                    binding?.note = note
-                    binding?.chronometerNoteTimer?.text = note.audioLength as CharSequence
-                }
 
             if (args.noteId == -1) {
 //                TODO("Use viewBinding to hide these views")
                 btnShare.visibility = View.GONE
                 btnDelete.visibility = View.GONE
 
+                chronometerNoteTimer.base = SystemClock.elapsedRealtime()
+                val note = Note()
+                _note = note
+                binding?.note = note
             } else {
+                tvTitle.text = "Edit Note"
                 btnRecord.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         resources,
@@ -105,7 +103,27 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                         null
                     )
                 )
+                viewModel.getNote(args.noteId)?.observe(viewLifecycleOwner) { note ->
+                    _note = note
+                    binding?.note = note
+                    binding?.chronometerNoteTimer?.text = note.audioLength
+//                    binding?.chronometerNoteTimer?.base = setBase(note.audioLength)!!.toLong()
+                }
             }
+        }
+    }
+
+    private fun launchDeleteNoteDialog(note: Note) {
+        val materialDialog = MaterialAlertDialogBuilder(requireContext())
+        materialDialog.apply {
+            setTitle("Delete Note")
+            setMessage("Are you sure you want to delete ${note.title}?")
+            setNegativeButton("No") { dialog, _ -> dialog?.dismiss() }
+            setPositiveButton("Yes") { _, _ ->
+                viewModel.deleteNote(note)
+                navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+            }
+            show()
         }
     }
 
@@ -113,7 +131,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
         binding?.chronometerNoteTimer?.base = SystemClock.elapsedRealtime()
         binding?.chronometerNoteTimer?.start()
         val filePath = filePath(requireActivity())
-        val fileName = "${binding?.tvNoteTitle?.text.toString().trim()}.3gp"
+        val fileName = "${binding?.etNoteTitle?.text.toString().trim()}.3gp"
         showToast("Started recording")
         mediaRecorder = MediaRecorder()
         mediaRecorder?.apply {
@@ -124,11 +142,11 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
 
             try {
                 prepare()
+                start()
             } catch (e: IOException) {
                 showToast("An error occurred")
             }
 
-            start()
         }
     }
 
@@ -143,7 +161,9 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
         showToast("Stopped recording")
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun startPlayingRecording() {
+        binding?.chronometerNoteTimer?.isCountDown = true
         showToast("Started playing recording")
     }
 
@@ -163,6 +183,20 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
         window.statusBarColor = color
     }
 
+//    private fun setBase(value: String): String? {
+//        var base = ""
+//        value.forEach {
+//
+//        }
+//        return if (value.length >= 5) {
+//            for (i in 0..4)
+//                if (i == 3)
+//                    continue
+//            base += value[i]
+//            base
+//        } else null
+//    }
+
     override fun onResume() {
         super.onResume()
 
@@ -181,7 +215,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                     btnRecord -> {
                         if (clickCount == 0) {
                             if (hasPermission(requireContext(), Manifest.permission.RECORD_AUDIO))
-                                if (tvNoteTitle.text.toString().trim().isNotBlank())
+                                if (etNoteTitle.text.toString().trim().isNotBlank())
                                     btnRecord.setImageDrawable(
                                         ResourcesCompat.getDrawable(
                                             resources,
@@ -194,7 +228,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                                     }
                                 else {
                                     showToast("The note title is required")
-                                    tvNoteTitle.requestFocus()
+                                    etNoteTitle.requestFocus()
                                 }
                             else
                                 requestPermission(
@@ -216,14 +250,17 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                         }
                     }
                     fabSaveNote -> {
-                        val noteTitle = tvNoteTitle.text.toString().trim()
-                        if (noteTitle.isNotBlank()) {
-                            viewModel.insertNote(_note.copy(title = noteTitle, color = args.noteColor))
+                        val note = _note.copy(
+                            title = etNoteTitle.text.toString().trim(),
+                            description = etNoteDescription.text.toString().trim()
+                        )
+                        if (note.title.isNotBlank()) {
+                            viewModel.insertNote(note)
                             showToast("Note saved")
                             navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
                         } else {
                             showToast("The note title is required")
-                            tvNoteTitle.requestFocus()
+                            etNoteTitle.requestFocus()
                         }
                     }
                 }
@@ -256,15 +293,15 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                     }
                     fabSaveNote -> {
                         val note = _note.copy(
-                            title = tvNoteTitle.text.toString().trim(),
-                            description = tvNoteDescription.text.toString().trim()
+                            title = etNoteTitle.text.toString().trim(),
+                            description = etNoteDescription.text.toString().trim()
                         )
                         if (note.title.isNotBlank()) {
                             viewModel.updateNote(note)
                             navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
                         } else {
                             showToast("The note title is required")
-                            tvNoteTitle.requestFocus()
+                            etNoteTitle.requestFocus()
                         }
                     }
                 }

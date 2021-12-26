@@ -33,8 +33,8 @@ interface AudioNotesDAO {
     suspend fun deleteNote(note: Note)
 
     @Query("SELECT * FROM notes_table WHERE id = :noteId")
-    fun getNote(noteId: Int): LiveData<Note>?
+    fun getNote(noteId: Int): LiveData<Note>
 
     @Query("SELECT * FROM notes_table ORDER BY id")
-    fun getAllNotes(): LiveData<List<Note>?>
+    fun getAllNotes(): LiveData<List<Note>>
 }
