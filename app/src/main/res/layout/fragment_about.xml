@@ -24,33 +24,19 @@
         android:background="@color/fragment_background"
         tools:context=".ui.AboutFragment">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btn_back"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardUseCompatPadding="false"
-            app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/materialTextView">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/_2sdp"
-                android:alpha=".15"
-                android:background="@color/black" />
-
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btn_back"
+                app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/materialTextView"
+                android:background="@null"
+                android:padding="@dimen/_4sdp"
+                android:layout_marginStart="@dimen/_16sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:tint="@color/black_day_white_night"
                 app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
-
-        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/materialTextView"
@@ -58,10 +44,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_32sdp"
             android:layout_marginTop="@dimen/_16sdp"
-            android:text="About"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+            android:text="@string/about"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="@dimen/_22ssp"
             android:textColor="@color/black_day_white_night"
-            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/btn_back"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -97,9 +83,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/black_day_white_night"
-            android:textStyle="bold"
+            android:textSize="@dimen/_14ssp"
             app:layout_constraintEnd_toEndOf="@+id/receiver_profile_image"
             app:layout_constraintStart_toStartOf="@+id/receiver_profile_image"
             app:layout_constraintTop_toBottomOf="@+id/receiver_profile_image" />
@@ -108,8 +94,9 @@
             android:id="@+id/materialTextView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="v0.0.1-beta01(20211225)"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:text="@string/app_version"
+            android:fontFamily="@font/open_sans_regular"
+            android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialTextView4" />
@@ -137,9 +124,10 @@
                     android:layout_marginTop="@dimen/_16sdp"
                     android:layout_marginStart="@dimen/_16sdp"
                     android:layout_height="wrap_content"
-                    android:text="Attributions &amp; Licence"
-                    android:textStyle="bold"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:text="@string/attributions_amp_licence"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@color/black_day_white_night"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -148,8 +136,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_16sdp"
-                    android:text="Licenced under Apache Licence, Version 2.0"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:text="@string/licenced_under_apache_licence_version_2_0"
+                    android:textSize="@dimen/_12ssp"
+                    android:fontFamily="@font/open_sans_regular"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/materialTextView7"

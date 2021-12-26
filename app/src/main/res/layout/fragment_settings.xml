@@ -14,8 +14,7 @@
   ~ limitations under the License.
   -->
 
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,33 +22,19 @@
         android:layout_height="match_parent"
         android:background="@color/fragment_background">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btn_back"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:padding="@dimen/_4sdp"
+            android:tint="@color/black_day_white_night"
             android:layout_marginStart="@dimen/_16sdp"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardUseCompatPadding="false"
             app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/materialTextView">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/_2sdp"
-                android:layout_gravity="center"
-                android:alpha=".15"
-                android:background="@color/black" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:tint="@color/black_day_white_night"
-                app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
-
-        </com.google.android.material.card.MaterialCardView>
+            app:layout_constraintTop_toTopOf="@+id/materialTextView"
+            app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/materialTextView"
@@ -57,18 +42,18 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_32sdp"
             android:layout_marginTop="@dimen/_16sdp"
-            android:text="Settings"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="@string/settings"
             android:textColor="@color/black_day_white_night"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-            android:textStyle="bold"
+            android:textSize="@dimen/_22ssp"
             app:layout_constraintStart_toEndOf="@+id/btn_back"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginEnd="@dimen/_16sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -104,8 +89,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:text="About"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:text="@string/about"
+                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/black_day_white_night"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView4"
                     app:layout_constraintTop_toBottomOf="@+id/preference_fragment" />
 
@@ -113,9 +100,11 @@
                     android:id="@+id/materialTextView9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginBottom="@dimen/_4sdp"
-                    android:text="App version, Licence and more"
+                    android:textSize="@dimen/_11ssp"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:text="@string/app_version_licence_and_more"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/materialTextView8"
                     app:layout_constraintTop_toBottomOf="@+id/materialTextView8" />
 

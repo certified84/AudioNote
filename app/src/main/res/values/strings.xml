@@ -23,4 +23,22 @@
     <string name="key_theme">theme</string>
     <string name="description">Description</string>
     <string name="note_title_required">Note title (required)</string>
+    <string name="new_note">New Note</string>
+    <string name="save">Save</string>
+    <string name="add_note_button">Add note button</string>
+    <string name="back_button">Back button</string>
+    <string name="delete_button">Delete button</string>
+    <string name="share_button">Share button</string>
+    <string name="click_to_add_a_reminder_to_this_note">Click to add a reminder to this note</string>
+    <string name="record_button">Record</string>
+    <string name="reminder_button">Reminder button</string>
+    <string name="welcome_back">Welcome back</string>
+    <string name="hi_there">Hi there,</string>
+    <string name="your_record_list_is_empty_click_the_button_below_to_get_started">Your record list is empty. Click the button below to get started</string>
+    <string name="about">About</string>
+    <string name="app_version">v0.0.1-beta01(20211225)</string>
+    <string name="attributions_amp_licence"><![CDATA[Attributions & Licence]]></string>
+    <string name="licenced_under_apache_licence_version_2_0">Licenced under Apache Licence, Version 2.0</string>
+    <string name="app_version_licence_and_more">App version, Licence and more</string>
+    <string name="settings">Settings</string>
 </resources>

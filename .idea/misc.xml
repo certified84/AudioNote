@@ -4,22 +4,28 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1859375" />
+        <entry key="app/src/main/res/drawable/ic_alarm_on_black_24dp.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_arrow_back_black_24dp.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_audio_not_playing.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_audio_playing.xml" value="0.25" />
         <entry key="app/src/main/res/drawable/ic_brightness_medium_black_24dp.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_code_black_24dp.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_contact_support_black_24dp.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_delete_black_24dp.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_done_black_24dp.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_info_black_24dp.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_person_black_24.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_play_arrow_black_24dp.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_settings_black_24dp.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_share_black_24dp.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_undraw_empty.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/font/.xml" value="0.20104166666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_about.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_edit_note.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_edit_note.xml" value="0.4049382716049383" />
         <entry key="app/src/main/res/layout/fragment_edit_note1.xml" value="0.3787528868360277" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.11818181818181818" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3620309050772627" />
         <entry key="app/src/main/res/layout/fragment_record.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.32188420019627084" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.1" />

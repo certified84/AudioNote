@@ -59,14 +59,14 @@
                 android:data="mailto:Sammie_kt@pm.me?subject=Feedback" />
         </Preference>
 
-<!--        <Preference-->
-<!--            android:icon="@drawable/ic_info_black_24dp"-->
-<!--            app:summary="App version, Licence and more"-->
-<!--            app:title="About">-->
-<!--            <intent-->
-<!--                android:action="android.intent.action.VIEW"-->
-<!--                android:data="https://github.com/shazomii/notely" />-->
-<!--        </Preference>-->
+        <!--        <Preference-->
+        <!--            android:icon="@drawable/ic_info_black_24dp"-->
+        <!--            app:summary="App version, Licence and more"-->
+        <!--            app:title="About">-->
+        <!--            <intent-->
+        <!--                android:action="android.intent.action.VIEW"-->
+        <!--                android:data="https://github.com/shazomii/notely" />-->
+        <!--        </Preference>-->
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -55,7 +55,9 @@
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_weight="3"
                 android:text="Record Player"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                android:textColor="@color/black_day_white_night"
+                android:textSize="@dimen/_16ssp"
+                android:fontFamily="@font/open_sans_bold"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_now_playing"
@@ -63,6 +65,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:text="Now playing"
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/black_day_white_night"
+                android:fontFamily="@font/open_sans_regular"
                 android:textAlignment="textEnd" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -75,7 +80,9 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/black_day_white_night"
+            android:fontFamily="@font/open_sans_semi_bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
