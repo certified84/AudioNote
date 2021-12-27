@@ -29,7 +29,7 @@
         <entry key="app/src/main/res/layout/fragment_record.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.32188420019627084" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_note.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/item_note.xml" value="0.5" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.33" />
         <entry key="app/src/main/res/xml/settings.xml" value="0.1" />
       </map>

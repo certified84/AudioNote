@@ -44,11 +44,11 @@
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/back_button"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:background="@null"
+            android:contentDescription="@string/back_button"
             android:padding="@dimen/_4sdp"
             android:tint="@color/black_day_white_night"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             android:background="@null"
             android:contentDescription="@string/share_button"
             android:padding="@dimen/_4sdp"
@@ -69,6 +69,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_delete"
             app:srcCompat="@drawable/ic_share_black_24dp"
+            app:visible="@{uiState == UIState.HAS_DATA}"
             tools:ignore="TouchTargetSizeCheck" />
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -76,13 +77,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_8sdp"
-            android:contentDescription="@string/delete_button"
             android:background="@null"
+            android:contentDescription="@string/delete_button"
             android:padding="@dimen/_4sdp"
             android:tint="@color/black_day_white_night"
             app:layout_constraintEnd_toStartOf="@+id/btn_share"
             app:layout_constraintTop_toTopOf="@+id/btn_back"
             app:srcCompat="@drawable/ic_delete_black_24dp"
+            app:visible="@{uiState == UIState.HAS_DATA}"
             tools:ignore="TouchTargetSizeCheck" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -102,11 +104,13 @@
             android:id="@+id/scrollView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
             android:paddingTop="@dimen/_16sdp"
             app:layout_constraintBottom_toTopOf="@+id/materialCardView"
-            app:layout_constraintEnd_toEndOf="@+id/fab_save_note"
-            app:layout_constraintStart_toStartOf="@+id/btn_back"
-            app:layout_constraintTop_toBottomOf="@+id/btn_delete">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_back">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -123,7 +127,7 @@
                     android:inputType="textMultiLine"
                     android:maxLength="50"
                     android:text="@{note.title}"
-                    android:textSize="@dimen/_16ssp"
+                    android:textSize="@dimen/_18ssp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -133,6 +137,7 @@
                     android:id="@+id/et_note_description"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:background="@null"
                     android:ems="10"
                     android:fontFamily="@font/open_sans_regular"
@@ -140,7 +145,7 @@
                     android:hint="@string/description"
                     android:inputType="textMultiLine"
                     android:text="@{note.description}"
-                    android:textSize="@dimen/_12ssp"
+                    android:textSize="@dimen/_14ssp"
                     app:layout_constraintBottom_toTopOf="@+id/guideline2"
                     app:layout_constraintEnd_toEndOf="@+id/et_note_title"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -196,8 +201,8 @@
             android:text="@string/save"
             android:textAllCaps="false"
             android:textSize="@dimen/_14ssp"
-            app:iconSize="@dimen/_27sdp"
             app:icon="@drawable/ic_done_black_24dp"
+            app:iconSize="@dimen/_27sdp"
             app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
             app:layout_constraintEnd_toEndOf="parent" />
 

@@ -16,9 +16,12 @@
 
 package com.certified.audionote.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.certified.audionote.utils.colors
+import kotlinx.parcelize.Parcelize
+import java.util.*
 
 /**
  * The Note class represent the domain model i.e the
@@ -36,16 +39,17 @@ import com.certified.audionote.utils.colors
  *
  **/
 
+@Parcelize
 @Entity(tableName = "notes_table")
 data class Note(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    var id: Int = -1,
     var title: String = "",
     var description: String = "",
     var color: Int = colors.random(),
-    var lastModificationDate: String = "",
-    var audioLength: String = "",
+    var lastModificationDate: Date = Date(),
+    var audioLength: String = "00:00",
     var size: String = "",
     var started: Boolean = false,
     val reminder: String = "Add a reminder to this note"
-)
+): Parcelable

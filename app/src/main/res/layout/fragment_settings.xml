@@ -30,7 +30,7 @@
             android:background="@null"
             android:padding="@dimen/_4sdp"
             android:tint="@color/black_day_white_night"
-            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_8sdp"
             app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/materialTextView"

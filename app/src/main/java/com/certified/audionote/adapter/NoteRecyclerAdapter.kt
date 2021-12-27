@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.databinding.ItemNoteBinding
 import com.certified.audionote.model.Note
+import com.certified.audionote.utils.Extensions.toReadableString
 
 class NoteRecyclerAdapter :
     ListAdapter<Note, NoteRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
@@ -45,6 +46,7 @@ class NoteRecyclerAdapter :
 
         fun bind(note: Note) {
             binding.note = note
+            binding.tvNoteLastModificationDate.text = note.lastModificationDate.toReadableString()
         }
 
         init {

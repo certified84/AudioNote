@@ -37,12 +37,14 @@ import com.certified.audionote.database.Repository
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.showToast
+import com.certified.audionote.utils.UIState
 import com.certified.audionote.utils.filePath
 import com.certified.audionote.utils.hasPermission
 import com.certified.audionote.utils.requestPermission
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -54,9 +56,9 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
 
     @Inject
     lateinit var repository: Repository
+    private val viewModel: NotesViewModel by viewModels()
     private lateinit var navController: NavController
     private val args: EditNoteFragmentArgs by navArgs()
-    private val viewModel: NotesViewModel by viewModels()
     private lateinit var _note: Note
     private var clickCount = 0
     private var mediaRecorder: MediaRecorder? = null
@@ -73,7 +75,10 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         navController = Navigation.findNavController(view)
+        binding?.lifecycleOwner = this
+        binding?.uiState = viewModel.uiState
 
         binding?.apply {
 
@@ -85,17 +90,14 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
             btnRecord.setOnClickListener(this@EditNoteFragment)
             fabSaveNote.setOnClickListener(this@EditNoteFragment)
 
-            if (args.noteId == -1) {
-//                TODO("Use viewBinding to hide these views")
-                btnShare.visibility = View.GONE
-                btnDelete.visibility = View.GONE
-
+            if (args.note.id == -1) {
+                viewModel.uiState.set(UIState.EMPTY)
                 chronometerNoteTimer.base = SystemClock.elapsedRealtime()
-                val note = Note()
-                _note = note
-                binding?.note = note
+                _note = args.note
+                binding?.note = _note
             } else {
-                tvTitle.text = "Edit Note"
+                viewModel.uiState.set(UIState.HAS_DATA)
+                tvTitle.text = getString(R.string.edit_note)
                 btnRecord.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         resources,
@@ -103,12 +105,10 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                         null
                     )
                 )
-                viewModel.getNote(args.noteId)?.observe(viewLifecycleOwner) { note ->
-                    _note = note
-                    binding?.note = note
-                    binding?.chronometerNoteTimer?.text = note.audioLength
+                    _note = args.note
+                    binding?.note = args.note
+                    binding?.chronometerNoteTimer?.text = args.note.audioLength
 //                    binding?.chronometerNoteTimer?.base = setBase(note.audioLength)!!.toLong()
-                }
             }
         }
     }
@@ -172,14 +172,14 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
     }
 
     private fun shareNote(note: Note) {
-        showToast("Coming soon")
 //        TODO("Not yet Implemented")
+        showToast("Coming soon: ${note.title}")
     }
 
     private fun updateStatusBarColor(color: Int) {
         val window = requireActivity().window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor = color
     }
 
@@ -200,7 +200,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
 
-        updateStatusBarColor(args.noteColor)
+        updateStatusBarColor(binding!!.note!!.color)
     }
 
     override fun onDestroyView() {
@@ -210,12 +210,12 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         binding?.apply {
-            if (args.noteId == -1) {
+            if (args.note.id == -1) {
                 when (p0) {
                     btnRecord -> {
                         if (clickCount == 0) {
                             if (hasPermission(requireContext(), Manifest.permission.RECORD_AUDIO))
-                                if (etNoteTitle.text.toString().trim().isNotBlank())
+                                if (etNoteTitle.text.toString().isNotBlank())
                                     btnRecord.setImageDrawable(
                                         ResourcesCompat.getDrawable(
                                             resources,
@@ -233,7 +233,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                             else
                                 requestPermission(
                                     requireActivity(),
-                                    "This permission is required to able to enable audio recording",
+                                    "This permission is required to enable audio recording",
                                     MainActivity.RECORD_AUDIO_PERMISSION_CODE,
                                     Manifest.permission.RECORD_AUDIO
                                 )
@@ -294,7 +294,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                     fabSaveNote -> {
                         val note = _note.copy(
                             title = etNoteTitle.text.toString().trim(),
-                            description = etNoteDescription.text.toString().trim()
+                            description = etNoteDescription.text.toString().trim(),
+                            lastModificationDate = Date()
                         )
                         if (note.title.isNotBlank()) {
                             viewModel.updateNote(note)

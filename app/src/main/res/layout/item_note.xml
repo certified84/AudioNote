@@ -20,6 +20,8 @@
 
     <data>
 
+        <import type="com.certified.audionote.utils.Extensions" />
+
         <variable
             name="note"
             type="com.certified.audionote.model.Note" />
@@ -36,8 +38,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_8sdp"
-            android:background="@{note.color}">
+            android:background="@{note.color}"
+            android:paddingBottom="@dimen/_8sdp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_note_title"
@@ -45,28 +47,36 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginEnd="@dimen/_16sdp"
                 android:ellipsize="end"
+                android:fontFamily="@font/open_sans_bold"
                 android:maxLines="1"
                 android:text="@{note.title}"
-                android:textSize="@dimen/_14ssp"
                 android:textColor="@color/black_day_white_night"
-                android:fontFamily="@font/open_sans_bold"
+                android:textSize="@dimen/_14ssp"
                 app:layout_constraintEnd_toStartOf="@+id/tv_note_last_modification_date"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="@dimen/_4sdp"
+                app:layout_constraintHorizontal_weight="4"
                 tools:text="CPE 407 - Lecture 1" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_note_last_modification_date"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAlignment="viewEnd"
+                app:layout_constraintHorizontal_weight="2"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:fontFamily="@font/open_sans_regular"
                 android:textSize="@dimen/_12ssp"
-                android:text="@{note.lastModificationDate}"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_note_title"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_note_title"
                 app:layout_constraintTop_toTopOf="@+id/tv_note_title"
                 tools:text="17/11/21" />
 
@@ -86,11 +96,11 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_record_length"
                 android:layout_width="wrap_content"
-                android:text="@{note.audioLength}"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_bold"
-                android:textSize="@dimen/_12ssp"
+                android:text="@{note.audioLength}"
                 android:textColor="@color/black_day_white_night"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toStartOf="@+id/tv_note_size"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
@@ -101,8 +111,8 @@
                 android:id="@+id/tv_note_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{note.size}"
                 android:fontFamily="@font/open_sans_regular"
+                android:text="@{note.size}"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_note_last_modification_date"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -131,10 +141,10 @@
                 android:alpha=".6"
                 android:ellipsize="end"
                 android:fontFamily="@font/open_sans_regular"
-                android:textSize="@dimen/_12ssp"
                 android:maxLines="1"
                 android:text="@{note.reminder}"
                 android:textAlignment="textEnd"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView2"
                 app:layout_constraintEnd_toEndOf="@+id/tv_note_size"
                 app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"

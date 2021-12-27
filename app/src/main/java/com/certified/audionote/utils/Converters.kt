@@ -16,13 +16,14 @@
 
 package com.certified.audionote.utils
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.room.TypeConverter
-import java.io.ByteArrayOutputStream
-import java.lang.Exception
+import java.util.*
 
 class Converters {
 
+    @TypeConverter
+    fun fromTimeStamp(value: Long) = Date(value)
+
+    @TypeConverter
+    fun dateToTimeStamp(date: Date) = date.time
 }

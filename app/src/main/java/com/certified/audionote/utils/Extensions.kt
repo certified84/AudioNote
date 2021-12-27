@@ -20,12 +20,14 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.certified.audionote.R
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Extensions {
     fun Fragment.flags(color: Int) {
         val window = requireActivity().window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor = this.resources.getColor(color)
     }
 
@@ -35,5 +37,10 @@ object Extensions {
             message,
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    fun Date.toReadableString(): String {
+        val format = SimpleDateFormat("dd/MM/yy")
+        return format.format(this)
     }
 }

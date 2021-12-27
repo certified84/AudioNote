@@ -49,10 +49,6 @@
         android:name="com.certified.audionote.ui.EditNoteFragment"
         android:label="EditNoteFragment"
         tools:layout="@layout/fragment_edit_note">
-        <argument
-            android:name="note_id"
-            android:defaultValue="-1"
-            app:argType="integer" />
         <action
             android:id="@+id/action_editNoteFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -61,9 +57,8 @@
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
         <argument
-            android:name="note_color"
-            android:defaultValue="0"
-            app:argType="integer" />
+            android:name="note"
+            app:argType="com.certified.audionote.model.Note" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

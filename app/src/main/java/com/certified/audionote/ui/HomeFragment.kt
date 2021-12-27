@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
             btnSettings.setOnClickListener { navController.navigate(R.id.action_homeFragment_to_settingsFragment) }
             fabAddNote.setOnClickListener {
                 val action =
-                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(-1, colors.random())
+                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(Note())
                 navController.navigate(action)
             }
 
@@ -112,16 +112,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(recyclerViewNotes: RecyclerView) {
-        val layoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerViewNotes.layoutManager = layoutManager
-        recyclerViewNotes.adapter = adapter
+        val layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.span_count))
+        recyclerViewNotes.also {
+            it.layoutManager = layoutManager
+            it.adapter = adapter
+        }
         adapter.setOnItemClickedListener(object : NoteRecyclerAdapter.OnItemClickedListener {
             override fun onItemClick(item: Note) {
                 val action =
-                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(
-                        item.id,
-                        item.color
-                    )
+                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(item)
                 navController.navigate(action)
             }
         })
