@@ -18,14 +18,12 @@ package com.certified.audionote.ui
 
 import android.Manifest
 import android.media.MediaRecorder
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -60,7 +58,10 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
     private lateinit var navController: NavController
     private val args: EditNoteFragmentArgs by navArgs()
     private lateinit var _note: Note
-    private var clickCount = 0
+    private var isRecording = false
+    private var isPlayingRecord = false
+
+    //    private var clickCount = 0
     private var mediaRecorder: MediaRecorder? = null
     private val files: Array<String> by lazy { requireContext().fileList() }
 
@@ -90,7 +91,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
             btnRecord.setOnClickListener(this@EditNoteFragment)
             fabSaveNote.setOnClickListener(this@EditNoteFragment)
 
-            if (args.note.id == -1) {
+            if (args.note.id == 0) {
                 viewModel.uiState.set(UIState.EMPTY)
                 chronometerNoteTimer.base = SystemClock.elapsedRealtime()
                 _note = args.note
@@ -105,9 +106,9 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                         null
                     )
                 )
-                    _note = args.note
-                    binding?.note = args.note
-                    binding?.chronometerNoteTimer?.text = args.note.audioLength
+                _note = args.note
+                binding?.note = args.note
+                binding?.chronometerNoteTimer?.text = args.note.audioLength
 //                    binding?.chronometerNoteTimer?.base = setBase(note.audioLength)!!.toLong()
             }
         }
@@ -161,7 +162,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
         showToast("Stopped recording")
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    //    @RequiresApi(Build.VERSION_CODES.N)
     private fun startPlayingRecording() {
         binding?.chronometerNoteTimer?.isCountDown = true
         showToast("Started playing recording")
@@ -210,10 +211,10 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         binding?.apply {
-            if (args.note.id == -1) {
+            if (args.note.id == 0) {
                 when (p0) {
                     btnRecord -> {
-                        if (clickCount == 0) {
+                        if (!isRecording) {
                             if (hasPermission(requireContext(), Manifest.permission.RECORD_AUDIO))
                                 if (etNoteTitle.text.toString().isNotBlank())
                                     btnRecord.setImageDrawable(
@@ -223,7 +224,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                                             null
                                         )
                                     ).run {
-                                        clickCount++
+//                                        clickCount++
+                                        isRecording = true
                                         startRecording()
                                     }
                                 else {
@@ -244,7 +246,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                                 )
                             )
                                 .run {
-                                    clickCount--
+                                    isRecording = false
+//                                    clickCount--
                                     stopRecording()
                                 }
                         }
@@ -255,9 +258,13 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                             description = etNoteDescription.text.toString().trim()
                         )
                         if (note.title.isNotBlank()) {
-                            viewModel.insertNote(note)
-                            showToast("Note saved")
-                            navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                            if (isRecording)
+                                showToast("Stop the recording first")
+                            else {
+                                viewModel.insertNote(note)
+                                showToast("Note saved")
+                                navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                            }
                         } else {
                             showToast("The note title is required")
                             etNoteTitle.requestFocus()
@@ -267,7 +274,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
             } else {
                 when (p0) {
                     btnRecord -> {
-                        if (clickCount == 0) {
+                        if (!isPlayingRecord) {
                             btnRecord.setImageDrawable(
                                 ResourcesCompat.getDrawable(
                                     resources,
@@ -275,7 +282,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                                 )
                             )
                                 .run {
-                                    clickCount++
+//                                    clickCount++
+                                    isPlayingRecord = true
                                     startPlayingRecording()
                                 }
                         } else {
@@ -286,7 +294,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                                 )
                             )
                                 .run {
-                                    clickCount--
+//                                    clickCount--
+                                    isPlayingRecord = false
                                     stopPlayingRecording()
                                 }
                         }

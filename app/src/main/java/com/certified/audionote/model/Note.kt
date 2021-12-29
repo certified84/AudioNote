@@ -43,7 +43,7 @@ import java.util.*
 @Entity(tableName = "notes_table")
 data class Note(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = -1,
+    var id: Int = 0,
     var title: String = "",
     var description: String = "",
     var color: Int = colors.random(),
