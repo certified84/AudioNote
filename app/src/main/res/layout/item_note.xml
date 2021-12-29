@@ -20,7 +20,17 @@
 
     <data>
 
+        <import type="androidx.databinding.ObservableField" />
+
         <import type="com.certified.audionote.utils.Extensions" />
+
+        <import type="com.certified.audionote.utils.UtilKt" />
+
+        <import type="com.certified.audionote.utils.ReminderCompletionState" />
+
+        <variable
+            name="reminderCompletionState"
+            type="ObservableField&lt;ReminderCompletionState>" />
 
         <variable
             name="note"
@@ -70,6 +80,7 @@
                 app:layout_constraintHorizontal_weight="2"
                 android:maxLines="1"
                 android:ellipsize="end"
+                android:text="@{UtilKt.formatSimpleDate(note.reminder)}"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/open_sans_regular"
@@ -147,7 +158,8 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/open_sans_regular"
                 android:maxLines="1"
-                android:text="@{note.reminder}"
+                app:strikeThrough="@{reminderCompletionState == ReminderCompletionState.COMPLETED}"
+                android:text="@{UtilKt.formatReminderDate(note.lastModificationDate)}"
                 android:textColor="@color/white"
                 android:textAlignment="textEnd"
                 android:textSize="@dimen/_12ssp"

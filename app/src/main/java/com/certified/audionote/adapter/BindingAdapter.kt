@@ -16,7 +16,9 @@
 
 package com.certified.audionote.adapter
 
+import android.graphics.Paint
 import android.view.View
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.model.Note
@@ -30,4 +32,13 @@ fun bindItemRecyclerView(recyclerView: RecyclerView, data: List<Note>?) {
 @BindingAdapter("visible")
 fun View.setVisible(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("strikeThrough")
+fun strikeThrough(textView: TextView, strikeThrough: Boolean) {
+    if (strikeThrough) {
+        textView.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+    } else {
+        textView.paintFlags = 0
+    }
 }

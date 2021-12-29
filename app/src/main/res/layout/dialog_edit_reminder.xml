@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2021 Samson Achiaga
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="note"
+            type="com.certified.audionote.model.Note" />
+
+        <import type="com.certified.audionote.utils.UtilKt" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_8sdp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/appCompatImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:contentDescription="@string/alarm_icon"
+                android:tint="@color/black_day_white_night"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_alarm_on_black_24dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_reminder_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:text="@{UtilKt.formatTime(note.reminder)}"
+                android:textColor="@color/black_day_white_night"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintStart_toEndOf="@id/appCompatImageView"
+                app:layout_constraintTop_toTopOf="@id/appCompatImageView"
+                tools:text="10:30 AM" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_reminder_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="@{UtilKt.formatDateOnly(note.reminder)}"
+                android:textColor="@color/black_day_white_night"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="@+id/tv_reminder_time"
+                app:layout_constraintTop_toBottomOf="@+id/tv_reminder_time"
+                tools:text="13th Dec. 2020" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_modify_reminder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:backgroundTint="@color/edit_reminder_button_color"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:text="@string/modify"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_delete_reminder"
+                app:layout_constraintTop_toTopOf="@id/btn_delete_reminder" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_delete_reminder"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:fontFamily="@font/open_sans_semi_bold"
+                android:text="@string/delete"
+                android:textColor="@color/edit_reminder_button_color"
+                app:layout_constraintEnd_toStartOf="@id/btn_modify_reminder"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatImageView"
+                app:strokeColor="@color/edit_reminder_button_color" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -16,11 +16,12 @@
 
 package com.certified.audionote.utils
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.text.format.DateUtils
 import com.vmadalin.easypermissions.EasyPermissions
-import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 val colors = listOf(
     -504764, -740056, -1544140, -2277816, -3246217, -4024195,
@@ -39,3 +40,35 @@ fun hasPermission(context: Context, permission: String) =
 fun requestPermission(activity: Activity, message: String, requestCode: Int, permission: String) {
     EasyPermissions.requestPermissions(activity, message, requestCode, permission)
 }
+
+fun currentDate(): Calendar {
+    return Calendar.getInstance()
+}
+
+fun formatDate(date: Long): String {
+    val dateString = DateUtils.getRelativeTimeSpanString(
+        date,
+        currentDate().timeInMillis,
+        DateUtils.SECOND_IN_MILLIS
+    ).toString()
+    return when {
+        "minute" in dateString -> {
+            SimpleDateFormat("h:mm a", Locale.getDefault()).format(date)
+        }
+        " seconds" in dateString -> {
+            "now"
+        }
+        else -> dateString
+    }
+}
+
+fun formatReminderDate(date: Long): String =
+    SimpleDateFormat("dd MMM, yyyy h:mm a", Locale.getDefault()).format(date)
+
+fun formatSimpleDate(date: Long): String =
+    SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(date)
+
+fun formatDateOnly(date: Long): String =
+    SimpleDateFormat("dd MMM, yyyy", Locale.getDefault()).format(date)
+
+fun formatTime(date: Long): String = SimpleDateFormat("h:mm a", Locale.getDefault()).format(date)

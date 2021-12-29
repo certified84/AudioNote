@@ -17,6 +17,8 @@
 package com.certified.audionote.ui
 
 import android.Manifest
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.SystemClock
@@ -24,6 +26,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.DatePicker
+import android.widget.TimePicker
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,13 +36,12 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.certified.audionote.R
 import com.certified.audionote.database.Repository
+import com.certified.audionote.databinding.DialogEditReminderBinding
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.model.Note
+import com.certified.audionote.utils.*
 import com.certified.audionote.utils.Extensions.showToast
-import com.certified.audionote.utils.UIState
-import com.certified.audionote.utils.filePath
-import com.certified.audionote.utils.hasPermission
-import com.certified.audionote.utils.requestPermission
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
@@ -46,7 +49,8 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EditNoteFragment : Fragment(), View.OnClickListener {
+class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDateSetListener,
+    TimePickerDialog.OnTimeSetListener {
 
     private var _binding: FragmentEditNoteBinding? = null
     private val binding: FragmentEditNoteBinding?
@@ -60,8 +64,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
     private lateinit var _note: Note
     private var isRecording = false
     private var isPlayingRecord = false
-
-    //    private var clickCount = 0
+    private lateinit var pickedDateTime: Calendar
+    private lateinit var currentDateTime: Calendar
     private var mediaRecorder: MediaRecorder? = null
     private val files: Array<String> by lazy { requireContext().fileList() }
 
@@ -78,13 +82,25 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         navController = Navigation.findNavController(view)
+        _note = args.note
         binding?.lifecycleOwner = this
-        binding?.uiState = viewModel.uiState
+        binding?.apply {
+            note = args.note
+            uiState = viewModel.uiState
+            reminderAvailableState = viewModel.reminderAvailableState
+            reminderCompletionState = viewModel.reminderCompletionState
+        }
 
         binding?.apply {
 
             btnBack.setOnClickListener {
                 navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+            }
+            cardAddReminder.setOnClickListener {
+                if (viewModel.reminderAvailableState.get() == ReminderAvailableState.NO_REMINDER)
+                    pickDate()
+                else
+                    openEditReminderDialog()
             }
             btnShare.setOnClickListener { shareNote(_note) }
             btnDelete.setOnClickListener { launchDeleteNoteDialog(_note) }
@@ -94,10 +110,22 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
             if (args.note.id == 0) {
                 viewModel.uiState.set(UIState.EMPTY)
                 chronometerNoteTimer.base = SystemClock.elapsedRealtime()
-                _note = args.note
-                binding?.note = _note
             } else {
-                viewModel.uiState.set(UIState.HAS_DATA)
+                viewModel.apply {
+                    uiState.set(UIState.HAS_DATA)
+                    getNote(args.note.id).observe(viewLifecycleOwner) {
+                        if (it.reminder != null) {
+                            reminderAvailableState.set(ReminderAvailableState.HAS_REMINDER)
+                            if (currentDate().timeInMillis > args.note.reminder!!) {
+                                reminderCompletionState.set(ReminderCompletionState.COMPLETED)
+                            } else {
+                                reminderCompletionState.set(ReminderCompletionState.ONGOING)
+                            }
+                        } else {
+                            reminderAvailableState.set(ReminderAvailableState.NO_REMINDER)
+                        }
+                    }
+                }
                 tvTitle.text = getString(R.string.edit_note)
                 btnRecord.setImageDrawable(
                     ResourcesCompat.getDrawable(
@@ -106,12 +134,33 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                         null
                     )
                 )
-                _note = args.note
-                binding?.note = args.note
                 binding?.chronometerNoteTimer?.text = args.note.audioLength
 //                    binding?.chronometerNoteTimer?.base = setBase(note.audioLength)!!.toLong()
             }
         }
+    }
+
+    private fun pickDate() {
+        currentDateTime = currentDate()
+        val startYear = currentDateTime.get(Calendar.YEAR)
+        val startMonth = currentDateTime.get(Calendar.MONTH)
+        val startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), this, startYear, startMonth, startDay)
+        datePickerDialog.show()
+    }
+
+    private fun openEditReminderDialog() {
+        val view = DialogEditReminderBinding.inflate(layoutInflater)
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+
+        view.apply {
+            note = _note
+        }
+
+        bottomSheetDialog.edgeToEdgeEnabled
+        bottomSheetDialog.setContentView(view.root)
+        bottomSheetDialog.show()
     }
 
     private fun launchDeleteNoteDialog(note: Note) {
@@ -224,7 +273,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                                             null
                                         )
                                     ).run {
-//                                        clickCount++
                                         isRecording = true
                                         startRecording()
                                     }
@@ -247,7 +295,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                             )
                                 .run {
                                     isRecording = false
-//                                    clickCount--
                                     stopRecording()
                                 }
                         }
@@ -282,7 +329,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                                 )
                             )
                                 .run {
-//                                    clickCount++
                                     isPlayingRecord = true
                                     startPlayingRecording()
                                 }
@@ -294,7 +340,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                                 )
                             )
                                 .run {
-//                                    clickCount--
                                     isPlayingRecord = false
                                     stopPlayingRecording()
                                 }
@@ -304,7 +349,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                         val note = _note.copy(
                             title = etNoteTitle.text.toString().trim(),
                             description = etNoteDescription.text.toString().trim(),
-                            lastModificationDate = Date()
+                            lastModificationDate = currentDate().timeInMillis
                         )
                         if (note.title.isNotBlank()) {
                             viewModel.updateNote(note)
@@ -317,5 +362,29 @@ class EditNoteFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
+        pickedDateTime = currentDate()
+        pickedDateTime.set(p1, p2, p3)
+        currentDateTime = currentDate()
+        val hourOfDay = currentDateTime.get(Calendar.HOUR_OF_DAY)
+        val minuteOfDay = currentDateTime.get(Calendar.MINUTE)
+        val timePickerDialog =
+            TimePickerDialog(requireContext(), this, hourOfDay, minuteOfDay, false)
+        timePickerDialog.show()
+    }
+
+    override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
+        pickedDateTime.set(Calendar.HOUR_OF_DAY, p1)
+        pickedDateTime.set(Calendar.MINUTE, p2)
+        if (pickedDateTime.timeInMillis <= currentDate().timeInMillis) {
+            pickedDateTime.run {
+                set(Calendar.DAY_OF_MONTH, currentDateTime.get(Calendar.DAY_OF_MONTH) + 1)
+                set(Calendar.YEAR, currentDateTime.get(Calendar.YEAR))
+                set(Calendar.MONTH, currentDateTime.get(Calendar.MONTH))
+            }
+        }
+        _note.reminder = pickedDateTime.timeInMillis
     }
 }

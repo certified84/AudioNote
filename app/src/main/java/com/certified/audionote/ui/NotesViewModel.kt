@@ -23,6 +23,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.certified.audionote.database.Repository
 import com.certified.audionote.model.Note
+import com.certified.audionote.utils.ReminderAvailableState
+import com.certified.audionote.utils.ReminderCompletionState
 import com.certified.audionote.utils.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +35,9 @@ import javax.inject.Inject
 class NotesViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     val uiState = ObservableField(UIState.LOADING)
+    val reminderAvailableState = ObservableField(ReminderAvailableState.NO_REMINDER)
+    val reminderCompletionState = ObservableField(ReminderCompletionState.ONGOING)
+
     private val _notes = MutableLiveData<List<Note>?>()
     lateinit var notes: LiveData<List<Note>>
 //        get() = _notes

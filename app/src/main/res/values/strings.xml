@@ -42,4 +42,7 @@
     <string name="app_version_licence_and_more">App version, Licence and more</string>
     <string name="settings">Settings</string>
     <string name="edit_note">Edit Note</string>
+    <string name="alarm_icon">Alarm Icon</string>
+    <string name="modify">Modify</string>
+    <string name="delete">Delete</string>
 </resources>

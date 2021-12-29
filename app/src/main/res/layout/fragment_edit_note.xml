@@ -24,9 +24,23 @@
 
         <import type="com.certified.audionote.utils.UIState" />
 
+        <import type="com.certified.audionote.utils.ReminderAvailableState" />
+
+        <import type="com.certified.audionote.utils.ReminderCompletionState" />
+
+        <import type="com.certified.audionote.utils.UtilKt" />
+
         <variable
             name="uiState"
             type="ObservableField&lt;UIState>" />
+
+        <variable
+            name="reminderAvailableState"
+            type="ObservableField&lt;ReminderAvailableState>" />
+
+        <variable
+            name="reminderCompletionState"
+            type="ObservableField&lt;ReminderCompletionState>" />
 
         <variable
             name="note"
@@ -107,7 +121,7 @@
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginEnd="@dimen/_16sdp"
             android:paddingTop="@dimen/_16sdp"
-            app:layout_constraintBottom_toTopOf="@+id/materialCardView"
+            app:layout_constraintBottom_toTopOf="@+id/card_add_reminder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_back">
@@ -207,7 +221,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView"
+            android:id="@+id/card_add_reminder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:elevation="@dimen/_4sdp"
@@ -233,14 +247,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:contentDescription="@string/reminder_button"
+                    android:src="@drawable/ic_alarm_on_black_24dp"
                     android:padding="@dimen/_4sdp"
                     android:tint="@color/black_day_white_night"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_reminder_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_4sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:textSize="@dimen/_12ssp"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:textColor="@color/black_day_white_night"
+                    android:text="@{UtilKt.formatReminderDate(note.reminder)}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/appCompatImageView3"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_alarm_on_black_24dp"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    app:strikeThrough="@{reminderCompletionState == ReminderCompletionState.COMPLETED}"
+                    app:visible="@{reminderAvailableState == ReminderAvailableState.HAS_REMINDER}" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -251,7 +279,8 @@
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView3"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView3"
-                    app:layout_constraintTop_toTopOf="@+id/appCompatImageView3" />
+                    app:layout_constraintTop_toTopOf="@+id/appCompatImageView3"
+                    app:visible="@{reminderAvailableState == ReminderAvailableState.NO_REMINDER}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

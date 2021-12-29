@@ -20,6 +20,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.certified.audionote.utils.colors
+import com.certified.audionote.utils.currentDate
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
@@ -47,9 +48,9 @@ data class Note(
     var title: String = "",
     var description: String = "",
     var color: Int = colors.random(),
-    var lastModificationDate: Date = Date(),
+    var lastModificationDate: Long = currentDate().timeInMillis,
     var audioLength: String = "00:00",
     var size: String = "",
     var started: Boolean = false,
-    val reminder: String = "Add a reminder to this note"
+    var reminder: Long? = null
 ): Parcelable
