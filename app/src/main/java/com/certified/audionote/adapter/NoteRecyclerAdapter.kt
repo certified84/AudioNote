@@ -18,15 +18,11 @@ package com.certified.audionote.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.databinding.ItemNoteBinding
 import com.certified.audionote.model.Note
-import com.certified.audionote.utils.Extensions.toReadableString
-import com.certified.audionote.utils.ReminderAvailableState
-import com.certified.audionote.utils.ReminderCompletionState
 
 class NoteRecyclerAdapter :
     ListAdapter<Note, NoteRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
@@ -49,7 +45,6 @@ class NoteRecyclerAdapter :
 
         fun bind(note: Note) {
             binding.note = note
-//            binding.reminderCompletionState = getReminderState()
         }
 
         init {
@@ -65,8 +60,6 @@ class NoteRecyclerAdapter :
     interface OnItemClickedListener {
         fun onItemClick(item: Note)
     }
-
-    fun getReminderState() = ObservableField<ReminderCompletionState>()
 
     fun setOnItemClickedListener(listener: OnItemClickedListener) {
         this.listener = listener

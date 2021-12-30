@@ -85,7 +85,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         _note = args.note
         binding?.lifecycleOwner = this
         binding?.apply {
-            note = args.note
+            note = _note
             uiState = viewModel.uiState
             reminderAvailableState = viewModel.reminderAvailableState
             reminderCompletionState = viewModel.reminderCompletionState
@@ -139,113 +139,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             }
         }
     }
-
-    private fun pickDate() {
-        currentDateTime = currentDate()
-        val startYear = currentDateTime.get(Calendar.YEAR)
-        val startMonth = currentDateTime.get(Calendar.MONTH)
-        val startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
-        val datePickerDialog =
-            DatePickerDialog(requireContext(), this, startYear, startMonth, startDay)
-        datePickerDialog.show()
-    }
-
-    private fun openEditReminderDialog() {
-        val view = DialogEditReminderBinding.inflate(layoutInflater)
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
-
-        view.apply {
-            note = _note
-        }
-
-        bottomSheetDialog.edgeToEdgeEnabled
-        bottomSheetDialog.setContentView(view.root)
-        bottomSheetDialog.show()
-    }
-
-    private fun launchDeleteNoteDialog(note: Note) {
-        val materialDialog = MaterialAlertDialogBuilder(requireContext())
-        materialDialog.apply {
-            setTitle("Delete Note")
-            setMessage("Are you sure you want to delete ${note.title}?")
-            setNegativeButton("No") { dialog, _ -> dialog?.dismiss() }
-            setPositiveButton("Yes") { _, _ ->
-                viewModel.deleteNote(note)
-                navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
-            }
-            show()
-        }
-    }
-
-    private fun startRecording() {
-        binding?.chronometerNoteTimer?.base = SystemClock.elapsedRealtime()
-        binding?.chronometerNoteTimer?.start()
-        val filePath = filePath(requireActivity())
-        val fileName = "${binding?.etNoteTitle?.text.toString().trim()}.3gp"
-        showToast("Started recording")
-        mediaRecorder = MediaRecorder()
-        mediaRecorder?.apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setOutputFile("$filePath/$fileName")
-            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-
-            try {
-                prepare()
-                start()
-            } catch (e: IOException) {
-                showToast("An error occurred")
-            }
-
-        }
-    }
-
-    private fun stopRecording() {
-        binding?.chronometerNoteTimer?.stop()
-        _note.audioLength = binding?.chronometerNoteTimer?.text.toString()
-        mediaRecorder?.apply {
-            stop()
-            release()
-        }
-        mediaRecorder = null
-        showToast("Stopped recording")
-    }
-
-    //    @RequiresApi(Build.VERSION_CODES.N)
-    private fun startPlayingRecording() {
-        binding?.chronometerNoteTimer?.isCountDown = true
-        showToast("Started playing recording")
-    }
-
-    private fun stopPlayingRecording() {
-        showToast("Stopped playing recording")
-    }
-
-    private fun shareNote(note: Note) {
-//        TODO("Not yet Implemented")
-        showToast("Coming soon: ${note.title}")
-    }
-
-    private fun updateStatusBarColor(color: Int) {
-        val window = requireActivity().window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = color
-    }
-
-//    private fun setBase(value: String): String? {
-//        var base = ""
-//        value.forEach {
-//
-//        }
-//        return if (value.length >= 5) {
-//            for (i in 0..4)
-//                if (i == 3)
-//                    continue
-//            base += value[i]
-//            base
-//        } else null
-//    }
 
     override fun onResume() {
         super.onResume()
@@ -386,5 +279,121 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             }
         }
         _note.reminder = pickedDateTime.timeInMillis
+        viewModel.updateNote(_note)
     }
+
+    private fun pickDate() {
+        currentDateTime = currentDate()
+        val startYear = currentDateTime.get(Calendar.YEAR)
+        val startMonth = currentDateTime.get(Calendar.MONTH)
+        val startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), this, startYear, startMonth, startDay)
+        datePickerDialog.show()
+    }
+
+    private fun openEditReminderDialog() {
+        val view = DialogEditReminderBinding.inflate(layoutInflater)
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        view.apply {
+            note = _note
+            btnDeleteReminder.setOnClickListener {
+                viewModel.reminderCompletionState.set(ReminderCompletionState.ONGOING)
+                _note.reminder = null
+                viewModel.updateNote(_note)
+                bottomSheetDialog.dismiss()
+            }
+            btnModifyReminder.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                pickDate()
+            }
+        }
+        bottomSheetDialog.edgeToEdgeEnabled
+        bottomSheetDialog.setContentView(view.root)
+        bottomSheetDialog.show()
+    }
+
+    private fun launchDeleteNoteDialog(note: Note) {
+        val materialDialog = MaterialAlertDialogBuilder(requireContext())
+        materialDialog.apply {
+            setTitle("Delete Note")
+            setMessage("Are you sure you want to delete ${note.title}?")
+            setNegativeButton("No") { dialog, _ -> dialog?.dismiss() }
+            setPositiveButton("Yes") { _, _ ->
+                viewModel.deleteNote(note)
+                navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+            }
+            show()
+        }
+    }
+
+    private fun startRecording() {
+        binding?.chronometerNoteTimer?.base = SystemClock.elapsedRealtime()
+        binding?.chronometerNoteTimer?.start()
+        val filePath = filePath(requireActivity())
+        val fileName = "${binding?.etNoteTitle?.text.toString().trim()}.3gp"
+        showToast("Started recording")
+        mediaRecorder = MediaRecorder()
+        mediaRecorder?.apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setOutputFile("$filePath/$fileName")
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+
+            try {
+                prepare()
+                start()
+            } catch (e: IOException) {
+                showToast("An error occurred")
+            }
+
+        }
+    }
+
+    private fun stopRecording() {
+        binding?.chronometerNoteTimer?.stop()
+        _note.audioLength = binding?.chronometerNoteTimer?.text.toString()
+        mediaRecorder?.apply {
+            stop()
+            release()
+        }
+        mediaRecorder = null
+        showToast("Stopped recording")
+    }
+
+    //    @RequiresApi(Build.VERSION_CODES.N)
+    private fun startPlayingRecording() {
+        binding?.chronometerNoteTimer?.isCountDown = true
+        showToast("Started playing recording")
+    }
+
+    private fun stopPlayingRecording() {
+        showToast("Stopped playing recording")
+    }
+
+    private fun shareNote(note: Note) {
+//        TODO("Not yet Implemented")
+        showToast("Coming soon: ${note.title}")
+    }
+
+    private fun updateStatusBarColor(color: Int) {
+        val window = requireActivity().window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.statusBarColor = color
+    }
+
+//    private fun setBase(value: String): String? {
+//        var base = ""
+//        value.forEach {
+//
+//        }
+//        return if (value.length >= 5) {
+//            for (i in 0..4)
+//                if (i == 3)
+//                    continue
+//            base += value[i]
+//            base
+//        } else null
+//    }
 }

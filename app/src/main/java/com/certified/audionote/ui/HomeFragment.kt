@@ -33,7 +33,6 @@ import com.certified.audionote.databinding.FragmentHomeBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.flags
 import com.certified.audionote.utils.UIState
-import com.certified.audionote.utils.colors
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -68,7 +67,7 @@ class HomeFragment : Fragment() {
         binding?.lifecycleOwner = this
         binding?.uiState = viewModel.uiState
 
-        viewModel.run {
+        viewModel.apply {
             notes.observe(viewLifecycleOwner) {
                 if (it != null && it.isNotEmpty())
                     uiState.set(UIState.HAS_DATA)
@@ -112,7 +111,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(recyclerViewNotes: RecyclerView) {
-        val layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.span_count))
+        val layoutManager =
+            GridLayoutManager(requireContext(), resources.getInteger(R.integer.span_count))
         recyclerViewNotes.also {
             it.layoutManager = layoutManager
             it.adapter = adapter
