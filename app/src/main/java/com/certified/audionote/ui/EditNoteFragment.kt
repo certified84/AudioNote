@@ -19,6 +19,7 @@ package com.certified.audionote.ui
 import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.SystemClock
@@ -72,6 +73,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     private lateinit var pickedDateTime: Calendar
     private lateinit var currentDateTime: Calendar
     private var mediaRecorder: MediaRecorder? = null
+    private var mediaPlayer: MediaPlayer? = null
     private var file: File? = null
 
     override fun onCreateView(
@@ -164,6 +166,16 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
     override fun onDestroyView() {
         super.onDestroyView()
+        mediaPlayer?.apply {
+            stop()
+            release()
+        }
+        mediaRecorder?.apply {
+            stop()
+            release()
+        }
+        mediaRecorder = null
+        mediaPlayer = null
         _binding = null
     }
 
@@ -238,8 +250,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                                 )
                             )
                                 .run {
-                                    isPlayingRecord = true
                                     startPlayingRecording()
+                                    isPlayingRecord = true
                                 }
                         } else {
                             btnRecord.setImageDrawable(
@@ -249,8 +261,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                                 )
                             )
                                 .run {
-                                    isPlayingRecord = false
                                     stopPlayingRecording()
+                                    isPlayingRecord = false
                                 }
                         }
                     }
@@ -383,17 +395,31 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
     //    @RequiresApi(Build.VERSION_CODES.N)
     private fun startPlayingRecording() {
-        binding?.chronometerNoteTimer?.isCountDown = true
-        showToast("Started playing recording")
+//        binding?.chronometerNoteTimer?.isCountDown = true
+        mediaPlayer = MediaPlayer()
+        try {
+            mediaPlayer?.apply {
+                setDataSource(file?.absolutePath)
+                prepare()
+                start()
+            }
+            showToast("Started playing recording")
+        } catch (e: IOException) {
+            showToast("An error occurred")
+        }
     }
 
     private fun stopPlayingRecording() {
+        mediaPlayer?.apply {
+            stop()
+            release()
+        }
         showToast("Stopped playing recording")
     }
 
     private fun shareNote(note: Note) {
 //        TODO("Not yet Implemented")
-        showToast("Coming soon: ${note.title}")
+        showToast("You'll be able to share ${note.title} soon")
     }
 
     private fun updateStatusBarColor(color: Int) {

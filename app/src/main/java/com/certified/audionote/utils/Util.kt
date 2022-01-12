@@ -64,7 +64,7 @@ fun formatDate(date: Long): String {
         minutes == 1L -> "a minute ago"
         minutes in 2..59L -> "$minutes minutes ago"
         hours == 1L -> "an hour ago"
-        hours in 2..59 -> "$hours hours ago"
+        hours in 2..23 -> "$hours hours ago"
         days == 1L -> "a day ago"
         else -> formatSimpleDate(date)
     }
