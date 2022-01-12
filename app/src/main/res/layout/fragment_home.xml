@@ -146,6 +146,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
+            android:visibility="gone"
             android:id="@+id/bottom_sheet_dialog_layout"
             layout="@layout/bottom_sheet_dialog" />
 

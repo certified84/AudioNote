@@ -54,14 +54,14 @@ class NoteRecyclerAdapter(private val files: Array<File>) :
             itemView.setOnClickListener {
                 val position = absoluteAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(getItem(position), files[position], position)
+                    listener.onItemClick(getItem(position))
                 }
             }
         }
     }
 
     interface OnItemClickedListener {
-        fun onItemClick(item: Note, file: File, position: Int)
+        fun onItemClick(item: Note)
     }
 
     fun setOnItemClickedListener(listener: OnItemClickedListener) {

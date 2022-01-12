@@ -24,6 +24,7 @@ import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -88,12 +89,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val path = filePath(requireActivity())
-            val files = File(path).listFiles() as Array<File>
-            file = if (args.position != -1) files[args.position] else null
-        }
-
         navController = Navigation.findNavController(view)
         _note = args.note
         binding?.lifecycleOwner = this
@@ -123,7 +118,12 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             if (args.note.id == 0) {
                 viewModel.uiState.set(UIState.EMPTY)
                 chronometerNoteTimer.base = SystemClock.elapsedRealtime()
+                file = null
             } else {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    file = File(_note.filePath)
+                    Log.d("TAG", "onViewCreated: ${file!!.name}")
+                }
                 viewModel.apply {
                     uiState.set(UIState.HAS_DATA)
                     getNote(args.note.id).observe(viewLifecycleOwner) {
@@ -166,14 +166,11 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mediaPlayer?.apply {
-            stop()
-            release()
-        }
-        mediaRecorder?.apply {
-            stop()
-            release()
-        }
+        if (isPlayingRecord)
+            mediaPlayer?.apply {
+                stop()
+                release()
+            }
         mediaRecorder = null
         mediaPlayer = null
         _binding = null
@@ -363,7 +360,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         binding?.chronometerNoteTimer?.start()
         val filePath = filePath(requireActivity())
         val fileName = "${binding?.etNoteTitle?.text.toString().trim()}.3gp"
-        _note.filePath = _note.title
+        _note.filePath = "$filePath/$fileName"
         showToast("Started recording")
         mediaRecorder = MediaRecorder()
         mediaRecorder?.apply {

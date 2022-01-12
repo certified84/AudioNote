@@ -126,11 +126,10 @@ class HomeFragment : Fragment() {
             it.adapter = adapter
         }
         adapter.setOnItemClickedListener(object : NoteRecyclerAdapter.OnItemClickedListener {
-            override fun onItemClick(item: Note, file: File, position: Int) {
+            override fun onItemClick(item: Note) {
                 val action =
-                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(item, position)
+                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(item)
                 navController.navigate(action)
-                Log.d("TAG", "onItemClick: ${file.name}")
             }
         })
     }
