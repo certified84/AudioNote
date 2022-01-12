@@ -96,14 +96,15 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:2.38.1"
 
 //    Easy Permissions
-//    implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
 
 //    Color picker
     implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
-    implementation "androidx.core:core-ktx:+"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+//    TimerX
+    implementation 'com.arsvechkarev:timerx:2.3.2'
+
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 }
 repositories {
     mavenCentral()

@@ -23,8 +23,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.databinding.ItemNoteBinding
 import com.certified.audionote.model.Note
+import java.io.File
 
-class NoteRecyclerAdapter :
+class NoteRecyclerAdapter(private val files: Array<File>) :
     ListAdapter<Note, NoteRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var listener: OnItemClickedListener
@@ -48,17 +49,19 @@ class NoteRecyclerAdapter :
         }
 
         init {
+//            val size = (files[position].totalSpace / 1048576L).toString()
+//            binding.tvNoteSize.text = "${size}MB"
             itemView.setOnClickListener {
                 val position = absoluteAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(getItem(position))
+                    listener.onItemClick(getItem(position), files[position], position)
                 }
             }
         }
     }
 
     interface OnItemClickedListener {
-        fun onItemClick(item: Note)
+        fun onItemClick(item: Note, file: File, position: Int)
     }
 
     fun setOnItemClickedListener(listener: OnItemClickedListener) {

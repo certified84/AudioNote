@@ -17,6 +17,7 @@
 package com.certified.audionote.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,13 +29,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.R
 import com.certified.audionote.adapter.NoteRecyclerAdapter
-import com.certified.audionote.database.Repository
+import com.certified.audionote.repository.Repository
 import com.certified.audionote.databinding.FragmentHomeBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.flags
 import com.certified.audionote.utils.UIState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -48,7 +50,7 @@ class HomeFragment : Fragment() {
     lateinit var repository: Repository
     private val viewModel: NotesViewModel by viewModels()
     private lateinit var navController: NavController
-    private val adapter by lazy { NoteRecyclerAdapter() }
+    private lateinit var adapter: NoteRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +68,10 @@ class HomeFragment : Fragment() {
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = this
         binding?.uiState = viewModel.uiState
+
+        val path = requireActivity().getExternalFilesDir("/")!!.absolutePath
+        val files = File(path).listFiles() as Array<File>
+        adapter = NoteRecyclerAdapter(files)
 
         viewModel.apply {
             notes.observe(viewLifecycleOwner) {
@@ -111,17 +117,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(recyclerViewNotes: RecyclerView) {
+//        val layoutManager =
+//            GridLayoutManager(requireContext(), resources.getInteger(R.integer.span_count))
         val layoutManager =
-            GridLayoutManager(requireContext(), resources.getInteger(R.integer.span_count))
+            GridLayoutManager(requireContext(), 2)
         recyclerViewNotes.also {
             it.layoutManager = layoutManager
             it.adapter = adapter
         }
         adapter.setOnItemClickedListener(object : NoteRecyclerAdapter.OnItemClickedListener {
-            override fun onItemClick(item: Note) {
+            override fun onItemClick(item: Note, file: File, position: Int) {
                 val action =
-                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(item)
+                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(item, position)
                 navController.navigate(action)
+                Log.d("TAG", "onItemClick: ${file.name}")
             }
         })
     }

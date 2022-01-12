@@ -22,6 +22,7 @@ import android.text.format.DateUtils
 import com.vmadalin.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 val colors = listOf(
     -504764, -740056, -1544140, -2277816, -3246217, -4024195,
@@ -51,15 +52,35 @@ fun formatDate(date: Long): String {
         currentDate().timeInMillis,
         DateUtils.SECOND_IN_MILLIS
     ).toString()
+
+    val now = Date()
+    val seconds = TimeUnit.MILLISECONDS.toSeconds(now.time - date)
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(now.time - date)
+    val hours = TimeUnit.MILLISECONDS.toHours(now.time - date)
+    val days = TimeUnit.MILLISECONDS.toDays(now.time - date)
+
     return when {
-        "minute" in dateString -> {
-            SimpleDateFormat("h:mm a", Locale.getDefault()).format(date)
-        }
-        " seconds" in dateString -> {
-            "now"
-        }
-        else -> dateString
+        seconds < 60 -> "Just now"
+        minutes == 1L -> "a minute ago"
+        minutes in 2..59L -> "$minutes minutes ago"
+        hours == 1L -> "an hour ago"
+        hours in 2..59 -> "$hours hours ago"
+        days == 1L -> "a day ago"
+        else -> formatSimpleDate(date)
     }
+
+//    return when {
+//        "hours" in dateString -> {
+//
+//        }
+//        "minute" in dateString -> {
+//            SimpleDateFormat("h:mm a", Locale.getDefault()).format(date)
+//        }
+//        "seconds" in dateString -> {
+//            "now"
+//        }
+//        else -> formatSimpleDate(date)
+//    }
 }
 
 fun formatReminderDate(date: Long): String =

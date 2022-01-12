@@ -35,6 +35,6 @@ interface AudioNotesDAO {
     @Query("SELECT * FROM notes_table WHERE id = :noteId")
     fun getNote(noteId: Int): LiveData<Note>
 
-    @Query("SELECT * FROM notes_table ORDER BY id")
+    @Query("SELECT * FROM notes_table ORDER BY id DESC")
     fun getAllNotes(): LiveData<List<Note>>
 }

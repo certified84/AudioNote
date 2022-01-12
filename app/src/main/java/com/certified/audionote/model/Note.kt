@@ -48,9 +48,11 @@ data class Note(
     var title: String = "",
     var description: String = "",
     var color: Int = colors.random(),
+//    val dateCreated: Long = currentDate().timeInMillis,
     var lastModificationDate: Long = currentDate().timeInMillis,
-    var audioLength: String = "00:00",
     var size: String = "",
+    var audioLength: String = "00:00",
+    var filePath: String = "",
     var started: Boolean = false,
     var reminder: Long? = null
 ): Parcelable

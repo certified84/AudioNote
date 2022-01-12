@@ -25,13 +25,13 @@
         <entry key="app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_edit_reminder.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_about.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_edit_note.xml" value="0.6521739130434783" />
+        <entry key="app/src/main/res/layout/fragment_edit_note.xml" value="0.26198083067092653" />
         <entry key="app/src/main/res/layout/fragment_edit_note1.xml" value="0.3787528868360277" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3620309050772627" />
         <entry key="app/src/main/res/layout/fragment_record.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.32188420019627084" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_note.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/item_note.xml" value="0.5988200589970502" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.33" />
         <entry key="app/src/main/res/xml/settings.xml" value="0.1" />
       </map>

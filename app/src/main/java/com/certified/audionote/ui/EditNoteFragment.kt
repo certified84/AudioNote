@@ -22,6 +22,7 @@ import android.app.TimePickerDialog
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,19 +32,23 @@ import android.widget.TimePicker
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.certified.audionote.R
-import com.certified.audionote.database.Repository
 import com.certified.audionote.databinding.DialogEditReminderBinding
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.model.Note
+import com.certified.audionote.repository.Repository
 import com.certified.audionote.utils.*
 import com.certified.audionote.utils.Extensions.showToast
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.File
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
@@ -67,7 +72,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     private lateinit var pickedDateTime: Calendar
     private lateinit var currentDateTime: Calendar
     private var mediaRecorder: MediaRecorder? = null
-    private val files: Array<String> by lazy { requireContext().fileList() }
+    private var file: File? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,6 +85,12 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val path = filePath(requireActivity())
+            val files = File(path).listFiles() as Array<File>
+            file = if (args.position != -1) files[args.position] else null
+        }
 
         navController = Navigation.findNavController(view)
         _note = args.note
@@ -103,7 +114,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                     openEditReminderDialog()
             }
             btnShare.setOnClickListener { shareNote(_note) }
-            btnDelete.setOnClickListener { launchDeleteNoteDialog(_note) }
+            btnDelete.setOnClickListener { launchDeleteNoteDialog() }
             btnRecord.setOnClickListener(this@EditNoteFragment)
             fabSaveNote.setOnClickListener(this@EditNoteFragment)
 
@@ -126,7 +137,12 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                         }
                     }
                 }
+
                 tvTitle.text = getString(R.string.edit_note)
+                etNoteTitle.apply {
+                    inputType = InputType.TYPE_NULL
+                    setOnClickListener { showToast("You can't edit the note title") }
+                }
                 btnRecord.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         resources,
@@ -265,7 +281,12 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         val minuteOfDay = currentDateTime.get(Calendar.MINUTE)
         val timePickerDialog =
             TimePickerDialog(requireContext(), this, hourOfDay, minuteOfDay, false)
+        timePickerDialog.setOnDismissListener {
+            _note.reminder = pickedDateTime.timeInMillis
+            binding?.tvReminderDate?.text = formatReminderDate(pickedDateTime.timeInMillis)
+        }
         timePickerDialog.show()
+
     }
 
     override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
@@ -278,8 +299,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                 set(Calendar.MONTH, currentDateTime.get(Calendar.MONTH))
             }
         }
-        _note.reminder = pickedDateTime.timeInMillis
-        viewModel.updateNote(_note)
     }
 
     private fun pickDate() {
@@ -300,7 +319,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             btnDeleteReminder.setOnClickListener {
                 viewModel.reminderCompletionState.set(ReminderCompletionState.ONGOING)
                 _note.reminder = null
-                viewModel.updateNote(_note)
                 bottomSheetDialog.dismiss()
             }
             btnModifyReminder.setOnClickListener {
@@ -313,14 +331,15 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         bottomSheetDialog.show()
     }
 
-    private fun launchDeleteNoteDialog(note: Note) {
+    private fun launchDeleteNoteDialog() {
         val materialDialog = MaterialAlertDialogBuilder(requireContext())
         materialDialog.apply {
             setTitle("Delete Note")
-            setMessage("Are you sure you want to delete ${note.title}?")
+            setMessage("Are you sure you want to delete ${_note.title}?")
             setNegativeButton("No") { dialog, _ -> dialog?.dismiss() }
             setPositiveButton("Yes") { _, _ ->
-                viewModel.deleteNote(note)
+                viewModel.deleteNote(_note)
+                lifecycleScope.launch(Dispatchers.IO) { file?.delete() }
                 navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
             }
             show()
@@ -332,6 +351,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         binding?.chronometerNoteTimer?.start()
         val filePath = filePath(requireActivity())
         val fileName = "${binding?.etNoteTitle?.text.toString().trim()}.3gp"
+        _note.filePath = _note.title
         showToast("Started recording")
         mediaRecorder = MediaRecorder()
         mediaRecorder?.apply {
