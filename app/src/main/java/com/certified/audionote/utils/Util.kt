@@ -58,7 +58,7 @@ fun formatDate(date: Long): String {
         " seconds" in dateString -> {
             "now"
         }
-        else -> dateString
+        else -> formatSimpleDate(date)
     }
 }
 
