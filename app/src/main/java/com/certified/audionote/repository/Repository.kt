@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.certified.audionote.database
+package com.certified.audionote.repository
 
 import androidx.lifecycle.LiveData
+import com.certified.audionote.database.AudioNotesDAO
 import com.certified.audionote.model.Note
-import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import javax.inject.Singleton
 

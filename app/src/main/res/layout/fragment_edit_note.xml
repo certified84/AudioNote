@@ -180,6 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:fontFamily="@font/open_sans_regular"
+                    app:visible="@{note.id == 0}"
                     android:textSize="@dimen/_30ssp"
                     app:layout_constraintBottom_toTopOf="@+id/btn_record"
                     app:layout_constraintEnd_toEndOf="parent"
