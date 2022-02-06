@@ -60,8 +60,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     TimePickerDialog.OnTimeSetListener {
 
     private var _binding: FragmentEditNoteBinding? = null
-    private val binding: FragmentEditNoteBinding?
-        get() = _binding
+    private val binding get() = _binding!!
 
     @Inject
     lateinit var repository: Repository
@@ -83,7 +82,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentEditNoteBinding.inflate(layoutInflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -223,13 +222,14 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                             description = etNoteDescription.text.toString().trim()
                         )
                         if (note.title.isNotBlank()) {
-                            if (isRecording)
-                                showToast("Stop the recording first")
-                            else {
-                                viewModel.insertNote(note)
-                                showToast("Note saved")
-                                navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
-                            }
+//                            if (isRecording)
+//                                showToast("Stop the recording first")
+//                            else {
+                            stopRecording()
+                            viewModel.insertNote(note)
+                            showToast("Note saved")
+                            navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+//                            }
                         } else {
                             showToast("The note title is required")
                             etNoteTitle.requestFocus()
@@ -425,18 +425,4 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 //        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.statusBarColor = color
     }
-
-//    private fun setBase(value: String): String? {
-//        var base = ""
-//        value.forEach {
-//
-//        }
-//        return if (value.length >= 5) {
-//            for (i in 0..4)
-//                if (i == 3)
-//                    continue
-//            base += value[i]
-//            base
-//        } else null
-//    }
 }
