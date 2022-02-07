@@ -41,7 +41,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/_32sdp"
             tools:context=".ui.HomeFragment">
 
                 <androidx.appcompat.widget.AppCompatImageButton
@@ -122,6 +121,14 @@
                 app:layout_constraintEnd_toEndOf="@+id/iv_empty_notes"
                 app:layout_constraintStart_toStartOf="@+id/iv_empty_notes" />
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group_empty_notes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:visible="@{uiState == UIState.EMPTY}"
+                app:constraint_referenced_ids="tv_empty_notes,iv_empty_notes" />
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_note"
                 android:layout_width="wrap_content"
@@ -134,14 +141,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_mic_black_24dp" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/group_empty_notes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:visible="@{uiState == UIState.EMPTY}"
-                app:constraint_referenced_ids="tv_empty_notes,iv_empty_notes" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

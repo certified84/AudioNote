@@ -70,16 +70,17 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     private lateinit var _note: Note
     private var isRecording = false
     private var isPlayingRecord = false
-    private lateinit var pickedDateTime: Calendar
-    private lateinit var currentDateTime: Calendar
+    private var pickedDateTime: Calendar? = null
+    private val currentDateTime by lazy { currentDate() }
     private var mediaRecorder: MediaRecorder? = null
     private var mediaPlayer: MediaPlayer? = null
     private var file: File? = null
+    private val noteIsRequired = "The note title is required"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentEditNoteBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -90,16 +91,15 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
         navController = Navigation.findNavController(view)
         _note = args.note
-        binding?.lifecycleOwner = this
-        binding?.apply {
+        binding.lifecycleOwner = this
+        binding.apply {
             note = _note
             uiState = viewModel.uiState
             reminderAvailableState = viewModel.reminderAvailableState
             reminderCompletionState = viewModel.reminderCompletionState
         }
 
-        binding?.apply {
-
+        binding.apply {
             btnBack.setOnClickListener {
                 navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
             }
@@ -151,7 +151,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                         null
                     )
                 )
-                binding?.chronometerNoteTimer?.text = args.note.audioLength
+                binding.chronometerNoteTimer.text = args.note.audioLength
 //                    binding?.chronometerNoteTimer?.base = setBase(note.audioLength)!!.toLong()
             }
         }
@@ -160,7 +160,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     override fun onResume() {
         super.onResume()
 
-        updateStatusBarColor(binding!!.note!!.color)
+        updateStatusBarColor(binding.note!!.color)
     }
 
     override fun onDestroyView() {
@@ -176,7 +176,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     override fun onClick(p0: View?) {
-        binding?.apply {
+        binding.apply {
             if (args.note.id == 0) {
                 when (p0) {
                     btnRecord -> {
@@ -194,7 +194,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                                         startRecording()
                                     }
                                 else {
-                                    showToast("The note title is required")
+                                    showToast(noteIsRequired)
                                     etNoteTitle.requestFocus()
                                 }
                             else
@@ -228,10 +228,12 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                             stopRecording()
                             viewModel.insertNote(note)
                             showToast("Note saved")
+                            if (pickedDateTime?.timeInMillis != null && pickedDateTime!!.timeInMillis <= currentDateTime.timeInMillis)
+                                startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note.id)
                             navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
 //                            }
                         } else {
-                            showToast("The note title is required")
+                            showToast(noteIsRequired)
                             etNoteTitle.requestFocus()
                         }
                     }
@@ -271,9 +273,11 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                         )
                         if (note.title.isNotBlank()) {
                             viewModel.updateNote(note)
+                            if (pickedDateTime?.timeInMillis != null && pickedDateTime?.timeInMillis != currentDateTime.timeInMillis)
+                                startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note.id)
                             navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
                         } else {
-                            showToast("The note title is required")
+                            showToast(noteIsRequired)
                             etNoteTitle.requestFocus()
                         }
                     }
@@ -284,25 +288,23 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
         pickedDateTime = currentDate()
-        pickedDateTime.set(p1, p2, p3)
-        currentDateTime = currentDate()
+        pickedDateTime!!.set(p1, p2, p3)
         val hourOfDay = currentDateTime.get(Calendar.HOUR_OF_DAY)
         val minuteOfDay = currentDateTime.get(Calendar.MINUTE)
         val timePickerDialog =
             TimePickerDialog(requireContext(), this, hourOfDay, minuteOfDay, false)
         timePickerDialog.setOnDismissListener {
-            _note.reminder = pickedDateTime.timeInMillis
-            binding?.tvReminderDate?.text = formatReminderDate(pickedDateTime.timeInMillis)
+            _note.reminder = pickedDateTime!!.timeInMillis
+            binding.tvReminderDate.text = formatReminderDate(pickedDateTime!!.timeInMillis)
         }
         timePickerDialog.show()
-
     }
 
     override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
-        pickedDateTime.set(Calendar.HOUR_OF_DAY, p1)
-        pickedDateTime.set(Calendar.MINUTE, p2)
-        if (pickedDateTime.timeInMillis <= currentDate().timeInMillis) {
-            pickedDateTime.run {
+        pickedDateTime!!.set(Calendar.HOUR_OF_DAY, p1)
+        pickedDateTime!!.set(Calendar.MINUTE, p2)
+        if (pickedDateTime!!.timeInMillis <= currentDate().timeInMillis) {
+            pickedDateTime!!.run {
                 set(Calendar.DAY_OF_MONTH, currentDateTime.get(Calendar.DAY_OF_MONTH) + 1)
                 set(Calendar.YEAR, currentDateTime.get(Calendar.YEAR))
                 set(Calendar.MONTH, currentDateTime.get(Calendar.MONTH))
@@ -311,7 +313,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun pickDate() {
-        currentDateTime = currentDate()
+//        currentDateTime = currentDate()
         val startYear = currentDateTime.get(Calendar.YEAR)
         val startMonth = currentDateTime.get(Calendar.MONTH)
         val startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
@@ -328,6 +330,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             btnDeleteReminder.setOnClickListener {
                 viewModel.reminderCompletionState.set(ReminderCompletionState.ONGOING)
                 _note.reminder = null
+                cancelAlarm(requireContext(), _note.id)
                 bottomSheetDialog.dismiss()
             }
             btnModifyReminder.setOnClickListener {
@@ -356,10 +359,10 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun startRecording() {
-        binding?.chronometerNoteTimer?.base = SystemClock.elapsedRealtime()
-        binding?.chronometerNoteTimer?.start()
+        binding.chronometerNoteTimer.base = SystemClock.elapsedRealtime()
+        binding.chronometerNoteTimer.start()
         val filePath = filePath(requireActivity())
-        val fileName = "${binding?.etNoteTitle?.text.toString().trim()}.3gp"
+        val fileName = "${binding.etNoteTitle.text.toString().trim()}.3gp"
         _note.filePath = "$filePath/$fileName"
         showToast("Started recording")
         mediaRecorder = MediaRecorder()
@@ -380,8 +383,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun stopRecording() {
-        binding?.chronometerNoteTimer?.stop()
-        _note.audioLength = binding?.chronometerNoteTimer?.text.toString()
+        binding.chronometerNoteTimer.stop()
+        _note.audioLength = binding.chronometerNoteTimer.text.toString()
         mediaRecorder?.apply {
             stop()
             release()

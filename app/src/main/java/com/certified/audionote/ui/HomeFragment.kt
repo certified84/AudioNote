@@ -17,7 +17,6 @@
 package com.certified.audionote.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,9 +28,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.R
 import com.certified.audionote.adapter.NoteRecyclerAdapter
-import com.certified.audionote.repository.Repository
 import com.certified.audionote.databinding.FragmentHomeBinding
 import com.certified.audionote.model.Note
+import com.certified.audionote.repository.Repository
 import com.certified.audionote.utils.Extensions.flags
 import com.certified.audionote.utils.UIState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -43,8 +42,7 @@ import javax.inject.Inject
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-    private val binding: FragmentHomeBinding?
-        get() = _binding
+    private val binding: FragmentHomeBinding get() = _binding!!
 
     @Inject
     lateinit var repository: Repository
@@ -55,19 +53,19 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        binding?.viewModel = viewModel
-        binding?.lifecycleOwner = this
-        binding?.uiState = viewModel.uiState
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        binding.uiState = viewModel.uiState
 
         val path = requireActivity().getExternalFilesDir("/")!!.absolutePath
         val files = File(path).listFiles() as Array<File>
@@ -83,7 +81,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding?.apply {
+        binding.apply {
 
             btnSettings.setOnClickListener { navController.navigate(R.id.action_homeFragment_to_settingsFragment) }
             fabAddNote.setOnClickListener {
@@ -104,7 +102,7 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
-
+//                    Unused
                 }
             })
             bottomSheetDialogLayout.linearLayoutCompat.setOnClickListener {
@@ -117,8 +115,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(recyclerViewNotes: RecyclerView) {
-//        val layoutManager =
-//            GridLayoutManager(requireContext(), resources.getInteger(R.integer.span_count))
         val layoutManager =
             GridLayoutManager(requireContext(), 2)
         recyclerViewNotes.also {

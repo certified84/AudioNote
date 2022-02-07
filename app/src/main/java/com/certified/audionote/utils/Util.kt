@@ -17,8 +17,13 @@
 package com.certified.audionote.utils
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.text.format.DateUtils
+import android.util.Log
+import com.certified.audionote.ui.AlertReceiver
 import com.vmadalin.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,11 +52,11 @@ fun currentDate(): Calendar {
 }
 
 fun formatDate(date: Long): String {
-    val dateString = DateUtils.getRelativeTimeSpanString(
-        date,
-        currentDate().timeInMillis,
-        DateUtils.SECOND_IN_MILLIS
-    ).toString()
+//    val dateString = DateUtils.getRelativeTimeSpanString(
+//        date,
+//        currentDate().timeInMillis,
+//        DateUtils.SECOND_IN_MILLIS
+//    ).toString()
 
     val now = Date()
     val seconds = TimeUnit.MILLISECONDS.toSeconds(now.time - date)
@@ -93,3 +98,19 @@ fun formatDateOnly(date: Long): String =
     SimpleDateFormat("dd MMM, yyyy", Locale.getDefault()).format(date)
 
 fun formatTime(date: Long): String = SimpleDateFormat("h:mm a", Locale.getDefault()).format(date)
+
+fun startAlarm(context: Context, time: Long, requestCode: Int) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlertReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, 0)
+    alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent)
+    Log.d("TAG", "startAlarm: Alarm started")
+}
+
+fun cancelAlarm(context: Context, requestCode: Int) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlertReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, 0)
+    alarmManager.cancel(pendingIntent)
+    Log.d("TAG", "cancelAlarm: Alarm canceled")
+}

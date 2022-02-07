@@ -46,4 +46,5 @@
     <string name="modify">Modify</string>
     <string name="delete">Delete</string>
     <string name="no_reminder_set">No reminder set</string>
+    <string name="channelId">Audio Notes notification</string>
 </resources>

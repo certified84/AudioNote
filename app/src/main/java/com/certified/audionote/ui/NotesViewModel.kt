@@ -47,7 +47,7 @@ class NotesViewModel @Inject constructor(private val repository: Repository) : V
     }
 
     private fun getNotes() {
-        val allNotes = repository.allNotes.value
+//        val allNotes = repository.allNotes.value
         notes = repository.allNotes
     }
 
