@@ -20,17 +20,31 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import com.certified.audionote.utils.NotificationWorker
+import java.util.concurrent.TimeUnit
 
-class AlertReceiver: BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
+class AlertReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
         Log.d("TAG", "onReceive: Alert received")
-        val notificationRequest: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>().build()
-        context?.let {
-            WorkManager.getInstance(context).enqueue(notificationRequest)
-        }
+        val noteId = intent.getIntExtra("noteId", 0)
+        val noteTitle = intent.getStringExtra("noteTitle")
+        Log.d("TAG", "onReceive: Alert received: noteId: $noteId, noteTitle: $noteTitle")
+        val data = Data.Builder()
+        data.putInt("noteId", noteId)
+        data.putString("noteTitle", noteTitle)
+        val notificationRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+        notificationRequest
+            .setInitialDelay(10000, TimeUnit.MILLISECONDS).setInputData(data.build())
+//        context?.let {
+        WorkManager.getInstance(context).beginUniqueWork(
+            "Audio Notes notification work",
+            ExistingWorkPolicy.REPLACE,
+            notificationRequest.build()
+        ).enqueue()
+//        }
     }
 }

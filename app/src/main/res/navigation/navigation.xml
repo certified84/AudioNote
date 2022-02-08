@@ -58,7 +58,12 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="note"
-            app:argType="com.certified.audionote.model.Note" />
+            app:argType="com.certified.audionote.model.Note"
+            app:nullable="true" />
+        <argument
+            android:name="noteId"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

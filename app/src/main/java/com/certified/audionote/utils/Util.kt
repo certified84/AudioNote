@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.format.DateUtils
 import android.util.Log
+import com.certified.audionote.model.Note
 import com.certified.audionote.ui.AlertReceiver
 import com.vmadalin.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
@@ -99,18 +100,20 @@ fun formatDateOnly(date: Long): String =
 
 fun formatTime(date: Long): String = SimpleDateFormat("h:mm a", Locale.getDefault()).format(date)
 
-fun startAlarm(context: Context, time: Long, requestCode: Int) {
+fun startAlarm(context: Context, time: Long, note: Note) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlertReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, 0)
+    intent.putExtra("noteTitle", note.title)
+    intent.putExtra("noteId", note.id)
+    val pendingIntent = PendingIntent.getBroadcast(context, note.id, intent, 0)
     alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent)
     Log.d("TAG", "startAlarm: Alarm started")
 }
 
-fun cancelAlarm(context: Context, requestCode: Int) {
+fun cancelAlarm(context: Context, note: Note) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlertReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, 0)
+    val pendingIntent = PendingIntent.getBroadcast(context, note.id, intent, 0)
     alarmManager.cancel(pendingIntent)
     Log.d("TAG", "cancelAlarm: Alarm canceled")
 }

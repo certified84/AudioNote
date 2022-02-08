@@ -16,10 +16,16 @@
 
 package com.certified.audionote.utils
 
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION
+import android.media.AudioAttributes.USAGE_NOTIFICATION_RINGTONE
 import android.media.RingtoneManager
+import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavDeepLinkBuilder
 import androidx.work.Worker
@@ -33,34 +39,58 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
     Worker(appContext, workerParams) {
     override fun doWork(): Result {
 
-        notifyUser(appContext)
+        val noteId = inputData.getInt("noteId", 0)
+        val noteTitle = inputData.getString("noteTitle")
+        notifyUser(appContext, noteId, noteTitle!!)
 
         return Result.success()
     }
 
-    private fun notifyUser(context: Context) {
+    private fun notifyUser(context: Context, noteId: Int, noteTitle: String) {
+
+        val channelId = context.getString(R.string.channelId)
+
         val defaultSoundUri =
             RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        val audioAttributes = AudioAttributes.Builder().setUsage(USAGE_NOTIFICATION_RINGTONE)
+            .setContentType(CONTENT_TYPE_SONIFICATION).build()
+
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val pendingIntent =
             NavDeepLinkBuilder(context)
                 .setGraph(R.navigation.navigation)
-                .setDestination(R.id.editNoteFragment, EditNoteFragmentArgs(Note(1)).toBundle())
+                .setDestination(R.id.editNoteFragment, EditNoteFragmentArgs(null, noteId).toBundle())
                 .setComponentName(MainActivity::class.java)
                 .createPendingIntent()
 
         val notificationBuilder =
             NotificationCompat.Builder(context, context.getString(R.string.channelId))
                 .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                .setContentTitle("Test note title")
-                .setContentText("Test note content")
+                .setContentTitle(noteTitle)
+//                .setContentText("note.description, $noteId")
                 .setColor(ResourcesCompat.getColor(context.resources, R.color.colorPrimary, null))
-                .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setDefaults(DEFAULT_ALL)
                 .setContentIntent(pendingIntent)
+                .setPriority(PRIORITY_HIGH)
+                .setAutoCancel(true)
 
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationBuilder.setChannelId(channelId)
+            val channel = NotificationChannel(
+                channelId,
+                "Audio Notes",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            channel.enableVibration(true)
+            channel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+            channel.setSound(defaultSoundUri, audioAttributes)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(noteId, notificationBuilder.build())
     }
 }
