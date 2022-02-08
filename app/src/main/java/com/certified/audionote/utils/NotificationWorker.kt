@@ -25,7 +25,8 @@ import android.media.AudioAttributes.USAGE_NOTIFICATION_RINGTONE
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationCompat.*
+import androidx.core.app.NotificationCompat.DEFAULT_ALL
+import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavDeepLinkBuilder
 import androidx.work.Worker
@@ -41,12 +42,33 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
 
         val noteId = inputData.getInt("noteId", 0)
         val noteTitle = inputData.getString("noteTitle")
-        notifyUser(appContext, noteId, noteTitle!!)
+        val noteDescription = inputData.getString("noteDescription")
+        val noteColor = inputData.getInt("noteColor", -1)
+        val noteLastModificationDate = inputData.getLong("noteLastModificationDate", -1L)
+        val noteSize = inputData.getString("noteSize")
+        val noteAudioLength = inputData.getString("noteAudioLength")
+        val noteFilePath = inputData.getString("noteFilePath")
+        val noteStarted = inputData.getBoolean("noteStarted", false)
+        val noteReminder = inputData.getLong("noteReminder", -1L)
+
+        val note = Note(
+            noteId,
+            noteTitle!!,
+            noteDescription!!,
+            noteColor,
+            noteLastModificationDate,
+            noteSize!!,
+            noteAudioLength!!,
+            noteFilePath!!,
+            noteStarted,
+            noteReminder
+        )
+        notifyUser(appContext, note)
 
         return Result.success()
     }
 
-    private fun notifyUser(context: Context, noteId: Int, noteTitle: String) {
+    private fun notifyUser(context: Context, note: Note) {
 
         val channelId = context.getString(R.string.channelId)
 
@@ -62,14 +84,17 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
         val pendingIntent =
             NavDeepLinkBuilder(context)
                 .setGraph(R.navigation.navigation)
-                .setDestination(R.id.editNoteFragment, EditNoteFragmentArgs(null, noteId).toBundle())
+                .setDestination(
+                    R.id.editNoteFragment,
+                    EditNoteFragmentArgs(note).toBundle()
+                )
                 .setComponentName(MainActivity::class.java)
                 .createPendingIntent()
 
         val notificationBuilder =
             NotificationCompat.Builder(context, context.getString(R.string.channelId))
                 .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                .setContentTitle(noteTitle)
+                .setContentTitle(note.title)
 //                .setContentText("note.description, $noteId")
                 .setColor(ResourcesCompat.getColor(context.resources, R.color.colorPrimary, null))
                 .setSound(defaultSoundUri)
@@ -91,6 +116,6 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(noteId, notificationBuilder.build())
+        notificationManager.notify(note.id, notificationBuilder.build())
     }
 }

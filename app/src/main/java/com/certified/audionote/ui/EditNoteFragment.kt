@@ -42,7 +42,6 @@ import com.certified.audionote.R
 import com.certified.audionote.databinding.DialogEditReminderBinding
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.model.Note
-import com.certified.audionote.repository.Repository
 import com.certified.audionote.utils.*
 import com.certified.audionote.utils.Extensions.showToast
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -53,7 +52,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDateSetListener,
@@ -62,10 +60,9 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     private var _binding: FragmentEditNoteBinding? = null
     private val binding get() = _binding!!
 
-    @Inject
-    lateinit var repository: Repository
     private val viewModel: NotesViewModel by viewModels()
     private lateinit var navController: NavController
+
     private val args: EditNoteFragmentArgs by navArgs()
     private lateinit var _note: Note
     private var isRecording = false
@@ -90,6 +87,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         super.onViewCreated(view, savedInstanceState)
 
         navController = Navigation.findNavController(view)
+
         _note = args.note
         binding.lifecycleOwner = this
         binding.apply {
@@ -119,41 +117,46 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                 chronometerNoteTimer.base = SystemClock.elapsedRealtime()
                 file = null
             } else {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    file = File(_note.filePath)
-                    Log.d("TAG", "onViewCreated: ${file!!.name}")
-                }
-                viewModel.apply {
-                    uiState.set(UIState.HAS_DATA)
-                    getNote(args.note.id).observe(viewLifecycleOwner) {
-                        if (it.reminder != null) {
-                            reminderAvailableState.set(ReminderAvailableState.HAS_REMINDER)
-                            if (currentDate().timeInMillis > args.note.reminder!!) {
-                                reminderCompletionState.set(ReminderCompletionState.COMPLETED)
-                            } else {
-                                reminderCompletionState.set(ReminderCompletionState.ONGOING)
-                            }
+                setup()
+            }
+        }
+    }
+
+    private fun setup() {
+        binding.apply {
+            lifecycleScope.launch(Dispatchers.IO) {
+                file = File(_note.filePath)
+                Log.d("TAG", "onViewCreated: ${file!!.name}")
+            }
+            viewModel.apply {
+                uiState.set(UIState.HAS_DATA)
+                getNote(args.note.id).observe(viewLifecycleOwner) {
+                    if (it.reminder != null) {
+                        reminderAvailableState.set(ReminderAvailableState.HAS_REMINDER)
+                        if (currentDate().timeInMillis > args.note.reminder!!) {
+                            reminderCompletionState.set(ReminderCompletionState.COMPLETED)
                         } else {
-                            reminderAvailableState.set(ReminderAvailableState.NO_REMINDER)
+                            reminderCompletionState.set(ReminderCompletionState.ONGOING)
                         }
+                    } else {
+                        reminderAvailableState.set(ReminderAvailableState.NO_REMINDER)
                     }
                 }
-
-                tvTitle.text = getString(R.string.edit_note)
-                etNoteTitle.apply {
-                    inputType = InputType.TYPE_NULL
-                    setOnClickListener { showToast("You can't edit the note title") }
-                }
-                btnRecord.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_audio_not_playing,
-                        null
-                    )
-                )
-                binding.chronometerNoteTimer.text = args.note.audioLength
-//                    binding?.chronometerNoteTimer?.base = setBase(note.audioLength)!!.toLong()
             }
+
+            tvTitle.text = getString(R.string.edit_note)
+            etNoteTitle.apply {
+                inputType = InputType.TYPE_NULL
+                setOnClickListener { showToast("You can't edit the note title") }
+            }
+            btnRecord.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.ic_audio_not_playing,
+                    null
+                )
+            )
+            binding.chronometerNoteTimer.text = args.note.audioLength
         }
     }
 
@@ -178,108 +181,116 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     override fun onClick(p0: View?) {
         binding.apply {
             if (args.note.id == 0) {
-                when (p0) {
-                    btnRecord -> {
-                        if (!isRecording) {
-                            if (hasPermission(requireContext(), Manifest.permission.RECORD_AUDIO))
-                                if (etNoteTitle.text.toString().isNotBlank())
-                                    btnRecord.setImageDrawable(
-                                        ResourcesCompat.getDrawable(
-                                            resources,
-                                            R.drawable.ic_mic_recording,
-                                            null
-                                        )
-                                    ).run {
-                                        isRecording = true
-                                        startRecording()
-                                    }
-                                else {
-                                    showToast(noteIsRequired)
-                                    etNoteTitle.requestFocus()
-                                }
-                            else
-                                requestPermission(
-                                    requireActivity(),
-                                    "This permission is required to enable audio recording",
-                                    MainActivity.RECORD_AUDIO_PERMISSION_CODE,
-                                    Manifest.permission.RECORD_AUDIO
-                                )
-                        } else {
-                            btnRecord.setImageDrawable(
-                                ResourcesCompat.getDrawable(
-                                    resources, R.drawable.ic_mic_not_recording, null
-                                )
+                onClickWhenIdIsZero(p0)
+            } else {
+                onClickWhenIdIsNotZero(p0)
+            }
+        }
+    }
+
+    private fun onClickWhenIdIsNotZero(p0: View?) {
+        binding.apply {
+            when (p0) {
+                btnRecord -> {
+                    if (!isPlayingRecord) {
+                        btnRecord.setImageDrawable(
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.ic_audio_playing, null
                             )
-                                .run {
-                                    isRecording = false
-                                    stopRecording()
-                                }
-                        }
-                    }
-                    fabSaveNote -> {
-                        val note = _note.copy(
-                            title = etNoteTitle.text.toString().trim(),
-                            description = etNoteDescription.text.toString().trim()
                         )
-                        if (note.title.isNotBlank()) {
-//                            if (isRecording)
-//                                showToast("Stop the recording first")
-//                            else {
-                            stopRecording()
-                            viewModel.insertNote(note)
-                            showToast("Note saved")
-                            if (pickedDateTime?.timeInMillis != null && pickedDateTime!!.timeInMillis <= currentDateTime.timeInMillis)
-                                startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note.id)
-                            navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
-//                            }
-                        } else {
-                            showToast(noteIsRequired)
-                            etNoteTitle.requestFocus()
-                        }
+                            .run {
+                                startPlayingRecording()
+                                isPlayingRecord = true
+                            }
+                    } else {
+                        btnRecord.setImageDrawable(
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.ic_audio_not_playing, null
+                            )
+                        )
+                            .run {
+                                stopPlayingRecording()
+                                isPlayingRecord = false
+                            }
                     }
                 }
-            } else {
-                when (p0) {
-                    btnRecord -> {
-                        if (!isPlayingRecord) {
-                            btnRecord.setImageDrawable(
-                                ResourcesCompat.getDrawable(
-                                    resources,
-                                    R.drawable.ic_audio_playing, null
-                                )
-                            )
-                                .run {
-                                    startPlayingRecording()
-                                    isPlayingRecord = true
-                                }
-                        } else {
-                            btnRecord.setImageDrawable(
-                                ResourcesCompat.getDrawable(
-                                    resources,
-                                    R.drawable.ic_audio_not_playing, null
-                                )
-                            )
-                                .run {
-                                    stopPlayingRecording()
-                                    isPlayingRecord = false
-                                }
-                        }
+                fabSaveNote -> {
+                    val note = _note.copy(
+                        title = etNoteTitle.text.toString().trim(),
+                        description = etNoteDescription.text.toString().trim(),
+                        lastModificationDate = currentDate().timeInMillis
+                    )
+                    if (note.title.isNotBlank()) {
+                        viewModel.updateNote(note)
+                        if (pickedDateTime?.timeInMillis != null && pickedDateTime?.timeInMillis != currentDateTime.timeInMillis)
+                            startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note)
+                        navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                    } else {
+                        showToast(noteIsRequired)
+                        etNoteTitle.requestFocus()
                     }
-                    fabSaveNote -> {
-                        val note = _note.copy(
-                            title = etNoteTitle.text.toString().trim(),
-                            description = etNoteDescription.text.toString().trim(),
-                            lastModificationDate = currentDate().timeInMillis
+                }
+            }
+        }
+    }
+
+    private fun onClickWhenIdIsZero(p0: View?) {
+        binding.apply {
+            when (p0) {
+                btnRecord -> {
+                    if (!isRecording) {
+                        if (hasPermission(requireContext(), Manifest.permission.RECORD_AUDIO))
+                            if (etNoteTitle.text.toString().isNotBlank())
+                                btnRecord.setImageDrawable(
+                                    ResourcesCompat.getDrawable(
+                                        resources,
+                                        R.drawable.ic_mic_recording,
+                                        null
+                                    )
+                                ).run {
+                                    isRecording = true
+                                    startRecording()
+                                }
+                            else {
+                                showToast(noteIsRequired)
+                                etNoteTitle.requestFocus()
+                            }
+                        else
+                            requestPermission(
+                                requireActivity(),
+                                "This permission is required to enable audio recording",
+                                MainActivity.RECORD_AUDIO_PERMISSION_CODE,
+                                Manifest.permission.RECORD_AUDIO
+                            )
+                    } else {
+                        btnRecord.setImageDrawable(
+                            ResourcesCompat.getDrawable(
+                                resources, R.drawable.ic_mic_not_recording, null
+                            )
                         )
-                        if (note.title.isNotBlank()) {
-                            viewModel.updateNote(note)
-                            if (pickedDateTime?.timeInMillis != null && pickedDateTime?.timeInMillis != currentDateTime.timeInMillis)
-                                startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note.id)
-                            navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
-                        } else {
-                            showToast(noteIsRequired)
-                            etNoteTitle.requestFocus()
-                        }
+                            .run {
+                                isRecording = false
+                                stopRecording()
+                            }
+                    }
+                }
+                fabSaveNote -> {
+                    val note = _note.copy(
+                        title = etNoteTitle.text.toString().trim(),
+                        description = etNoteDescription.text.toString().trim()
+                    )
+                    if (note.title.isNotBlank()) {
+                        stopRecording()
+                        viewModel.insertNote(note)
+                        showToast("Note saved")
+                        if (pickedDateTime?.timeInMillis != null && pickedDateTime!!.timeInMillis <= currentDateTime.timeInMillis)
+                            startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note)
+                        navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                    } else {
+                        showToast(noteIsRequired)
+                        etNoteTitle.requestFocus()
                     }
                 }
             }

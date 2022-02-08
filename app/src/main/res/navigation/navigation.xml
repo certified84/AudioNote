@@ -55,15 +55,10 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/slide_out"
             app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
         <argument
             android:name="note"
-            app:argType="com.certified.audionote.model.Note"
-            app:nullable="true" />
-        <argument
-            android:name="noteId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            app:argType="com.certified.audionote.model.Note" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
