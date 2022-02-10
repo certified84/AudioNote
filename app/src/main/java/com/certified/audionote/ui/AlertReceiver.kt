@@ -37,7 +37,7 @@ class AlertReceiver : BroadcastReceiver() {
         val noteColor = intent.getIntExtra("noteColor", -1)
         val noteLastModificationDate = intent.getLongExtra("noteLastModificationDate", -1L)
         val noteSize = intent.getStringExtra("noteSize")
-        val noteAudioLength = intent.getStringExtra("noteAudioLength")
+        val noteAudioLength = intent.getLongExtra("noteAudioLength", 0L)
         val noteFilePath = intent.getStringExtra("noteFilePath")
         val noteStarted = intent.getBooleanExtra("noteStarted", false)
         val noteReminder = intent.getLongExtra("noteReminder", -1L)
@@ -51,7 +51,7 @@ class AlertReceiver : BroadcastReceiver() {
                     noteColor,
                     noteLastModificationDate,
                     noteSize!!,
-                    noteAudioLength!!,
+                    noteAudioLength,
                     noteFilePath!!,
                     noteStarted,
                     noteReminder
@@ -67,7 +67,7 @@ class AlertReceiver : BroadcastReceiver() {
             putInt("noteColor", noteColor)
             putLong("noteLastModificationDate", noteLastModificationDate)
             putString("noteSize", noteSize)
-            putString("noteAudioLength", noteAudioLength)
+            putLong("noteAudioLength", noteAudioLength)
             putString("noteFilePath", noteFilePath)
             putBoolean("noteStarted", noteStarted)
             putLong("noteReminder", noteReminder)

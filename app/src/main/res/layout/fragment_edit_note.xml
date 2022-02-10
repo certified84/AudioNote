@@ -174,19 +174,34 @@
                     android:orientation="horizontal"
                     app:layout_constraintGuide_percent=".4" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_regular"
+                    app:timeText="@{note.audioLength}"
+                    android:textColor="@color/black_day_white_night"
+                    android:textSize="@dimen/_30ssp"
+                    app:visible="@{note.id != 0}"
+                    app:layout_constraintBottom_toBottomOf="@+id/chronometer_note_timer"
+                    app:layout_constraintEnd_toEndOf="@+id/chronometer_note_timer"
+                    app:layout_constraintStart_toStartOf="@+id/chronometer_note_timer"
+                    app:layout_constraintTop_toTopOf="@+id/chronometer_note_timer"
+                    tools:text="00:00" />
+
                 <Chronometer
                     android:id="@+id/chronometer_note_timer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:fontFamily="@font/open_sans_regular"
-                    app:visible="@{note.id == 0}"
                     android:textSize="@dimen/_30ssp"
                     app:layout_constraintBottom_toTopOf="@+id/btn_record"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_note_description" />
+                    app:layout_constraintTop_toBottomOf="@+id/et_note_description"
+                    app:chronometerVisibility="@{note.id == 0}" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/btn_record"
@@ -248,8 +263,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:src="@drawable/ic_alarm_on_black_24dp"
                     android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_alarm_on_black_24dp"
                     android:tint="@color/black_day_white_night"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -259,12 +274,12 @@
                     android:id="@+id/tv_reminder_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_4sdp"
                     android:layout_marginStart="@dimen/_16sdp"
-                    android:textSize="@dimen/_14ssp"
                     android:fontFamily="@font/open_sans_regular"
-                    android:textColor="@color/black_day_white_night"
+                    android:padding="@dimen/_4sdp"
                     android:text="@{UtilKt.formatReminderDate(note.reminder)}"
+                    android:textColor="@color/black_day_white_night"
+                    android:textSize="@dimen/_14ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView3"
                     app:layout_constraintTop_toTopOf="parent"

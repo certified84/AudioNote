@@ -46,7 +46,7 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
         val noteColor = inputData.getInt("noteColor", -1)
         val noteLastModificationDate = inputData.getLong("noteLastModificationDate", -1L)
         val noteSize = inputData.getString("noteSize")
-        val noteAudioLength = inputData.getString("noteAudioLength")
+        val noteAudioLength = inputData.getLong("noteAudioLength", 0L)
         val noteFilePath = inputData.getString("noteFilePath")
         val noteStarted = inputData.getBoolean("noteStarted", false)
         val noteReminder = inputData.getLong("noteReminder", -1L)
@@ -58,7 +58,7 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
             noteColor,
             noteLastModificationDate,
             noteSize!!,
-            noteAudioLength!!,
+            noteAudioLength,
             noteFilePath!!,
             noteStarted,
             noteReminder

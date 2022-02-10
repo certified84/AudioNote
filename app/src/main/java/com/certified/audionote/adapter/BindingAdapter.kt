@@ -18,6 +18,7 @@ package com.certified.audionote.adapter
 
 import android.graphics.Paint
 import android.view.View
+import android.widget.Chronometer
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,11 @@ fun View.setVisible(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
 }
 
+@BindingAdapter("chronometerVisibility")
+fun Chronometer.setVisible(visible: Boolean) {
+    visibility = if (visible) View.VISIBLE else View.INVISIBLE
+}
+
 @BindingAdapter("strikeThrough")
 fun strikeThrough(textView: TextView, strikeThrough: Boolean) {
     if (strikeThrough) {
@@ -41,4 +47,12 @@ fun strikeThrough(textView: TextView, strikeThrough: Boolean) {
     } else {
         textView.paintFlags = 0
     }
+}
+
+@BindingAdapter("timeText")
+fun TextView.timeText(value: Long) {
+    text = if (value >= 3600)
+        String.format("%02d:%02d:%02d", value / 3600, (value % 3600) / 60, value % 60)
+    else
+        String.format("%02d:%02d", (value % 3600) / 60, value % 60)
 }

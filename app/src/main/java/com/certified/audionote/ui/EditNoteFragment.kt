@@ -49,9 +49,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timerx.Timer
+import timerx.TimerBuilder
 import java.io.File
 import java.io.IOException
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDateSetListener,
@@ -73,6 +76,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     private var mediaPlayer: MediaPlayer? = null
     private var file: File? = null
     private val noteIsRequired = "The note title is required"
+    private var timer: Timer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -156,7 +160,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                     null
                 )
             )
-            binding.chronometerNoteTimer.text = args.note.audioLength
+            binding.chronometerNoteTimer.text = args.note.audioLength.toString()
         }
     }
 
@@ -175,6 +179,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             }
         mediaRecorder = null
         mediaPlayer = null
+        timer?.stop()
+        timer = null
         _binding = null
     }
 
@@ -395,7 +401,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
     private fun stopRecording() {
         binding.chronometerNoteTimer.stop()
-        _note.audioLength = binding.chronometerNoteTimer.text.toString()
+        _note.audioLength =
+            binding.chronometerNoteTimer.text.toString().filter { it.isDigit() }.toLong()
         mediaRecorder?.apply {
             stop()
             release()
@@ -404,15 +411,32 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         showToast("Stopped recording")
     }
 
-    //    @RequiresApi(Build.VERSION_CODES.N)
     private fun startPlayingRecording() {
-//        binding?.chronometerNoteTimer?.isCountDown = true
         mediaPlayer = MediaPlayer()
         try {
             mediaPlayer?.apply {
                 setDataSource(file?.absolutePath)
                 prepare()
                 start()
+
+                timer = TimerBuilder()
+                    .startTime(_note.audioLength.toLong(), TimeUnit.SECONDS)
+                    .startFormat("HH:MM:SS")
+                    .onTick { time -> binding.tvTimer.text = time }
+                    .actionWhen(0, TimeUnit.SECONDS) {
+                        binding.btnRecord.setImageDrawable(
+                            ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.ic_audio_not_playing,
+                                null
+                            )
+                        ).run {
+                            isPlayingRecord = false
+                            startRecording()
+                        }
+                    }
+                    .build()
+                timer!!.start()
             }
             showToast("Started playing recording")
         } catch (e: IOException) {

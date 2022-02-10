@@ -51,7 +51,7 @@ data class Note(
 //    val dateCreated: Long = currentDate().timeInMillis,
     var lastModificationDate: Long = currentDate().timeInMillis,
     var size: String = "",
-    var audioLength: String = "00:00",
+    var audioLength: Long = 0L,
     var filePath: String = "",
     var started: Boolean = false,
     var reminder: Long? = null
