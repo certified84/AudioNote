@@ -65,7 +65,7 @@
                 android:text="@string/hi_there"
                 android:textSize="@dimen/_26ssp"
                 android:textColor="@color/black_day_white_night"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/open_sans_bold_italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".7"
                 android:text="@string/welcome_back"
-                android:fontFamily="@font/open_sans_regular"
+                android:fontFamily="@font/open_sans_medium_italic"
                 android:textSize="@dimen/_16ssp"
                 app:layout_constraintStart_toStartOf="@+id/materialTextView2"
                 app:layout_constraintTop_toBottomOf="@+id/materialTextView2" />
@@ -93,41 +93,77 @@
                 app:visible="@{uiState == UIState.HAS_DATA}"
                 tools:listitem="@layout/item_note" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_empty_notes"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/materialTextView"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:src="@drawable/ic_undraw_void"
-                app:layout_constraintBottom_toTopOf="@+id/fab_add_note"
-                app:layout_constraintEnd_toEndOf="@+id/fab_add_note"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/materialTextView3"
-                app:layout_constraintTop_toBottomOf="@+id/materialTextView3"
-                app:layout_constraintVertical_bias="1.0" />
+                android:textColor="@color/titleText"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_height="wrap_content"
+                android:text="“The more that you read, the more things you will know, the more that you learn, the more places you’ll go.”"
+                android:textAlignment="center"
+                android:alpha=".7"
+                android:textSize="@dimen/_14ssp"
+                android:fontFamily="@font/open_sans_medium_italic"
+                app:layout_constraintBottom_toTopOf="@+id/materialTextView4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_empty_notes"
+                android:id="@+id/materialTextView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:alpha=".7"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:text="@string/your_record_list_is_empty_click_the_button_below_to_get_started"
-                android:textAlignment="center"
-                android:textSize="@dimen/_12ssp"
-                android:fontFamily="@font/open_sans_regular"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_empty_notes"
-                app:layout_constraintEnd_toEndOf="@+id/iv_empty_notes"
-                app:layout_constraintStart_toStartOf="@+id/iv_empty_notes" />
+                android:text="– Dr. Seuss"
+                android:scrollbarSize="@dimen/_18ssp"
+                android:textColor="@color/titleText"
+                android:fontFamily="@font/open_sans_bold_italic"
+                android:textSize="@dimen/_18ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/materialTextView"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/materialTextView"
+                app:layout_constraintTop_toBottomOf="@+id/materialTextView" />
+
+<!--            <androidx.appcompat.widget.AppCompatImageView-->
+<!--                android:id="@+id/iv_empty_notes"-->
+<!--                android:layout_width="0dp"-->
+<!--                tools:visibility="gone"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:src="@drawable/ic_undraw_void"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/fab_add_note"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/fab_add_note"-->
+<!--                app:layout_constraintHorizontal_bias="1.0"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/materialTextView3"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/materialTextView3"-->
+<!--                app:layout_constraintVertical_bias="1.0" />-->
+
+<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--                android:id="@+id/tv_empty_notes"-->
+<!--                tools:visibility="gone"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="@dimen/_8sdp"-->
+<!--                android:alpha=".7"-->
+<!--                android:paddingStart="@dimen/_16sdp"-->
+<!--                android:paddingEnd="@dimen/_16sdp"-->
+<!--                android:text="@string/your_record_list_is_empty_click_the_button_below_to_get_started"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textSize="@dimen/_12ssp"-->
+<!--                android:fontFamily="@font/open_sans_regular"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/iv_empty_notes"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/iv_empty_notes"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/iv_empty_notes" />-->
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_empty_notes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:visible="@{uiState == UIState.EMPTY}"
-                app:constraint_referenced_ids="tv_empty_notes,iv_empty_notes" />
+                app:constraint_referenced_ids="materialTextView,materialTextView4"
+                app:visible="@{uiState == UIState.EMPTY}" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_add_note"

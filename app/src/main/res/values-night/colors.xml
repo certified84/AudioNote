@@ -35,4 +35,7 @@
     <color name="fab_background_tint">#EFB8C8</color>
     <color name="about_icon_color">#939094</color>
     <color name="edit_reminder_button_color">@color/about_icon_color</color>
+    <color name="grey">@color/white</color>
+    <color name="titleText">@color/white</color>
+    <color name="subtitleText">@color/white</color>
 </resources>

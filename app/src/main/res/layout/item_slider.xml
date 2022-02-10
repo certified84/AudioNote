@@ -43,8 +43,8 @@
 
         <TextView
             android:id="@+id/tv_title"
-            android:fontFamily="@font/open_sans_bold"
-            android:textColor="@color/black_day_white_night"
+            android:fontFamily="@font/open_sans_bold_italic"
+            android:textColor="@color/titleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
@@ -60,10 +60,11 @@
 
         <TextView
             android:id="@+id/tv_description"
-            android:textColor="@color/black_day_white_night"
-            android:fontFamily="@font/open_sans_regular"
+            android:textColor="@color/titleText"
+            android:fontFamily="@font/open_sans_medium_italic"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:alpha=".7"
             android:layout_marginTop="@dimen/_8sdp"
             android:gravity="center"
             android:text="@{sliderItem.description}"

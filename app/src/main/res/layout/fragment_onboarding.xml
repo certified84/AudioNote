@@ -44,6 +44,7 @@
         android:backgroundTint="@color/primary_dark"
         android:fontFamily="@font/open_sans_semi_bold"
         android:text="Get Started"
+        android:textSize="@dimen/_14ssp"
         android:textAllCaps="false"
         android:textColor="@color/black_day_white_night"
         app:layout_constraintBottom_toTopOf="@+id/indicator"

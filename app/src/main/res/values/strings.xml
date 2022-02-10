@@ -47,4 +47,12 @@
     <string name="delete">Delete</string>
     <string name="no_reminder_set">No reminder set</string>
     <string name="channelId">Audio Notes notification</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="view_pager_title_audio_recording">Record audio easily</string>
+    <string name="view_pager_description_audio_recording">Taking notes shouldn\'t be about typing or writing alone. Use the voice recording feature to record your note easily and faster to improve your productivity</string>
+    <string name="view_pager_title_notification">Custom Notifications</string>
+    <string name="view_pager_description_notification">Set a reminder for your notes and get notified at the exact time you set the reminder for.  You no longer have to worry about forgetting to check out a note.</string>
+    <string name="view_pager_title_dark_mode">Designed for you</string>
+    <string name="view_pager_description_dark_mode">Taking notes shouldn\'t be rocket science. The applicatio was designed with you in mind to ease how you take notes and to also improve your productivity</string>
 </resources>

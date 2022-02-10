@@ -73,7 +73,6 @@ class NoteRecyclerAdapter(private val files: Array<File>) :
             override fun areItemsTheSame(oldItem: Note, newItem: Note) = oldItem.id == newItem.id
 
             override fun areContentsTheSame(oldItem: Note, newItem: Note) = oldItem == newItem
-
         }
     }
 }
