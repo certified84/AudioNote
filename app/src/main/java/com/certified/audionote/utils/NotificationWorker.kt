@@ -95,7 +95,7 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
             NotificationCompat.Builder(context, context.getString(R.string.channelId))
                 .setSmallIcon(R.drawable.ic_baseline_notifications_24)
                 .setContentTitle(note.title)
-//                .setContentText("note.description, $noteId")
+                .setContentText("Hi there, it's time to check out ${note.title}")
                 .setColor(ResourcesCompat.getColor(context.resources, R.color.colorPrimary, null))
                 .setSound(defaultSoundUri)
                 .setDefaults(DEFAULT_ALL)

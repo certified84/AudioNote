@@ -19,9 +19,11 @@ package com.certified.audionote.adapter
 import android.graphics.Paint
 import android.view.View
 import android.widget.Chronometer
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.certified.audionote.model.Note
 
 @BindingAdapter("listItems")
@@ -55,4 +57,9 @@ fun TextView.timeText(value: Long) {
         String.format("%02d:%02d:%02d", value / 3600, (value % 3600) / 60, value % 60)
     else
         String.format("%02d:%02d", (value % 3600) / 60, value % 60)
+}
+
+@BindingAdapter("image")
+fun ImageView.loadImage(image: Int) {
+    this.load(image)
 }

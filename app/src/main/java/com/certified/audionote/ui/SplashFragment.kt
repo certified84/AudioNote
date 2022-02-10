@@ -24,9 +24,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.preference.PreferenceManager
 import com.certified.audionote.R
 import com.certified.audionote.databinding.FragmentSplashBinding
 import com.certified.audionote.utils.Extensions.flags
+import com.certified.audionote.utils.PreferenceKeys
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -55,8 +57,17 @@ class SplashFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             delay(3000L)
-            navController.navigate(R.id.action_splashFragment_to_homeFragment)
+            isFirstLogin()
         }
+    }
+
+    private fun isFirstLogin() {
+        val isFirstLogin: Boolean = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .getBoolean(PreferenceKeys.FIRST_TIME_LOGIN, true)
+        if (isFirstLogin)
+            navController.navigate(R.id.action_splashFragment_to_onboardingFragment)
+        else
+            navController.navigate(R.id.action_splashFragment_to_homeFragment)
     }
 
     override fun onDestroyView() {

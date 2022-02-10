@@ -105,6 +105,12 @@ dependencies {
 //    TimerX
     implementation 'com.arsvechkarev:timerx:2.3.2'
 
+//    page indicator
+    implementation "com.romandanylyk:pageindicatorview:1.0.3@aar"
+
+//    Coil
+    implementation "io.coil-kt:coil:1.4.0"
+
 //    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 }
 repositories {
