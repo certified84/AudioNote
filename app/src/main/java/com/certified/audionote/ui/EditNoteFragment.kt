@@ -206,7 +206,10 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                             )
                         )
                             .run {
-                                startPlayingRecording()
+                                if (timer == null)
+                                    startPlayingRecording()
+                                else
+                                    continuePlayingRecording()
                                 isPlayingRecord = true
                             }
                     } else {
@@ -217,7 +220,10 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                             )
                         )
                             .run {
-                                stopPlayingRecording()
+                                if (timer?.getRemainingTimeIn(TimeUnit.SECONDS) != 0L)
+                                    pausePlayingRecording()
+                                else
+                                    stopPlayingRecording()
                                 isPlayingRecord = false
                             }
                     }
@@ -418,30 +424,41 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                 setDataSource(file?.absolutePath)
                 prepare()
                 start()
-
-                timer = TimerBuilder()
-                    .startTime(_note.audioLength.toLong(), TimeUnit.SECONDS)
-                    .startFormat("HH:MM:SS")
-                    .onTick { time -> binding.tvTimer.text = time }
-                    .actionWhen(0, TimeUnit.SECONDS) {
-                        binding.btnRecord.setImageDrawable(
-                            ResourcesCompat.getDrawable(
-                                resources,
-                                R.drawable.ic_audio_not_playing,
-                                null
-                            )
-                        ).run {
-                            isPlayingRecord = false
-                            startRecording()
-                        }
-                    }
-                    .build()
-                timer!!.start()
             }
+            timer = TimerBuilder()
+                .startTime(_note.audioLength, TimeUnit.SECONDS)
+                .startFormat("HH:MM:SS")
+                .onTick { time -> binding.tvTimer.text = time }
+                .actionWhen(0, TimeUnit.SECONDS) {
+                    binding.btnRecord.setImageDrawable(
+                        ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.ic_audio_not_playing,
+                            null
+                        )
+                    ).run {
+                        isPlayingRecord = false
+                        stopPlayingRecording()
+                    }
+                }
+                .build()
+            timer!!.start()
             showToast("Started playing recording")
         } catch (e: IOException) {
+            e.printStackTrace()
+            Log.d("TAG", "startPlayingRecording: ${e.localizedMessage}")
             showToast("An error occurred")
         }
+    }
+
+    private fun pausePlayingRecording() {
+        mediaPlayer?.pause()
+        timer?.stop()
+    }
+
+    private fun continuePlayingRecording() {
+        mediaPlayer?.start()
+        timer?.start()
     }
 
     private fun stopPlayingRecording() {
@@ -449,6 +466,11 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             stop()
             release()
         }
+        timer?.apply {
+            reset()
+            stop()
+        }
+        timer = null
         showToast("Stopped playing recording")
     }
 
