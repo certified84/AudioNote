@@ -16,20 +16,24 @@ A simple open source audio note-taking 📝 Android application built to describ
 <br />
 
 ## Day Mode 🌞
-Splash | Onboarding 1 | Onboarding 2 | Onboarding 3 | 
+Splash | Onboarding | Home(empty) | Home(content) | 
 --- | --- | --- | --- | 
-![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Splash.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Onboarding_1.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Onboarding_2.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Onboarding_3.png) |
+![](https://github.com/certified84/AudioNote/blob/master/Screenshots/splash_day.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/onboarding_day.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/home_empty_day.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/home_day.png) |
 
-Home | Notes | Courses | Bookmarks | Profile | Result
---- | --- | --- | --- | --- | --- |
-![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Home.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Notes.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Courses.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Bookmarks.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Profile.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Result.png)
+New note | Edit note | Settings | About | 
+--- | --- | --- | --- | 
+![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Home.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/edit_note.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/settings_day.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/about_day.png)
 
 <br />
 
 ## We Support Dark Mode Too 🌚
-Splash | Home | Notes | Courses | Bookmarks | Profile | Result
---- | --- | --- | --- | --- | --- | --- |
-![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Splash_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Home_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Notes_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Courses_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Bookmarks_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Profile_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Result_dark.png)
+Splash | Onboarding | Home(empty) | Home(content) | 
+--- | --- | --- | --- | 
+![](https://github.com/certified84/AudioNote/blob/master/Screenshots/splash_dark.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/onboarding_dark.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/home_empty_dark.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/home_dark.png) |
+
+New note | Edit note | Settings | About | 
+--- | --- | --- | --- | 
+![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Home.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/edit_note.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/settings_dark.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/about_dark.png)
 
 <br />
 
