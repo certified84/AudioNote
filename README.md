@@ -5,7 +5,7 @@ A simple open source audio note-taking 📝 Android application built to describ
 
 ***Find the latest apk here👇***
 
-[![AudioNotes](https://github.com/certified84/AudioNote/blob/master/app/src/main/res/drawable/logo.png)](https://github.com/certified84/Notes/releases/tag/beta-release-v1.2)
+[![AudioNotes](https://github.com/certified84/AudioNote/blob/master/app/src/main/res/drawable/logo.png)](https://github.com/certified84/AudioNote/releases)
 
 <br />
 
