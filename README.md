@@ -22,7 +22,7 @@ Splash | Onboarding | Home(empty) | Home(content) |
 
 New note | Edit note | Settings | About | 
 --- | --- | --- | --- | 
-![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Home.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/edit_note.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/settings_day.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/about_day.png)
+![](https://github.com/certified84/AudioNote/blob/master/Screenshots/new_note.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/edit_note.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/settings_day.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/about_day.png)
 
 <br />
 
@@ -33,7 +33,7 @@ Splash | Onboarding | Home(empty) | Home(content) |
 
 New note | Edit note | Settings | About | 
 --- | --- | --- | --- | 
-![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Home.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/edit_note.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/settings_dark.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/about_dark.png)
+![](https://github.com/certified84/AudioNote/blob/master/Screenshots/new_note.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/edit_note.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/settings_dark.png) | ![](https://github.com/certified84/AudioNote/blob/master/Screenshots/about_dark.png)
 
 <br />
 
