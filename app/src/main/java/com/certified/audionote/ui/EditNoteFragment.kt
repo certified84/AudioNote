@@ -289,12 +289,12 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                     }
                 }
                 fabSaveNote -> {
-                    val note = _note.copy(
-                        title = etNoteTitle.text.toString().trim(),
-                        description = etNoteDescription.text.toString().trim()
-                    )
-                    if (note.title.isNotBlank()) {
+                    if (etNoteTitle.text.toString().isNotBlank()) {
                         stopRecording()
+                        val note = _note.copy(
+                            title = etNoteTitle.text.toString().trim(),
+                            description = etNoteDescription.text.toString().trim()
+                        )
                         viewModel.insertNote(note)
                         showToast("Note saved")
                         if (pickedDateTime?.timeInMillis != null && pickedDateTime!!.timeInMillis <= currentDateTime.timeInMillis)

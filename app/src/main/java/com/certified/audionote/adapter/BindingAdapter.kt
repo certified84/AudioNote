@@ -37,6 +37,23 @@ fun View.setVisible(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
 }
 
+@BindingAdapter("editNoteVisible")
+fun View.setEditNoteVisible(audioLength: Long) {
+    visibility = when (audioLength) {
+        0L -> View.GONE
+        else -> View.VISIBLE
+    }
+}
+
+@BindingAdapter("timerVisible")
+fun View.setTimerVisible(audioLength: Long) {
+    visibility = when (audioLength) {
+        0L -> View.GONE
+        -1L -> View.GONE
+        else -> View.VISIBLE
+    }
+}
+
 @BindingAdapter("chronometerVisibility")
 fun Chronometer.setVisible(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.INVISIBLE

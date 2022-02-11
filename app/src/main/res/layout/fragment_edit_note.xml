@@ -186,7 +186,7 @@
                     app:layout_constraintStart_toStartOf="@+id/chronometer_note_timer"
                     app:layout_constraintTop_toTopOf="@+id/chronometer_note_timer"
                     app:timeText="@{note.audioLength}"
-                    app:visible="@{(note.id != 0 &amp;&amp; note.audioLength != 0L)}"
+                    app:timerVisible="@{note.audioLength}"
                     tools:text="00:00" />
 
                 <Chronometer
@@ -216,7 +216,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/chronometer_note_timer"
                     app:srcCompat="@drawable/ic_mic_not_recording"
-                    app:visible="@{(note.id != 0 &amp;&amp; note.audioLength != 0L)}" />
+                    app:editNoteVisible="@{note.audioLength}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
