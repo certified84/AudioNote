@@ -16,6 +16,8 @@
 
 package com.certified.audionote.utils
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
+
 object PreferenceKeys {
-    const val FIRST_TIME_LOGIN = "FIRST_TIME_LOGIN"
+    val FIRST_TIME_LOGIN = booleanPreferencesKey("FIRST_TIME_LOGIN")
 }

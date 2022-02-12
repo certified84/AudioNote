@@ -16,10 +16,11 @@
 
 package com.certified.audionote.utils
 
+import android.content.Context
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
-import com.certified.audionote.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,4 +44,6 @@ object Extensions {
         val format = SimpleDateFormat("dd/MM/yy")
         return format.format(this)
     }
+
+    val Context.dataStore by preferencesDataStore(name = "com.certified.audionotes.preferences")
 }

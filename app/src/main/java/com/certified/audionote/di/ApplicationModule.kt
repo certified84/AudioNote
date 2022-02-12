@@ -16,6 +16,7 @@
 
 package com.certified.audionote.di
 
+import android.app.Application
 import android.content.Context
 import dagger.Module
 import dagger.Provides
@@ -28,7 +29,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 object ApplicationModule {
 
     @Provides
-    fun provideAppContext(@ApplicationContext context: Context): Context {
-        return context
+    fun provideAppContext(@ApplicationContext context: Application): Context {
+        return context.applicationContext
     }
 }

@@ -16,20 +16,22 @@
 
 package com.certified.audionote.ui
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
 import com.certified.audionote.R
 import com.certified.audionote.adapter.ViewPagerAdapter
 import com.certified.audionote.databinding.FragmentOnboardingBinding
 import com.certified.audionote.model.SliderItem
+import com.certified.audionote.utils.Extensions.dataStore
 import com.certified.audionote.utils.PreferenceKeys
+import kotlinx.coroutines.launch
 
 class OnboardingFragment : Fragment() {
 
@@ -53,11 +55,12 @@ class OnboardingFragment : Fragment() {
         setUpViewPager()
 
         binding.btnGetStarted.setOnClickListener {
-//            val editor: SharedPreferences.Editor =
-//                PreferenceManager.getDefaultSharedPreferences(requireContext()).edit()
-//            editor.putBoolean(PreferenceKeys.FIRST_TIME_LOGIN, false)
-//            editor.apply()
-            findNavController().navigate(R.id.action_onboardingFragment_to_homeFragment)
+            lifecycleScope.launch {
+                requireContext().dataStore.edit {
+                    it[PreferenceKeys.FIRST_TIME_LOGIN] = false
+                }
+                findNavController().navigate(R.id.action_onboardingFragment_to_homeFragment)
+            }
         }
     }
 
