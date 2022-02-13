@@ -29,17 +29,16 @@ import com.certified.audionote.databinding.FragmentAboutBinding
 class AboutFragment : Fragment() {
 
     private var _binding: FragmentAboutBinding? = null
-    private val binding: FragmentAboutBinding?
-        get() = _binding
+    private val binding get() = _binding!!
     private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentAboutBinding.inflate(layoutInflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +46,7 @@ class AboutFragment : Fragment() {
 
         navController = Navigation.findNavController(view)
 
-        binding?.btnBack?.setOnClickListener { navController.navigate(R.id.action_aboutFragment_to_settingsFragment) }
+        binding.btnBack.setOnClickListener { navController.navigate(R.id.action_aboutFragment_to_settingsFragment) }
     }
 
     override fun onDestroyView() {

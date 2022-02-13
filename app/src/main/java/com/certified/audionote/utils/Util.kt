@@ -35,10 +35,7 @@ val colors = listOf(
     -11419154, -14654801
 )
 
-fun filePath(activity: Activity): String? {
-//    val file = File()
-    return activity.getExternalFilesDir("/")?.absolutePath
-}
+fun filePath(activity: Activity) = activity.getExternalFilesDir("/")?.absolutePath
 
 fun hasPermission(context: Context, permission: String) =
     EasyPermissions.hasPermissions(context, permission)
@@ -47,16 +44,9 @@ fun requestPermission(activity: Activity, message: String, requestCode: Int, per
     EasyPermissions.requestPermissions(activity, message, requestCode, permission)
 }
 
-fun currentDate(): Calendar {
-    return Calendar.getInstance()
-}
+fun currentDate(): Calendar = Calendar.getInstance()
 
 fun formatDate(date: Long): String {
-//    val dateString = DateUtils.getRelativeTimeSpanString(
-//        date,
-//        currentDate().timeInMillis,
-//        DateUtils.SECOND_IN_MILLIS
-//    ).toString()
 
     val now = Date()
     val seconds = TimeUnit.MILLISECONDS.toSeconds(now.time - date)
@@ -73,19 +63,6 @@ fun formatDate(date: Long): String {
         days == 1L -> "a day ago"
         else -> formatSimpleDate(date)
     }
-
-//    return when {
-//        "hours" in dateString -> {
-//
-//        }
-//        "minute" in dateString -> {
-//            SimpleDateFormat("h:mm a", Locale.getDefault()).format(date)
-//        }
-//        "seconds" in dateString -> {
-//            "now"
-//        }
-//        else -> formatSimpleDate(date)
-//    }
 }
 
 fun formatReminderDate(date: Long): String =

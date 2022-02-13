@@ -38,17 +38,16 @@ import kotlinx.coroutines.launch
 class SplashFragment : Fragment() {
 
     private var _binding: FragmentSplashBinding? = null
-    private val binding: FragmentSplashBinding?
-        get() = _binding
+    private val binding get() = _binding!!
     private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentSplashBinding.inflate(layoutInflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

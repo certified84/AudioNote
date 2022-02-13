@@ -19,6 +19,7 @@ package com.certified.audionote.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.certified.audionote.model.Note
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AudioNotesDAO {
@@ -33,8 +34,8 @@ interface AudioNotesDAO {
     suspend fun deleteNote(note: Note)
 
     @Query("SELECT * FROM notes_table WHERE id = :noteId")
-    fun getNote(noteId: Int): LiveData<Note>
+    fun getNote(noteId: Int): Flow<Note>
 
     @Query("SELECT * FROM notes_table ORDER BY id DESC")
-    fun getAllNotes(): LiveData<List<Note>>
+    fun getAllNotes(): Flow<List<Note>>
 }

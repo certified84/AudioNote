@@ -30,18 +30,17 @@ import com.certified.audionote.utils.Extensions.flags
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
-    private val binding: FragmentSettingsBinding?
-        get() = _binding
+    private val binding get() = _binding!!
     private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,7 +48,7 @@ class SettingsFragment : Fragment() {
 
         navController = Navigation.findNavController(view)
 
-        binding?.apply {
+        binding.apply {
             btnBack.setOnClickListener { navController.navigate(R.id.action_settingsFragment_to_homeFragment) }
             groupAbout.setOnClickListener { navController.navigate(R.id.action_settingsFragment_to_aboutFragment) }
         }
@@ -57,7 +56,6 @@ class SettingsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         flags(R.color.fragment_background)
     }
 

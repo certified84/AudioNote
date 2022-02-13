@@ -19,12 +19,10 @@ package com.certified.audionote.ui
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.certified.audionote.model.Note
 import com.certified.audionote.utils.NotificationWorker
 import java.util.concurrent.TimeUnit
 
@@ -41,23 +39,6 @@ class AlertReceiver : BroadcastReceiver() {
         val noteFilePath = intent.getStringExtra("noteFilePath")
         val noteStarted = intent.getBooleanExtra("noteStarted", false)
         val noteReminder = intent.getLongExtra("noteReminder", -1L)
-
-        Log.d(
-            "TAG", "onReceive: Alert received: Note: ${
-                Note(
-                    noteId,
-                    noteTitle!!,
-                    noteDescription!!,
-                    noteColor,
-                    noteLastModificationDate,
-                    noteSize!!,
-                    noteAudioLength,
-                    noteFilePath!!,
-                    noteStarted,
-                    noteReminder
-                )
-            }"
-        )
 
         val data = Data.Builder()
         data.apply {

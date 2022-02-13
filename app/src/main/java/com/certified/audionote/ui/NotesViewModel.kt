@@ -17,12 +17,9 @@
 package com.certified.audionote.ui
 
 import androidx.databinding.ObservableField
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.certified.audionote.repository.Repository
+import androidx.lifecycle.*
 import com.certified.audionote.model.Note
+import com.certified.audionote.repository.Repository
 import com.certified.audionote.utils.ReminderAvailableState
 import com.certified.audionote.utils.ReminderCompletionState
 import com.certified.audionote.utils.UIState
@@ -40,15 +37,13 @@ class NotesViewModel @Inject constructor(private val repository: Repository) : V
 
     private val _notes = MutableLiveData<List<Note>?>()
     lateinit var notes: LiveData<List<Note>>
-//        get() = _notes
 
     init {
         getNotes()
     }
 
     private fun getNotes() {
-//        val allNotes = repository.allNotes.value
-        notes = repository.allNotes
+        notes = repository.allNotes.asLiveData()
     }
 
     fun insertNote(note: Note) {
@@ -69,5 +64,5 @@ class NotesViewModel @Inject constructor(private val repository: Repository) : V
         }
     }
 
-    fun getNote(noteId: Int) = repository.getNote(noteId)
+    fun getNote(noteId: Int): LiveData<Note> = repository.getNote(noteId).asLiveData()
 }

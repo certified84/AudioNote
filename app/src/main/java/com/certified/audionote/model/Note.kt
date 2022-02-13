@@ -22,7 +22,6 @@ import androidx.room.PrimaryKey
 import com.certified.audionote.utils.colors
 import com.certified.audionote.utils.currentDate
 import kotlinx.parcelize.Parcelize
-import java.util.*
 
 /**
  * The Note class represent the domain model i.e the
@@ -48,11 +47,10 @@ data class Note(
     var title: String = "",
     var description: String = "",
     var color: Int = colors.random(),
-//    val dateCreated: Long = currentDate().timeInMillis,
     var lastModificationDate: Long = currentDate().timeInMillis,
     var size: String = "",
     var audioLength: Long = -1L,
     var filePath: String = "",
     var started: Boolean = false,
     var reminder: Long? = null
-): Parcelable
+) : Parcelable

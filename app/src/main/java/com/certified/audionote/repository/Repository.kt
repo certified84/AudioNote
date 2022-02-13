@@ -19,13 +19,14 @@ package com.certified.audionote.repository
 import androidx.lifecycle.LiveData
 import com.certified.audionote.database.AudioNotesDAO
 import com.certified.audionote.model.Note
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject constructor(private val audioNotesDAO: AudioNotesDAO) {
 
-    val allNotes: LiveData<List<Note>> = audioNotesDAO.getAllNotes()
+    val allNotes: Flow<List<Note>> = audioNotesDAO.getAllNotes()
 
     suspend fun insertNote(note: Note) {
         audioNotesDAO.insertNote(note)
@@ -39,15 +40,5 @@ class Repository @Inject constructor(private val audioNotesDAO: AudioNotesDAO) {
         audioNotesDAO.deleteNote(note)
     }
 
-    fun getNote(noteId: Int): LiveData<Note> {
-//        return try {
-            return audioNotesDAO.getNote(noteId)
-//        } catch (e: ExecutionException) {
-//            e.printStackTrace()
-//            null
-//        } catch (e: InterruptedException) {
-//            e.printStackTrace()
-//            null
-//        }
-    }
+    fun getNote(noteId: Int): Flow<Note> = audioNotesDAO.getNote(noteId)
 }

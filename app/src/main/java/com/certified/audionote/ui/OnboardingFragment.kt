@@ -89,12 +89,6 @@ class OnboardingFragment : Fragment() {
                 getString(R.string.view_pager_description_dark_mode)
             )
         )
-//        sliderItem.add(
-//            SliderItem(
-//                R.raw.animation_report, getString(R.string.view_pager_title_report),
-//                getString(R.string.view_pager_description_report)
-//            )
-//        )
     }
 
     private fun setUpViewPager() {

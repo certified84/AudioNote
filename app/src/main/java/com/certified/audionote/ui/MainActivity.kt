@@ -86,6 +86,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     companion object {
-        val RECORD_AUDIO_PERMISSION_CODE = 100
+        const val RECORD_AUDIO_PERMISSION_CODE = 100
     }
 }
