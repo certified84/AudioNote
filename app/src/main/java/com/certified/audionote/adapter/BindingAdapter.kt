@@ -18,7 +18,6 @@ package com.certified.audionote.adapter
 
 import android.graphics.Paint
 import android.view.View
-import android.widget.Chronometer
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -49,14 +48,8 @@ fun View.setEditNoteVisible(audioLength: Long) {
 fun View.setTimerVisible(audioLength: Long) {
     visibility = when (audioLength) {
         0L -> View.GONE
-//        -1L -> View.GONE
         else -> View.VISIBLE
     }
-}
-
-@BindingAdapter("chronometerVisibility")
-fun Chronometer.setVisible(visible: Boolean) {
-    visibility = if (visible) View.VISIBLE else View.INVISIBLE
 }
 
 @BindingAdapter("strikeThrough")

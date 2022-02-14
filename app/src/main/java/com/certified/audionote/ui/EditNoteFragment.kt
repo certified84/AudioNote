@@ -119,7 +119,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
             if (args.note.id == 0) {
                 viewModel.uiState.set(UIState.EMPTY)
-//                chronometerNoteTimer.base = SystemClock.elapsedRealtime()
                 file = null
             } else {
                 setup()
@@ -345,7 +344,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun pickDate() {
-//        currentDateTime = currentDate()
         val startYear = currentDateTime.get(Calendar.YEAR)
         val startMonth = currentDateTime.get(Calendar.MONTH)
         val startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
@@ -391,18 +389,17 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun startRecording() {
-//        binding.chronometerNoteTimer.base = SystemClock.elapsedRealtime()
-//        binding.chronometerNoteTimer.start()
+        val filePath = filePath(requireActivity())
+        val fileName = "${binding.etNoteTitle.text.toString().trim()}.3gp"
+        _note.filePath = "$filePath/$fileName"
+        showToast("Started recording")
+
         stopWatch = StopwatchBuilder()
             .startFormat("MM:SS")
             .onTick { time -> binding.tvTimer.text = time }
             .changeFormatWhen(1, TimeUnit.HOURS, "HH:MM:SS")
             .build()
 
-        val filePath = filePath(requireActivity())
-        val fileName = "${binding.etNoteTitle.text.toString().trim()}.3gp"
-        _note.filePath = "$filePath/$fileName"
-        showToast("Started recording")
         mediaRecorder = MediaRecorder()
         mediaRecorder?.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -421,19 +418,17 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun stopRecording() {
-//        binding.chronometerNoteTimer.stop()
-//        _note.audioLength =
-//            binding.chronometerNoteTimer.text.toString().filter { it.isDigit() }.toLong()
         mediaRecorder?.apply {
             stop()
             release()
         }
+        mediaRecorder = null
         stopWatch?.apply {
             stop()
             _note.audioLength = stopWatch!!.getTimeIn(TimeUnit.SECONDS)
             reset()
         }
-        mediaRecorder = null
+        stopWatch = null
         val file = File(_note.filePath)
         val fileByte = (file.readBytes().size.toDouble() / 1048576.00)
         val fileSize = roundOffDecimal(fileByte).toString()

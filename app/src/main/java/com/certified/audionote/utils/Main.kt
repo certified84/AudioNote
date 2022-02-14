@@ -23,7 +23,3 @@ fun main() {
     val minute = (time % 3600) / 60
     println("Time: $time, Minute: $minute, Second: $sec")
 }
-
-//fun correctTime(stringTime: String): Long {
-//    val hour = stringTime.split(":")
-//}
