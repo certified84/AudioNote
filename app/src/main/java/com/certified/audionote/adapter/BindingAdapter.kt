@@ -49,7 +49,7 @@ fun View.setEditNoteVisible(audioLength: Long) {
 fun View.setTimerVisible(audioLength: Long) {
     visibility = when (audioLength) {
         0L -> View.GONE
-        -1L -> View.GONE
+//        -1L -> View.GONE
         else -> View.VISIBLE
     }
 }

@@ -178,30 +178,31 @@
                     android:id="@+id/tv_timer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:fontFamily="@font/open_sans_regular"
                     android:textColor="@color/black_day_white_night"
                     android:textSize="@dimen/_30ssp"
-                    app:layout_constraintBottom_toBottomOf="@+id/chronometer_note_timer"
-                    app:layout_constraintEnd_toEndOf="@+id/chronometer_note_timer"
-                    app:layout_constraintStart_toStartOf="@+id/chronometer_note_timer"
-                    app:layout_constraintTop_toTopOf="@+id/chronometer_note_timer"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_record"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/et_note_description"
                     app:timeText="@{note.audioLength}"
                     app:timerVisible="@{note.audioLength}"
                     tools:text="00:00" />
 
-                <Chronometer
-                    android:id="@+id/chronometer_note_timer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:fontFamily="@font/open_sans_regular"
-                    android:textSize="@dimen/_30ssp"
-                    app:chronometerVisibility="@{note.id == 0}"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_record"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_note_description" />
+                <!--                <Chronometer-->
+                <!--                    android:id="@+id/tv_timer"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="@dimen/_16sdp"-->
+                <!--                    android:fontFamily="@font/open_sans_regular"-->
+                <!--                    android:textSize="@dimen/_30ssp"-->
+                <!--                    app:chronometerVisibility="@{note.id == 0}"-->
+                <!--                    app:layout_constraintBottom_toTopOf="@+id/btn_record"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintHorizontal_bias="0.5"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@+id/et_note_description" />-->
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/btn_record"
@@ -211,12 +212,12 @@
                     android:layout_marginBottom="@dimen/_8sdp"
                     android:background="@null"
                     android:contentDescription="@string/record_button"
+                    app:editNoteVisible="@{note.audioLength}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/chronometer_note_timer"
-                    app:srcCompat="@drawable/ic_mic_not_recording"
-                    app:editNoteVisible="@{note.audioLength}" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_timer"
+                    app:srcCompat="@drawable/ic_mic_not_recording" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

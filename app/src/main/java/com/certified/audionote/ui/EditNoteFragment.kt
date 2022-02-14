@@ -22,8 +22,6 @@ import android.app.TimePickerDialog
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
-import android.os.SystemClock
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -49,6 +47,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timerx.Stopwatch
+import timerx.StopwatchBuilder
 import timerx.Timer
 import timerx.TimerBuilder
 import java.io.File
@@ -76,6 +76,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     private var mediaPlayer: MediaPlayer? = null
     private var file: File? = null
     private val noteIsRequired = "The note title is required"
+    private var stopWatch: Stopwatch? = null
     private var timer: Timer? = null
 
     override fun onCreateView(
@@ -118,7 +119,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
             if (args.note.id == 0) {
                 viewModel.uiState.set(UIState.EMPTY)
-                chronometerNoteTimer.base = SystemClock.elapsedRealtime()
+//                chronometerNoteTimer.base = SystemClock.elapsedRealtime()
                 file = null
             } else {
                 setup()
@@ -161,7 +162,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                     null
                 )
             )
-            binding.chronometerNoteTimer.text = args.note.audioLength.toString()
         }
     }
 
@@ -180,8 +180,16 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             }
         mediaRecorder = null
         mediaPlayer = null
-        timer?.stop()
+        timer?.apply {
+            stop()
+            reset()
+        }
         timer = null
+        stopWatch?.apply {
+            stop()
+            reset()
+        }
+        stopWatch = null
         _binding = null
     }
 
@@ -383,8 +391,14 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun startRecording() {
-        binding.chronometerNoteTimer.base = SystemClock.elapsedRealtime()
-        binding.chronometerNoteTimer.start()
+//        binding.chronometerNoteTimer.base = SystemClock.elapsedRealtime()
+//        binding.chronometerNoteTimer.start()
+        stopWatch = StopwatchBuilder()
+            .startFormat("MM:SS")
+            .onTick { time -> binding.tvTimer.text = time }
+            .changeFormatWhen(1, TimeUnit.HOURS, "HH:MM:SS")
+            .build()
+
         val filePath = filePath(requireActivity())
         val fileName = "${binding.etNoteTitle.text.toString().trim()}.3gp"
         _note.filePath = "$filePath/$fileName"
@@ -398,6 +412,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             try {
                 prepare()
                 start()
+                stopWatch!!.start()
                 disableNoteTitleEdit()
             } catch (e: IOException) {
                 showToast("An error occurred")
@@ -406,12 +421,17 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun stopRecording() {
-        binding.chronometerNoteTimer.stop()
-        _note.audioLength =
-            binding.chronometerNoteTimer.text.toString().filter { it.isDigit() }.toLong()
+//        binding.chronometerNoteTimer.stop()
+//        _note.audioLength =
+//            binding.chronometerNoteTimer.text.toString().filter { it.isDigit() }.toLong()
         mediaRecorder?.apply {
             stop()
             release()
+        }
+        stopWatch?.apply {
+            stop()
+            _note.audioLength = stopWatch!!.getTimeIn(TimeUnit.SECONDS)
+            reset()
         }
         mediaRecorder = null
         val file = File(_note.filePath)
@@ -422,6 +442,23 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun startPlayingRecording() {
+        timer = TimerBuilder()
+            .startTime(_note.audioLength, TimeUnit.SECONDS)
+            .startFormat("HH:MM:SS")
+            .onTick { time -> binding.tvTimer.text = time }
+            .actionWhen(0, TimeUnit.SECONDS) {
+                binding.btnRecord.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_audio_not_playing,
+                        null
+                    )
+                ).run {
+                    isPlayingRecord = false
+                    stopPlayingRecording()
+                }
+            }
+            .build()
         mediaPlayer = MediaPlayer()
         try {
             mediaPlayer?.apply {
@@ -429,23 +466,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                 prepare()
                 start()
             }
-            timer = TimerBuilder()
-                .startTime(_note.audioLength, TimeUnit.SECONDS)
-                .startFormat("HH:MM:SS")
-                .onTick { time -> binding.tvTimer.text = time }
-                .actionWhen(0, TimeUnit.SECONDS) {
-                    binding.btnRecord.setImageDrawable(
-                        ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.ic_audio_not_playing,
-                            null
-                        )
-                    ).run {
-                        isPlayingRecord = false
-                        stopPlayingRecording()
-                    }
-                }
-                .build()
             timer!!.start()
             showToast("Started playing recording")
         } catch (e: IOException) {
