@@ -49,8 +49,6 @@ class NoteRecyclerAdapter(private val files: Array<File>) :
         }
 
         init {
-//            val size = (files[position].totalSpace / 1048576L).toString()
-//            binding.tvNoteSize.text = "${size}MB"
             itemView.setOnClickListener {
                 val position = absoluteAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {

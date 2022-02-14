@@ -104,7 +104,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_bold"
-                app:timeText="@{note.audioLength}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView"
@@ -112,6 +111,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
                 app:layout_constraintTop_toTopOf="@+id/appCompatImageView"
+                app:timeText="@{note.audioLength}"
                 tools:text="36:25" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -119,13 +119,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_regular"
-                android:text="@{note.size}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_note_last_modification_date"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/tv_record_length"
                 app:layout_constraintTop_toTopOf="@+id/tv_record_length"
+                app:sizeText="@{note.size}"
                 tools:text="46MB" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -160,19 +160,19 @@
                 app:layout_constraintTop_toTopOf="@+id/appCompatImageView2"
                 app:strikeThrough="@{UtilKt.currentDate().timeInMillis > note.reminder}"
                 app:visible="@{note.reminder != null}" />
-<!--            tools:text="17 Nov, 2021 8:00 AM"-->
+            <!--            tools:text="17 Nov, 2021 8:00 AM"-->
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_4sdp"
+                android:ellipsize="end"
                 android:fontFamily="@font/open_sans_regular"
+                android:maxLines="1"
                 android:text="@string/no_reminder_set"
                 android:textAlignment="viewEnd"
-                android:maxLines="1"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
-                android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView2"
                 app:layout_constraintEnd_toEndOf="@+id/tv_note_size"
                 app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"

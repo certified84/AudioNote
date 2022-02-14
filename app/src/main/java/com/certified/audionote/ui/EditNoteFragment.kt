@@ -150,7 +150,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
             tvTitle.text = getString(R.string.edit_note)
             etNoteTitle.apply {
-                inputType = InputType.TYPE_NULL
+//                inputType = InputType.TYPE_NULL
+                keyListener = null
                 setOnClickListener { showToast("You can't edit the note title") }
             }
             btnRecord.setImageDrawable(
@@ -394,14 +395,13 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
             setOutputFile("$filePath/$fileName")
             setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-
             try {
                 prepare()
                 start()
+                disableNoteTitleEdit()
             } catch (e: IOException) {
                 showToast("An error occurred")
             }
-
         }
     }
 
@@ -414,6 +414,10 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             release()
         }
         mediaRecorder = null
+        val file = File(_note.filePath)
+        val fileByte = (file.readBytes().size.toDouble() / 1048576.00)
+        val fileSize = roundOffDecimal(fileByte).toString()
+        _note.size = fileSize
         showToast("Stopped recording")
     }
 
@@ -448,6 +452,13 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             e.printStackTrace()
             Log.d("TAG", "startPlayingRecording: ${e.localizedMessage}")
             showToast("An error occurred")
+        }
+    }
+
+    private fun disableNoteTitleEdit() {
+        binding.etNoteTitle.apply {
+            keyListener = null
+            setOnClickListener { showToast("You can't edit the note title") }
         }
     }
 

@@ -80,3 +80,8 @@ fun TextView.timeText(value: Long) {
 fun ImageView.loadImage(image: Int) {
     this.load(image)
 }
+
+@BindingAdapter("sizeText")
+fun TextView.sizeText(value: String) {
+    text = "${value}MB"
+}
