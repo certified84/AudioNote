@@ -1,0 +1,1 @@
+<i>AudioNotes</i> is a simple app allowing you to take voice recordings – a dictaphone. It supports light and dark theme, lets you save and edit your recordings.
