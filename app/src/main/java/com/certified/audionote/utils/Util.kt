@@ -21,7 +21,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
+import com.certified.audionote.R
 import com.certified.audionote.model.Note
 import com.certified.audionote.ui.AlertReceiver
 import com.vmadalin.easypermissions.EasyPermissions
@@ -48,7 +50,7 @@ fun requestPermission(activity: Activity, message: String, requestCode: Int, per
 
 fun currentDate(): Calendar = Calendar.getInstance()
 
-fun formatDate(date: Long): String {
+fun formatDate(date: Long, context: Context): String {
 
     val now = Date()
     val seconds = TimeUnit.MILLISECONDS.toSeconds(now.time - date)
@@ -57,12 +59,12 @@ fun formatDate(date: Long): String {
     val days = TimeUnit.MILLISECONDS.toDays(now.time - date)
 
     return when {
-        seconds < 60 -> "Just now"
-        minutes == 1L -> "a minute ago"
-        minutes in 2..59L -> "$minutes minutes ago"
-        hours == 1L -> "an hour ago"
-        hours in 2..23 -> "$hours hours ago"
-        days == 1L -> "a day ago"
+        seconds < 60 -> context.getString(R.string.just_now)
+        minutes == 1L -> context.getString(R.string.a_minute_ago)
+        minutes in 2..59L -> "$minutes ${context.getString(R.string.minutes_ago)}"
+        hours == 1L -> context.getString(R.string.an_hour_ago)
+        hours in 2..23 -> "$hours ${context.getString(R.string.hours_ago)}"
+        days == 1L -> context.getString(R.string.a_day_ago)
         else -> formatSimpleDate(date)
     }
 }
@@ -93,7 +95,11 @@ fun startAlarm(context: Context, time: Long, note: Note) {
         putExtra("noteStarted", note.started)
         putExtra("noteReminder", note.reminder)
     }
-    val pendingIntent = PendingIntent.getBroadcast(context, note.id, intent, 0)
+    val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        PendingIntent.getBroadcast(context, note.id, intent, PendingIntent.FLAG_IMMUTABLE)
+    } else {
+        PendingIntent.getBroadcast(context, note.id, intent, 0)
+    }
     alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent)
     Log.d("TAG", "startAlarm: Alarm started")
 }
@@ -101,7 +107,11 @@ fun startAlarm(context: Context, time: Long, note: Note) {
 fun cancelAlarm(context: Context, noteId: Int) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlertReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, noteId, intent, 0)
+    val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        PendingIntent.getBroadcast(context, noteId, intent, PendingIntent.FLAG_IMMUTABLE)
+    } else {
+        PendingIntent.getBroadcast(context, noteId, intent, 0)
+    }
     alarmManager.cancel(pendingIntent)
     Log.d("TAG", "cancelAlarm: Alarm canceled")
 }

@@ -9,12 +9,15 @@
         <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/drawable/ic_undraw_empty.xml" value="0.182" />
         <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/drawable/ic_undraw_void.xml" value="0.1" />
         <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/fragment_about.xml" value="0.13768115942028986" />
+        <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/bottom_sheet_dialog.xml" value="0.10030395136778116" />
+        <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/dialog_edit_reminder.xml" value="0.25" />
+        <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/fragment_about.xml" value="0.4125" />
         <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/fragment_edit_note.xml" value="0.20625" />
         <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/fragment_home.xml" value="0.2" />
-        <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/fragment_onboarding.xml" value="0.5" />
+        <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/fragment_onboarding.xml" value="0.2" />
+        <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/fragment_settings.xml" value="0.22" />
         <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/fragment_splash.xml" value="0.12182971014492754" />
-        <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/item_note.xml" value="0.5" />
+        <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/item_note.xml" value="0.2" />
         <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/layout/item_slider.xml" value="0.33" />
         <entry key="..\:/Users/SAMSON/StudioProjects/AudioNote/app/src/main/res/xml/root_preferences.xml" value="0.20625" />
         <entry key="app/src/main/res/drawable/ic_alarm_on_black_24dp.xml" value="0.18697916666666667" />
