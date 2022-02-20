@@ -3,9 +3,9 @@ A simple open source audio note-taking 📝 Android application built to describ
 
 <br />
 
-***Find the latest apk here👇***
+***Find the latest stable release here👇***
 
-[![AudioNotes](https://github.com/certified84/AudioNote/blob/master/app/src/main/res/drawable/logo.png)](https://github.com/certified84/AudioNote/releases/tag/v0.1.1-beta00(11022022))
+[![AudioNotes](https://github.com/certified84/AudioNote/blob/master/app/src/main/res/drawable/logo.png)](https://github.com/certified84/AudioNote/releases/tag/v0.1.3)
 
 <br />
 
@@ -99,6 +99,11 @@ This app uses [***MVVM (Model View View-Model)***](https://developer.android.com
 
 ## Build-tool 🧰
 You need to have [Android Studio](https://developer.android.com/studio) to build this project.
+
+<br />
+
+## Credit 🙌
+Credit goes to [Shazomii's Notely](https://github.com/shazomii/Notely) for project inspiration
 
 <br />
 
