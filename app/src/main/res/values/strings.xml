@@ -67,4 +67,25 @@
     <string name="an_hour_ago">an hour ago</string>
     <string name="hours_ago">hours ago</string>
     <string name="a_day_ago">a day ago</string>
+    <string name="theme_system_default">System default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="now_playing">Now playing</string>
+    <string name="cant_edit_note_title">You can\'t edit the note title</string>
+    <string name="title_required">The note title is required</string>
+    <string name="permission_required">This permission is required to enable audio recording</string>
+    <string name="note_saved">Note saved</string>
+    <string name="started_recording">Started recording</string>
+    <string name="stopped_recording">Stopped recording</string>
+    <string name="started_playing_recording">Started playing recording</string>
+    <string name="stopped_playing_recording">Stopped playing recording</string>
+    <string name="error_occurred">An error occurred</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="confirm_deletion">Are you sure you want to delete</string>
+    <string name="all">All</string>
+    <string name="today">Today</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="completed">Completed</string>
 </resources>

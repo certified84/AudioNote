@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="Now playing"
+                android:text="@string/now_playing"
                 android:textSize="@dimen/_12ssp"
                 android:textColor="@color/black_day_white_night"
                 android:fontFamily="@font/open_sans_regular"

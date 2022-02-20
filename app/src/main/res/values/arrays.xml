@@ -17,9 +17,9 @@
 <resources>
     <!-- Theme Preference -->
     <string-array name="pref_theme">
-        <item>System default</item>
-        <item>Light</item>
-        <item>Dark</item>
+        <item>@string/theme_system_default</item>
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
     </string-array>
 
     <string-array name="pref_theme_values">
@@ -29,9 +29,9 @@
     </string-array>
 
     <string-array name="filter_array">
-        <item>All</item>
-        <item>Today</item>
-        <item>Upcoming</item>
-        <item>Completed</item>
+        <item>@string/all</item>
+        <item>@string/today</item>
+        <item>@string/upcoming</item>
+        <item>@string/completed</item>
     </string-array>
 </resources>
