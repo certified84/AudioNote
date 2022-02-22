@@ -27,6 +27,7 @@ import com.certified.audionote.R
 import com.certified.audionote.model.Note
 import com.certified.audionote.ui.AlertReceiver
 import com.vmadalin.easypermissions.EasyPermissions
+import java.lang.NumberFormatException
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -117,7 +118,14 @@ fun cancelAlarm(context: Context, noteId: Int) {
 }
 
 fun roundOffDecimal(number: Double): Double {
-    val df = DecimalFormat("#.##")
-    df.roundingMode = RoundingMode.CEILING
-    return df.format(number).toDouble()
+    var df : DecimalFormat
+    return try {
+        df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.CEILING
+        df.format(number).toDouble()
+    } catch (e: NumberFormatException) {
+        df = DecimalFormat("#,##")
+        df.roundingMode = RoundingMode.CEILING
+        df.format(number).toDouble()
+    }
 }
