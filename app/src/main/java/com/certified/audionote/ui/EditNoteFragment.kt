@@ -19,6 +19,7 @@ package com.certified.audionote.ui
 import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
@@ -75,7 +76,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     private var mediaRecorder: MediaRecorder? = null
     private var mediaPlayer: MediaPlayer? = null
     private var file: File? = null
-    private val noteIsRequired = "The note title is required"
     private var stopWatch: Stopwatch? = null
     private var timer: Timer? = null
 
@@ -113,7 +113,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                     openEditReminderDialog()
             }
             btnShare.setOnClickListener { shareNote(_note) }
-            btnDelete.setOnClickListener { launchDeleteNoteDialog() }
+            btnDelete.setOnClickListener { launchDeleteNoteDialog(requireContext()) }
             btnRecord.setOnClickListener(this@EditNoteFragment)
             fabSaveNote.setOnClickListener(this@EditNoteFragment)
 
@@ -152,7 +152,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             etNoteTitle.apply {
 //                inputType = InputType.TYPE_NULL
                 keyListener = null
-                setOnClickListener { showToast("You can't edit the note title") }
+                setOnClickListener { showToast(requireContext().getString(R.string.cant_edit_note_title)) }
             }
             btnRecord.setImageDrawable(
                 ResourcesCompat.getDrawable(
@@ -248,7 +248,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                             startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note)
                         navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
                     } else {
-                        showToast(noteIsRequired)
+                        showToast(requireContext().getString(R.string.title_required))
                         etNoteTitle.requestFocus()
                     }
                 }
@@ -274,13 +274,13 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                                     startRecording()
                                 }
                             else {
-                                showToast(noteIsRequired)
+                                showToast(requireContext().getString(R.string.title_required))
                                 etNoteTitle.requestFocus()
                             }
                         else
                             requestPermission(
                                 requireActivity(),
-                                "This permission is required to enable audio recording",
+                                requireContext().getString(R.string.permission_required),
                                 MainActivity.RECORD_AUDIO_PERMISSION_CODE,
                                 Manifest.permission.RECORD_AUDIO
                             )
@@ -304,12 +304,12 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                             description = etNoteDescription.text.toString().trim()
                         )
                         viewModel.insertNote(note)
-                        showToast("Note saved")
+                        showToast(requireContext().getString(R.string.note_saved))
                         if (pickedDateTime?.timeInMillis != null && pickedDateTime!!.timeInMillis <= currentDateTime.timeInMillis)
                             startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note)
                         navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
                     } else {
-                        showToast(noteIsRequired)
+                        showToast(requireContext().getString(R.string.title_required))
                         etNoteTitle.requestFocus()
                     }
                 }
@@ -373,13 +373,13 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         bottomSheetDialog.show()
     }
 
-    private fun launchDeleteNoteDialog() {
+    private fun launchDeleteNoteDialog(context: Context) {
         val materialDialog = MaterialAlertDialogBuilder(requireContext())
         materialDialog.apply {
-            setTitle("Delete Note")
-            setMessage("Are you sure you want to delete ${_note.title}?")
-            setNegativeButton("No") { dialog, _ -> dialog?.dismiss() }
-            setPositiveButton("Yes") { _, _ ->
+            setTitle(context.getString(R.string.delete_note))
+            setMessage("${context.getString(R.string.confirm_deletion)} ${_note.title}?")
+            setNegativeButton(context.getString(R.string.no)) { dialog, _ -> dialog?.dismiss() }
+            setPositiveButton(context.getString(R.string.yes)) { _, _ ->
                 viewModel.deleteNote(_note)
                 lifecycleScope.launch(Dispatchers.IO) { file?.delete() }
                 navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
@@ -392,7 +392,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         val filePath = filePath(requireActivity())
         val fileName = "${binding.etNoteTitle.text.toString().trim()}.3gp"
         _note.filePath = "$filePath/$fileName"
-        showToast("Started recording")
+        showToast(requireContext().getString(R.string.started_recording))
 
         stopWatch = StopwatchBuilder()
             .startFormat("MM:SS")
@@ -412,7 +412,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                 stopWatch!!.start()
                 disableNoteTitleEdit()
             } catch (e: IOException) {
-                showToast("An error occurred")
+                showToast(requireContext().getString(R.string.error_occurred))
             }
         }
     }
@@ -433,7 +433,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         val fileByte = (file.readBytes().size.toDouble() / 1048576.00)
         val fileSize = roundOffDecimal(fileByte).toString()
         _note.size = fileSize
-        showToast("Stopped recording")
+        showToast(requireContext().getString(R.string.stopped_recording))
     }
 
     private fun startPlayingRecording() {
@@ -462,18 +462,18 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                 start()
             }
             timer!!.start()
-            showToast("Started playing recording")
+            showToast(requireContext().getString(R.string.started_playing_recording))
         } catch (e: IOException) {
             e.printStackTrace()
             Log.d("TAG", "startPlayingRecording: ${e.localizedMessage}")
-            showToast("An error occurred")
+            showToast(requireContext().getString(R.string.error_occurred))
         }
     }
 
     private fun disableNoteTitleEdit() {
         binding.etNoteTitle.apply {
             keyListener = null
-            setOnClickListener { showToast("You can't edit the note title") }
+            setOnClickListener { showToast(requireContext().getString(R.string.cant_edit_note_title)) }
         }
     }
 
@@ -497,7 +497,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             stop()
         }
         timer = null
-        showToast("Stopped playing recording")
+        showToast(requireContext().getString(R.string.stopped_playing_recording))
     }
 
     private fun shareNote(note: Note) {
