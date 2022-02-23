@@ -66,7 +66,6 @@
     <string name="theme_light">Chiaro</string>
     <string name="theme_dark">Scuro</string>
     <string name="now_playing">In riproduzione</string>
-    <string name="cant_edit_note_title">Non puoi modificare il titolo della nota</string>
     <string name="title_required">Il titolo della nota è obbligatorio</string>
     <string name="permission_required">Questa autorizzazione è richiesta per abilitare le registrazioni audio</string>
     <string name="note_saved">Nota salvata</string>
