@@ -149,11 +149,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             }
 
             tvTitle.text = getString(R.string.edit_note)
-            etNoteTitle.apply {
-//                inputType = InputType.TYPE_NULL
-                keyListener = null
-                setOnClickListener { showToast(requireContext().getString(R.string.cant_edit_note_title)) }
-            }
             btnRecord.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
@@ -263,20 +258,15 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                 btnRecord -> {
                     if (!isRecording) {
                         if (hasPermission(context, Manifest.permission.RECORD_AUDIO))
-                            if (etNoteTitle.text.toString().isNotBlank())
-                                btnRecord.setImageDrawable(
-                                    ResourcesCompat.getDrawable(
-                                        resources,
-                                        R.drawable.ic_mic_recording,
-                                        null
-                                    )
-                                ).run {
-                                    isRecording = true
-                                    startRecording()
-                                }
-                            else {
-                                showToast(context.getString(R.string.title_required))
-                                etNoteTitle.requestFocus()
+                            btnRecord.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    resources,
+                                    R.drawable.ic_mic_recording,
+                                    null
+                                )
+                            ).run {
+                                isRecording = true
+                                startRecording()
                             }
                         else
                             requestPermission(
@@ -395,7 +385,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
     private fun startRecording() {
         val filePath = filePath(requireActivity())
-        val fileName = "${binding.etNoteTitle.text.toString().trim()}.3gp"
+        val fileName = "${System.currentTimeMillis()}.3gp"
         _note.filePath = "$filePath/$fileName"
         showToast(requireContext().getString(R.string.started_recording))
 
@@ -415,7 +405,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                 prepare()
                 start()
                 stopWatch!!.start()
-                disableNoteTitleEdit()
             } catch (e: IOException) {
                 showToast(requireContext().getString(R.string.error_occurred))
             }
@@ -474,13 +463,6 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             e.printStackTrace()
             Log.d("TAG", "startPlayingRecording: ${e.localizedMessage}")
             showToast(requireContext().getString(R.string.error_occurred))
-        }
-    }
-
-    private fun disableNoteTitleEdit() {
-        binding.etNoteTitle.apply {
-            keyListener = null
-            setOnClickListener { showToast(requireContext().getString(R.string.cant_edit_note_title)) }
         }
     }
 
