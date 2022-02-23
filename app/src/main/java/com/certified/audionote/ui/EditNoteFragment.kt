@@ -427,7 +427,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             return
         val file = File(_note.filePath)
         val fileByte = (file.readBytes().size.toDouble() / 1048576.00)
-        val fileSize = roundOffDecimal(fileByte).toString()
+        val fileSize = roundOffDecimal(fileByte)
         _note.size = fileSize
         showToast(requireContext().getString(R.string.stopped_recording))
     }
