@@ -27,7 +27,7 @@
     <string name="back_button">Pulsante Indietro</string>
     <string name="delete_button">Pulsante Elimina</string>
     <string name="share_button">Pulsante Condividi</string>
-    <string name="click_to_add_a_reminder_to_this_note">Clicca per aggiungere un promemoria a questa nota</string>
+    <string name="click_to_add_a_reminder_to_this_note">Aggiungi un promemoria a questa nota</string>
     <string name="record_button">Registra</string>
     <string name="reminder_button">Pulsante Promemoria</string>
     <string name="welcome_back">Bentornato</string>
@@ -83,4 +83,5 @@
     <string name="today">Oggi</string>
     <string name="upcoming">Imminenti</string>
     <string name="completed">Completate</string>
+    <string name="record_note_before_saving">Registra la tua nota audio prima di salvare</string>
 </resources>

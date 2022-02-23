@@ -88,4 +88,5 @@
     <string name="today">Today</string>
     <string name="upcoming">Upcoming</string>
     <string name="completed">Completed</string>
+    <string name="record_note_before_saving">Please record your audio note before saving</string>
 </resources>

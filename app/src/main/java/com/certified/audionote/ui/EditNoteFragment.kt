@@ -257,11 +257,12 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun onClickWhenIdIsZero(p0: View?) {
+        val context = requireContext()
         binding.apply {
             when (p0) {
                 btnRecord -> {
                     if (!isRecording) {
-                        if (hasPermission(requireContext(), Manifest.permission.RECORD_AUDIO))
+                        if (hasPermission(context, Manifest.permission.RECORD_AUDIO))
                             if (etNoteTitle.text.toString().isNotBlank())
                                 btnRecord.setImageDrawable(
                                     ResourcesCompat.getDrawable(
@@ -274,13 +275,13 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                                     startRecording()
                                 }
                             else {
-                                showToast(requireContext().getString(R.string.title_required))
+                                showToast(context.getString(R.string.title_required))
                                 etNoteTitle.requestFocus()
                             }
                         else
                             requestPermission(
                                 requireActivity(),
-                                requireContext().getString(R.string.permission_required),
+                                context.getString(R.string.permission_required),
                                 MainActivity.RECORD_AUDIO_PERMISSION_CODE,
                                 Manifest.permission.RECORD_AUDIO
                             )
@@ -299,17 +300,21 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                 fabSaveNote -> {
                     if (etNoteTitle.text.toString().isNotBlank()) {
                         stopRecording()
+                        if (_note.audioLength <= 0) {
+                            showToast(context.getString(R.string.record_note_before_saving))
+                            return
+                        }
                         val note = _note.copy(
                             title = etNoteTitle.text.toString().trim(),
                             description = etNoteDescription.text.toString().trim()
                         )
                         viewModel.insertNote(note)
-                        showToast(requireContext().getString(R.string.note_saved))
+                        showToast(context.getString(R.string.note_saved))
                         if (pickedDateTime?.timeInMillis != null && pickedDateTime!!.timeInMillis <= currentDateTime.timeInMillis)
-                            startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note)
+                            startAlarm(context, pickedDateTime!!.timeInMillis, note)
                         navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
                     } else {
-                        showToast(requireContext().getString(R.string.title_required))
+                        showToast(context.getString(R.string.title_required))
                         etNoteTitle.requestFocus()
                     }
                 }
@@ -374,7 +379,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun launchDeleteNoteDialog(context: Context) {
-        val materialDialog = MaterialAlertDialogBuilder(requireContext())
+        val materialDialog = MaterialAlertDialogBuilder(context)
         materialDialog.apply {
             setTitle(context.getString(R.string.delete_note))
             setMessage("${context.getString(R.string.confirm_deletion)} ${_note.title}?")
@@ -429,6 +434,8 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             reset()
         }
         stopWatch = null
+        if (_note.audioLength <= 0)
+            return
         val file = File(_note.filePath)
         val fileByte = (file.readBytes().size.toDouble() / 1048576.00)
         val fileSize = roundOffDecimal(fileByte).toString()
