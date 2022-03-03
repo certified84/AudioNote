@@ -42,6 +42,7 @@ import com.certified.audionote.databinding.DialogEditReminderBinding
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.*
+import com.certified.audionote.utils.Extensions.showKeyboardFor
 import com.certified.audionote.utils.Extensions.showToast
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -161,7 +162,11 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
     override fun onResume() {
         super.onResume()
-
+        if (args.note.id == 0)
+            binding.etNoteTitle.apply {
+                requestFocus()
+                showKeyboardFor(requireContext())
+            }
         updateStatusBarColor(binding.note!!.color)
     }
 
