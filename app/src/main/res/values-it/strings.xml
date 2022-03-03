@@ -1,0 +1,86 @@
+<!--
+  ~ Copyright (c) 2021 Samson Achiaga
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">Audio Notes</string>
+    <string name="display">Visualizzazione</string>
+    <string name="theme">Tema</string>
+    <string name="choose_theme">Scegli tema</string>
+    <string name="description">Descrizione</string>
+    <string name="note_title_required">Titolo della nota (obbligatorio)</string>
+    <string name="new_note">Nuova Nota</string>
+    <string name="save">Salva</string>
+    <string name="add_note_button">Pulsante Aggiungi nota</string>
+    <string name="back_button">Pulsante Indietro</string>
+    <string name="delete_button">Pulsante Elimina</string>
+    <string name="share_button">Pulsante Condividi</string>
+    <string name="click_to_add_a_reminder_to_this_note">Aggiungi un promemoria a questa nota</string>
+    <string name="record_button">Registra</string>
+    <string name="reminder_button">Pulsante Promemoria</string>
+    <string name="welcome_back">Bentornato</string>
+    <string name="hi_there">Ehilà,</string>
+    <string name="your_record_list_is_empty_click_the_button_below_to_get_started">L\'elenco delle registrazioni è vuoto. Clicca sul pulsante in basso per iniziare</string>
+    <string name="about">Informazioni</string>
+    <string name="attributions_amp_licence">Attribuzioni e Licenze</string>
+    <string name="licenced_under_apache_licence_version_2_0">Rilasciato sotto Licenza Apache, Versione 2.0</string>
+    <string name="app_version_licence_and_more">Versione dell\'app, licenza e altro</string>
+    <string name="settings">Impostazioni</string>
+    <string name="edit_note">Modifica Nota</string>
+    <string name="alarm_icon">Icona Sveglia</string>
+    <string name="modify">Modifica</string>
+    <string name="delete">Elimina</string>
+    <string name="no_reminder_set">Nessun promemoria</string>
+    <string name="channelId">Notifica di Audio Notes</string>
+    <string name="view_pager_title_audio_recording">Registra audio facilmente</string>
+    <string name="view_pager_description_audio_recording">Prendere appunti non dovrebbe riguardare la digitazione o la scrittura da sole. Usa la funzione di registrazione vocale per registrare la tua nota in modo facile e veloce per migliorare la tua produttività</string>
+    <string name="view_pager_title_notification">Notifiche Personalizzate</string>
+    <string name="view_pager_description_notification">Imposta un promemoria per le tue note e ricevi una notifica all\'ora esatta per cui hai impostato il promemoria. Non devi più preoccuparti di dimenticare di controllare una nota.</string>
+    <string name="view_pager_title_dark_mode">Progettato per te</string>
+    <string name="view_pager_description_dark_mode">Prendere appunti non dovrebbe essere fantascienza. L\'app è stata progettata pensando a te per facilitare il modo in cui prendi appunti e anche per migliorare la tua produttività</string>
+    <string name="record_player">Registratore</string>
+    <string name="developer">Sviluppatore</string>
+    <string name="contribute">Contribuisci</string>
+    <string name="contribute_summary">Visualizza il progetto su GitHub</string>
+    <string name="contact_feedback">Contatto e Feedback</string>
+    <string name="get_started">Iniziamo</string>
+    <string name="just_now">Proprio ora</string>
+    <string name="a_minute_ago">un minuto fa</string>
+    <string name="minutes_ago">minuti fa</string>
+    <string name="an_hour_ago">un\'ora fa</string>
+    <string name="hours_ago">ore fa</string>
+    <string name="a_day_ago">un giorno fa</string>
+    <string name="theme_system_default">Predefinito di sistema</string>
+    <string name="theme_light">Chiaro</string>
+    <string name="theme_dark">Scuro</string>
+    <string name="now_playing">In riproduzione</string>
+    <string name="title_required">Il titolo della nota è obbligatorio</string>
+    <string name="permission_required">Questa autorizzazione è richiesta per abilitare le registrazioni audio</string>
+    <string name="note_saved">Nota salvata</string>
+    <string name="started_recording">Registrazione avviata</string>
+    <string name="stopped_recording">Registrazione terminata</string>
+    <string name="started_playing_recording">Riproduzione della registrazione avviata</string>
+    <string name="stopped_playing_recording">Riproduzione della registrazione terminata</string>
+    <string name="error_occurred">Si è verificato un errore</string>
+    <string name="yes">Sì</string>
+    <string name="no">No</string>
+    <string name="delete_note">Elimina Nota</string>
+    <string name="confirm_deletion">Sei sicuro di voler eliminare</string>
+    <string name="all">Tutte</string>
+    <string name="today">Oggi</string>
+    <string name="upcoming">Imminenti</string>
+    <string name="completed">Completate</string>
+    <string name="record_note_before_saving">Registra la tua nota audio prima di salvare</string>
+</resources>

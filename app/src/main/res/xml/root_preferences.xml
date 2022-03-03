@@ -31,11 +31,11 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="About">
+    <PreferenceCategory app:title="@string/about">
         <Preference
             android:icon="@drawable/ic_person_black_24"
-            app:summary="Sammie_kt"
-            app:title="Developer">
+            app:summary="@string/developer_nick"
+            app:title="@string/developer">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://github.com/certified84" />
@@ -43,8 +43,8 @@
 
         <Preference
             android:icon="@drawable/ic_code_black_24dp"
-            app:summary="View project on Github"
-            app:title="Contribute">
+            app:summary="@string/contribute_summary"
+            app:title="@string/contribute">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://github.com/certified84/AudioNote" />
@@ -52,21 +52,21 @@
 
         <Preference
             android:icon="@drawable/ic_contact_support_black_24dp"
-            app:summary="Sammie_kt@pm.me"
-            app:title="Contact &amp; Feedback">
+            app:summary="@string/developer_mail"
+            app:title="@string/contact_feedback">
             <intent
                 android:action="android.intent.action.SENDTO"
                 android:data="mailto:Sammie_kt@pm.me?subject=Feedback" />
         </Preference>
 
-        <!--        <Preference-->
-        <!--            android:icon="@drawable/ic_info_black_24dp"-->
-        <!--            app:summary="App version, Licence and more"-->
-        <!--            app:title="About">-->
-        <!--            <intent-->
-        <!--                android:action="android.intent.action.VIEW"-->
-        <!--                android:data="https://github.com/shazomii/notely" />-->
-        <!--        </Preference>-->
+<!--        <Preference-->
+<!--            android:icon="@drawable/ic_info_black_24dp"-->
+<!--            app:summary="@string/app_version_licence_and_more"-->
+<!--            app:title="@string/about">-->
+<!--            <intent-->
+<!--                android:action="android.intent.action.VIEW"-->
+<!--                android:data="https://github.com/certified84/AudioNote" />-->
+<!--        </Preference>-->
     </PreferenceCategory>
 
 </PreferenceScreen>

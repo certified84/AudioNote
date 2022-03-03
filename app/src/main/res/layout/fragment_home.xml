@@ -63,7 +63,7 @@
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:text="@string/hi_there"
-                android:textSize="@dimen/_26ssp"
+                android:textSize="@dimen/_18ssp"
                 android:textColor="@color/black_day_white_night"
                 android:fontFamily="@font/open_sans_bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +76,7 @@
                 android:alpha=".7"
                 android:text="@string/welcome_back"
                 android:fontFamily="@font/open_sans_medium"
-                android:textSize="@dimen/_16ssp"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintStart_toStartOf="@+id/materialTextView2"
                 app:layout_constraintTop_toBottomOf="@+id/materialTextView2" />
 
@@ -85,6 +85,8 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

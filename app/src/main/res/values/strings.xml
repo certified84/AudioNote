@@ -18,9 +18,9 @@
     <string name="app_name">Audio Notes</string>
     <string name="display">Display</string>
     <string name="theme">Theme</string>
-    <string name="default_theme">MODE_NIGHT_FOLLOW_SYSTEM</string>
+    <string name="default_theme" translatable="false">MODE_NIGHT_FOLLOW_SYSTEM</string>
     <string name="choose_theme">Choose theme</string>
-    <string name="key_theme">theme</string>
+    <string name="key_theme" translatable="false">theme</string>
     <string name="description">Description</string>
     <string name="note_title_required">Note title (required)</string>
     <string name="new_note">New Note</string>
@@ -36,7 +36,7 @@
     <string name="hi_there">Hi there,</string>
     <string name="your_record_list_is_empty_click_the_button_below_to_get_started">Your record list is empty. Click the button below to get started</string>
     <string name="about">About</string>
-    <string name="app_version">v0.0.3-beta03(14022022)</string>
+    <string name="app_version" translatable="false">v0.1.4(04032022)</string>
     <string name="attributions_amp_licence"><![CDATA[Attributions & Licence]]></string>
     <string name="licenced_under_apache_licence_version_2_0">Licenced under Apache Licence, Version 2.0</string>
     <string name="app_version_licence_and_more">App version, Licence and more</string>
@@ -47,12 +47,45 @@
     <string name="delete">Delete</string>
     <string name="no_reminder_set">No reminder set</string>
     <string name="channelId">Audio Notes notification</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="view_pager_title_audio_recording">Record audio easily</string>
     <string name="view_pager_description_audio_recording">Taking notes shouldn\'t be about typing or writing alone. Use the voice recording feature to record your note easily and faster to improve your productivity</string>
     <string name="view_pager_title_notification">Custom Notifications</string>
     <string name="view_pager_description_notification">Set a reminder for your notes and get notified at the exact time you set the reminder for.  You no longer have to worry about forgetting to check out a note.</string>
     <string name="view_pager_title_dark_mode">Designed for you</string>
     <string name="view_pager_description_dark_mode">Taking notes shouldn\'t be rocket science. The application was designed with you in mind to ease how you take notes and to also improve your productivity</string>
+    <string name="record_player">Record Player</string>
+    <string name="developer">Developer</string>
+    <string name="developer_nick" translatable="false">Sammie_kt</string>
+    <string name="contribute">Contribute</string>
+    <string name="contribute_summary">View project on Github</string>
+    <string name="developer_mail" translatable="false">Sammie_kt@pm.me</string>
+    <string name="contact_feedback"><![CDATA[Contact & Feedback]]></string>
+    <string name="get_started">Get Started</string>
+    <string name="just_now">Just now</string>
+    <string name="a_minute_ago">a minute ago</string>
+    <string name="minutes_ago">minutes ago</string>
+    <string name="an_hour_ago">an hour ago</string>
+    <string name="hours_ago">hours ago</string>
+    <string name="a_day_ago">a day ago</string>
+    <string name="theme_system_default">System default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="now_playing">Now playing</string>
+    <string name="title_required">The note title is required</string>
+    <string name="permission_required">This permission is required to enable audio recording</string>
+    <string name="note_saved">Note saved</string>
+    <string name="started_recording">Started recording</string>
+    <string name="stopped_recording">Stopped recording</string>
+    <string name="started_playing_recording">Started playing recording</string>
+    <string name="stopped_playing_recording">Stopped playing recording</string>
+    <string name="error_occurred">An error occurred</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="confirm_deletion">Are you sure you want to delete</string>
+    <string name="all">All</string>
+    <string name="today">Today</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="completed">Completed</string>
+    <string name="record_note_before_saving">Please record your audio note before saving</string>
 </resources>
