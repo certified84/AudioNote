@@ -88,4 +88,9 @@
     <string name="upcoming">Upcoming</string>
     <string name="completed">Completed</string>
     <string name="record_note_before_saving">Please record your audio note before saving</string>
+    <string name="notification_permission_required" translatable="false">Notification permission is required to ensure you receive reminders for your saved notes</string>
+    <string name="notification_permission" translatable="false">Notification Permission</string>
+    <string name="audio_notes_channel" translatable="false">Audio Notes channel</string>
+    <string name="audio_record_permission" translatable="false">Audio record permission</string>
+    <string name="ok">Ok</string>
 </resources>

@@ -20,6 +20,7 @@ import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
@@ -30,6 +31,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.DatePicker
 import android.widget.TimePicker
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -50,8 +53,6 @@ import com.certified.audionote.utils.cancelAlarm
 import com.certified.audionote.utils.currentDate
 import com.certified.audionote.utils.filePath
 import com.certified.audionote.utils.formatReminderDate
-import com.certified.audionote.utils.hasPermission
-import com.certified.audionote.utils.requestPermission
 import com.certified.audionote.utils.roundOffDecimal
 import com.certified.audionote.utils.startAlarm
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -89,6 +90,17 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     private var file: File? = null
     private var stopWatch: Stopwatch? = null
     private var timer: Timer? = null
+
+    private val requestAudioRecordingPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (!isGranted) MaterialAlertDialogBuilder(requireContext()).apply {
+                setTitle(getString(R.string.audio_record_permission))
+                setMessage(getString(R.string.permission_required))
+                setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+                show()
+            }
+            else startRecording()
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -263,7 +275,10 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             when (p0) {
                 btnRecord -> {
                     if (!isRecording) {
-                        if (hasPermission(context, Manifest.permission.RECORD_AUDIO))
+                        if (ContextCompat.checkSelfPermission(
+                                requireContext(), Manifest.permission.RECORD_AUDIO
+                            ) == PackageManager.PERMISSION_GRANTED
+                        ) {
                             btnRecord.setImageDrawable(
                                 ResourcesCompat.getDrawable(
                                     resources,
@@ -274,13 +289,14 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                                 isRecording = true
                                 startRecording()
                             }
-                        else
-                            requestPermission(
-                                requireActivity(),
-                                context.getString(R.string.permission_required),
-                                MainActivity.RECORD_AUDIO_PERMISSION_CODE,
-                                Manifest.permission.RECORD_AUDIO
-                            )
+                        } else if (shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO))
+                            MaterialAlertDialogBuilder(requireContext()).apply {
+                                setTitle(getString(R.string.audio_record_permission))
+                                setMessage(getString(R.string.permission_required))
+                                setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+                                show()
+                            }
+                        else requestAudioRecordingPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
                     } else {
                         btnRecord.setImageDrawable(
                             ResourcesCompat.getDrawable(
