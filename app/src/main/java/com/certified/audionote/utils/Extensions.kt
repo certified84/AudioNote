@@ -22,6 +22,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 
@@ -30,7 +31,7 @@ object Extensions {
         val window = requireActivity().window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 //        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = this.resources.getColor(color)
+        window.statusBarColor = ResourcesCompat.getColor(resources, color, null)
     }
 
     fun Fragment.showToast(message: String) {

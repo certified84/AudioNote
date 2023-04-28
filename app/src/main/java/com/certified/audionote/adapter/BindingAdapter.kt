@@ -22,7 +22,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.certified.audionote.model.Note
 
 @BindingAdapter("listItems")
@@ -71,7 +70,7 @@ fun TextView.timeText(value: Long) {
 
 @BindingAdapter("image")
 fun ImageView.loadImage(image: Int) {
-    this.load(image)
+    setImageResource(image)
 }
 
 @BindingAdapter("sizeText")

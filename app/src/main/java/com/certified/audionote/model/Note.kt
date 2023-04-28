@@ -42,8 +42,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "notes_table")
 data class Note(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
     var title: String = "",
     var description: String = "",
     var color: Int = colors.random(),
@@ -52,5 +50,7 @@ data class Note(
     var audioLength: Long = -1L,
     var filePath: String = "",
     var started: Boolean = false,
-    var reminder: Long? = null
+    var reminder: Long? = null,
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
 ) : Parcelable

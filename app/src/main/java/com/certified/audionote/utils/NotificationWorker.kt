@@ -16,12 +16,8 @@
 
 package com.certified.audionote.utils
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.media.AudioAttributes
-import android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION
-import android.media.AudioAttributes.USAGE_NOTIFICATION_RINGTONE
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -52,7 +48,6 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
         val noteReminder = inputData.getLong("noteReminder", -1L)
 
         val note = Note(
-            noteId,
             noteTitle!!,
             noteDescription!!,
             noteColor,
@@ -61,7 +56,8 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
             noteAudioLength,
             noteFilePath!!,
             noteStarted,
-            noteReminder
+            noteReminder,
+            noteId,
         )
         notifyUser(appContext, note)
 
@@ -70,14 +66,8 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
 
     private fun notifyUser(context: Context, note: Note) {
 
-        val channelId = context.getString(R.string.channelId)
-
         val defaultSoundUri =
             RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-
-        val audioAttributes = AudioAttributes.Builder().setUsage(USAGE_NOTIFICATION_RINGTONE)
-            .setContentType(CONTENT_TYPE_SONIFICATION).build()
-
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -96,25 +86,15 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
                 .setSmallIcon(R.drawable.ic_baseline_notifications_24)
                 .setContentTitle(note.title)
                 .setContentText("Hi there, it's time to check out ${note.title}")
-                .setColor(ResourcesCompat.getColor(context.resources, R.color.colorPrimary, null))
+                .setColor(ResourcesCompat.getColor(context.resources, R.color.primary, null))
                 .setSound(defaultSoundUri)
                 .setDefaults(DEFAULT_ALL)
                 .setContentIntent(pendingIntent)
                 .setPriority(PRIORITY_HIGH)
                 .setAutoCancel(true)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationBuilder.setChannelId(channelId)
-            val channel = NotificationChannel(
-                channelId,
-                "Audio Notes",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            channel.enableVibration(true)
-            channel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
-            channel.setSound(defaultSoundUri, audioAttributes)
-            notificationManager.createNotificationChannel(channel)
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            notificationBuilder.setChannelId(context.getString(R.string.channelId))
 
         notificationManager.notify(note.id, notificationBuilder.build())
     }

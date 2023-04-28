@@ -36,7 +36,7 @@
     <string name="hi_there">Hi there,</string>
     <string name="your_record_list_is_empty_click_the_button_below_to_get_started">Your record list is empty. Click the button below to get started</string>
     <string name="about">About</string>
-    <string name="app_version" translatable="false">v0.1.4(04032022)</string>
+    <string name="app_version" translatable="false">v0.1.5(29042023)</string>
     <string name="attributions_amp_licence"><![CDATA[Attributions & Licence]]></string>
     <string name="licenced_under_apache_licence_version_2_0">Licenced under Apache Licence, Version 2.0</string>
     <string name="app_version_licence_and_more">App version, Licence and more</string>
@@ -88,4 +88,10 @@
     <string name="upcoming">Upcoming</string>
     <string name="completed">Completed</string>
     <string name="record_note_before_saving">Please record your audio note before saving</string>
+    <string name="notification_permission_required" translatable="false">Notification permission is required to ensure you receive reminders for your saved notes</string>
+    <string name="notification_permission" translatable="false">Notification Permission</string>
+    <string name="audio_notes_channel" translatable="false">Audio Notes channel</string>
+    <string name="audio_record_permission" translatable="false">Audio record permission</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="file_not_found">File not found</string>
 </resources>

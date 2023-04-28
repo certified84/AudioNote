@@ -26,9 +26,10 @@ import android.util.Log
 import com.certified.audionote.R
 import com.certified.audionote.model.Note
 import com.certified.audionote.ui.AlertReceiver
-import com.vmadalin.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 val colors = listOf(
@@ -38,13 +39,6 @@ val colors = listOf(
 )
 
 fun filePath(activity: Activity) = activity.getExternalFilesDir("/")?.absolutePath
-
-fun hasPermission(context: Context, permission: String) =
-    EasyPermissions.hasPermissions(context, permission)
-
-fun requestPermission(activity: Activity, message: String, requestCode: Int, permission: String) {
-    EasyPermissions.requestPermissions(activity, message, requestCode, permission)
-}
 
 fun currentDate(): Calendar = Calendar.getInstance()
 
