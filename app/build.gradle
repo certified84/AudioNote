@@ -21,6 +21,9 @@ plugins {
     id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
 }
 apply plugin: 'kotlin-android'
 
@@ -110,8 +113,11 @@ dependencies {
 //    page indicator
     implementation "com.romandanylyk:pageindicatorview:1.0.3@aar"
 
-//    Coil
-//    implementation "io.coil-kt:coil:2.2.1"
+//    Firebase
+    implementation platform('com.google.firebase:firebase-bom:29.0.3')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-perf-ktx'
 }
 repositories {
     mavenCentral()
