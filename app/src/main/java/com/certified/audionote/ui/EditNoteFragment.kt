@@ -20,6 +20,7 @@ import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -33,6 +34,7 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -68,6 +70,7 @@ import java.io.File
 import java.io.IOException
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
+
 
 @AndroidEntryPoint
 class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDateSetListener,
@@ -513,8 +516,25 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
     }
 
     private fun shareNote(note: Note) {
-//        TODO("Not yet Implemented")
-        showToast("You'll be able to share ${note.title} soon")
+        if (file == null) {
+            showToast(requireContext().getString(R.string.file_not_found))
+            return
+        }
+        try {
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                "com.certified.audionote.provider",
+                file!!
+            )
+            Intent(Intent.ACTION_SEND).apply {
+                type = "*/*"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                startActivity(Intent.createChooser(this, "Share using"))
+            }
+        } catch (t: Throwable) {
+            showToast(requireContext().getString(R.string.error_occurred))
+            Log.d("TAG", "shareNote: ${t.localizedMessage}")
+        }
     }
 
     private fun updateStatusBarColor(color: Int) {
