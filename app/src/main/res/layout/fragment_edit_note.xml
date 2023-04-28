@@ -21,27 +21,29 @@
 
     <data>
 
-        <import type="androidx.databinding.ObservableField" />
-
-        <import type="com.certified.audionote.utils.UIState" />
+        <import type="com.certified.audionote.utils.UtilKt" />
 
         <import type="com.certified.audionote.utils.ReminderAvailableState" />
 
         <import type="com.certified.audionote.utils.ReminderCompletionState" />
 
-        <import type="com.certified.audionote.utils.UtilKt" />
+        <import type="com.certified.audionote.utils.UIState" />
+
+        <variable
+            name="viewModel"
+            type="com.certified.audionote.ui.NotesViewModel" />
 
         <variable
             name="uiState"
-            type="ObservableField&lt;UIState>" />
+            type="UIState" />
 
         <variable
             name="reminderAvailableState"
-            type="ObservableField&lt;ReminderAvailableState>" />
+            type="ReminderAvailableState" />
 
         <variable
             name="reminderCompletionState"
-            type="ObservableField&lt;ReminderCompletionState>" />
+            type="ReminderCompletionState" />
 
         <variable
             name="note"
@@ -83,7 +85,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_delete"
             app:srcCompat="@drawable/ic_share_black_24dp"
-            app:visible="@{uiState == UIState.HAS_DATA}"
+            app:visible="@{viewModel.uiState == UIState.HAS_DATA}"
             tools:ignore="TouchTargetSizeCheck" />
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -98,7 +100,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btn_share"
             app:layout_constraintTop_toTopOf="@+id/btn_back"
             app:srcCompat="@drawable/ic_delete_black_24dp"
-            app:visible="@{uiState == UIState.HAS_DATA}"
+            app:visible="@{viewModel.uiState == UIState.HAS_DATA}"
             tools:ignore="TouchTargetSizeCheck" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -270,8 +272,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView3"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:strikeThrough="@{reminderCompletionState == ReminderCompletionState.COMPLETED}"
-                    app:visible="@{reminderAvailableState == ReminderAvailableState.HAS_REMINDER}" />
+                    app:strikeThrough="@{viewModel.reminderCompletionState == ReminderCompletionState.COMPLETED}"
+                    app:visible="@{viewModel.reminderAvailableState == ReminderAvailableState.HAS_REMINDER}" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -283,7 +285,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView3"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView3"
                     app:layout_constraintTop_toTopOf="@+id/appCompatImageView3"
-                    app:visible="@{reminderAvailableState == ReminderAvailableState.NO_REMINDER}" />
+                    app:visible="@{viewModel.reminderAvailableState == ReminderAvailableState.NO_REMINDER}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

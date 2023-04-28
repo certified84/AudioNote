@@ -41,9 +41,19 @@ import com.certified.audionote.R
 import com.certified.audionote.databinding.DialogEditReminderBinding
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.model.Note
-import com.certified.audionote.utils.*
 import com.certified.audionote.utils.Extensions.showKeyboardFor
 import com.certified.audionote.utils.Extensions.showToast
+import com.certified.audionote.utils.ReminderAvailableState
+import com.certified.audionote.utils.ReminderCompletionState
+import com.certified.audionote.utils.UIState
+import com.certified.audionote.utils.cancelAlarm
+import com.certified.audionote.utils.currentDate
+import com.certified.audionote.utils.filePath
+import com.certified.audionote.utils.formatReminderDate
+import com.certified.audionote.utils.hasPermission
+import com.certified.audionote.utils.requestPermission
+import com.certified.audionote.utils.roundOffDecimal
+import com.certified.audionote.utils.startAlarm
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +65,7 @@ import timerx.Timer
 import timerx.TimerBuilder
 import java.io.File
 import java.io.IOException
-import java.util.*
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -94,70 +104,60 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
         navController = Navigation.findNavController(view)
 
-        _note = args.note
         binding.lifecycleOwner = this
-        binding.apply {
-            note = _note
-            uiState = viewModel.uiState
-            reminderAvailableState = viewModel.reminderAvailableState
-            reminderCompletionState = viewModel.reminderCompletionState
+        binding.viewModel = viewModel
+        args.note.let {
+            _note = it
+            binding.note = it
         }
 
-        binding.apply {
-            btnBack.setOnClickListener {
-                navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
-            }
-            cardAddReminder.setOnClickListener {
-                if (viewModel.reminderAvailableState.get() == ReminderAvailableState.NO_REMINDER)
-                    pickDate()
-                else
-                    openEditReminderDialog()
-            }
-            btnShare.setOnClickListener { shareNote(_note) }
-            btnDelete.setOnClickListener { launchDeleteNoteDialog(requireContext()) }
-            btnRecord.setOnClickListener(this@EditNoteFragment)
-            fabSaveNote.setOnClickListener(this@EditNoteFragment)
+        binding.btnBack.setOnClickListener {
+            navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+        }
+        binding.cardAddReminder.setOnClickListener {
+            if (viewModel._reminderAvailableState.value == ReminderAvailableState.NO_REMINDER)
+                pickDate()
+            else
+                openEditReminderDialog()
+        }
+        binding.btnShare.setOnClickListener { shareNote(_note) }
+        binding.btnDelete.setOnClickListener { launchDeleteNoteDialog(requireContext()) }
+        binding.btnRecord.setOnClickListener(this@EditNoteFragment)
+        binding.fabSaveNote.setOnClickListener(this@EditNoteFragment)
 
-            if (args.note.id == 0) {
-                viewModel.uiState.set(UIState.EMPTY)
-                file = null
-            } else {
-                setup()
-            }
+        if (args.note.id == 0) {
+            viewModel._uiState.value = UIState.EMPTY
+            file = null
+        } else {
+            setup()
         }
     }
 
     private fun setup() {
-        binding.apply {
-            lifecycleScope.launch(Dispatchers.IO) {
-                file = File(_note.filePath)
-                Log.d("TAG", "onViewCreated: ${file!!.name}")
-            }
-            viewModel.apply {
-                uiState.set(UIState.HAS_DATA)
-                getNote(args.note.id).observe(viewLifecycleOwner) {
-                    if (it.reminder != null) {
-                        reminderAvailableState.set(ReminderAvailableState.HAS_REMINDER)
-                        if (currentDate().timeInMillis > args.note.reminder!!) {
-                            reminderCompletionState.set(ReminderCompletionState.COMPLETED)
-                        } else {
-                            reminderCompletionState.set(ReminderCompletionState.ONGOING)
-                        }
-                    } else {
-                        reminderAvailableState.set(ReminderAvailableState.NO_REMINDER)
-                    }
+        lifecycleScope.launch(Dispatchers.IO) {
+            file = File(_note.filePath)
+            Log.d("TAG", "onViewCreated: ${file!!.name}")
+        }
+        viewModel.apply {
+            _uiState.value = UIState.HAS_DATA
+            if (_note.reminder != null) {
+                _reminderAvailableState.value = ReminderAvailableState.HAS_REMINDER
+                if (currentDate().timeInMillis > args.note.reminder!!) {
+                    _reminderCompletionState.value = ReminderCompletionState.COMPLETED
+                } else {
+                    _reminderCompletionState.value = ReminderCompletionState.ONGOING
                 }
             }
-
-            tvTitle.text = getString(R.string.edit_note)
-            btnRecord.setImageDrawable(
-                ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.ic_audio_not_playing,
-                    null
-                )
-            )
         }
+
+        binding.tvTitle.text = getString(R.string.edit_note)
+        binding.btnRecord.setImageDrawable(
+            ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_audio_not_playing,
+                null
+            )
+        )
     }
 
     override fun onResume() {
@@ -236,6 +236,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                             }
                     }
                 }
+
                 fabSaveNote -> {
                     val note = _note.copy(
                         title = etNoteTitle.text.toString().trim(),
@@ -243,7 +244,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                         lastModificationDate = currentDate().timeInMillis
                     )
                     if (note.title.isNotBlank()) {
-                        viewModel.updateNote(note)
+                        this@EditNoteFragment.viewModel.updateNote(note)
                         if (pickedDateTime?.timeInMillis != null && pickedDateTime?.timeInMillis != currentDateTime.timeInMillis)
                             startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note)
                         navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
@@ -292,6 +293,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                             }
                     }
                 }
+
                 fabSaveNote -> {
                     if (etNoteTitle.text.toString().isNotBlank()) {
                         stopRecording()
@@ -303,7 +305,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                             title = etNoteTitle.text.toString().trim(),
                             description = etNoteDescription.text.toString().trim()
                         )
-                        viewModel.insertNote(note)
+                        this@EditNoteFragment.viewModel.insertNote(note)
                         showToast(context.getString(R.string.note_saved))
                         if (pickedDateTime?.timeInMillis != null && pickedDateTime!!.timeInMillis <= currentDateTime.timeInMillis)
                             startAlarm(context, pickedDateTime!!.timeInMillis, note)
@@ -358,7 +360,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         view.apply {
             note = _note
             btnDeleteReminder.setOnClickListener {
-                viewModel.reminderCompletionState.set(ReminderCompletionState.ONGOING)
+                viewModel._reminderCompletionState.value = ReminderCompletionState.ONGOING
                 _note.reminder = null
                 cancelAlarm(requireContext(), _note.id)
                 bottomSheetDialog.dismiss()

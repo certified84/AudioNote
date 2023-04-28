@@ -22,6 +22,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,6 +38,8 @@ import com.certified.audionote.utils.Extensions.flags
 import com.certified.audionote.utils.UIState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
@@ -65,19 +70,22 @@ class HomeFragment : Fragment() {
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        binding.uiState = viewModel.uiState
 
         val path = requireActivity().getExternalFilesDir("/")!!.absolutePath
         val files = File(path).listFiles() as Array<File>
         adapter = NoteRecyclerAdapter(files)
 
-        viewModel.apply {
-            notes.observe(viewLifecycleOwner) {
-                if (it != null && it.isNotEmpty())
-                    uiState.set(UIState.HAS_DATA)
-                else
-                    uiState.set(UIState.EMPTY)
-                adapter.submitList(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.notes.collectLatest {
+                        if (!it.isNullOrEmpty())
+                            viewModel._uiState.value = UIState.HAS_DATA
+                        else
+                            viewModel._uiState.value = UIState.EMPTY
+                        adapter.submitList(it)
+                    }
+                }
             }
         }
 

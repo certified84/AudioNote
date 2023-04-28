@@ -52,7 +52,6 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
         val noteReminder = inputData.getLong("noteReminder", -1L)
 
         val note = Note(
-            noteId,
             noteTitle!!,
             noteDescription!!,
             noteColor,
@@ -61,7 +60,8 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
             noteAudioLength,
             noteFilePath!!,
             noteStarted,
-            noteReminder
+            noteReminder,
+            noteId,
         )
         notifyUser(appContext, note)
 
