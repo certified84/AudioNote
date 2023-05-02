@@ -95,7 +95,7 @@ class HomeFragment : Fragment() {
             btnSettings.setOnClickListener { navController.safeNavigate(HomeFragmentDirections.actionHomeFragmentToSettingsFragment()) }
             fabAddNote.setOnClickListener {
                 val action =
-                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(Note())
+                    HomeFragmentDirections.actionHomeFragmentToAddNoteFragment(Note(audioLength = 0L))
                 navController.safeNavigate(action)
             }
 
