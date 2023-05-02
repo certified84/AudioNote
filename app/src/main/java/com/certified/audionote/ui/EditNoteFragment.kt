@@ -45,7 +45,6 @@ import com.certified.audionote.utils.Extensions.safeNavigate
 import com.certified.audionote.utils.Extensions.showToast
 import com.certified.audionote.utils.ReminderAvailableState
 import com.certified.audionote.utils.ReminderCompletionState
-import com.certified.audionote.utils.UIState
 import com.certified.audionote.utils.cancelAlarm
 import com.certified.audionote.utils.currentDate
 import com.certified.audionote.utils.formatReminderDate
@@ -108,12 +107,12 @@ class EditNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             navController.safeNavigate(EditNoteFragmentDirections.actionEditNoteFragmentToHomeFragment())
         }
         binding.cardAddReminder.setOnClickListener {
-            if (viewModel._reminderAvailableState.value == ReminderAvailableState.NO_REMINDER)
+            if (viewModel.reminderAvailableState.value == ReminderAvailableState.NO_REMINDER)
                 pickDate()
             else
                 openEditReminderDialog()
         }
-        binding.btnShare.setOnClickListener { shareNote(_note) }
+        binding.btnShare.setOnClickListener { shareNote() }
         binding.btnDelete.setOnClickListener { launchDeleteNoteDialog(requireContext()) }
         binding.btnRecord.setOnClickListener { playPauseRecord() }
         binding.fabUpdateNote.setOnClickListener { updateNote() }
@@ -127,7 +126,6 @@ class EditNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             Log.d("TAG", "onViewCreated: ${file!!.name}")
         }
         viewModel.apply {
-            _uiState.value = UIState.HAS_DATA
             if (_note.reminder != null) {
                 _reminderAvailableState.value = ReminderAvailableState.HAS_REMINDER
                 if (currentDate().timeInMillis > args.note.reminder!!) {
@@ -205,7 +203,7 @@ class EditNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             lastModificationDate = currentDate().timeInMillis
         )
         if (note.title.isNotBlank()) {
-            this@EditNoteFragment.viewModel.updateNote(note)
+            viewModel.updateNote(note)
             if (pickedDateTime?.timeInMillis != null && pickedDateTime?.timeInMillis != currentDateTime.timeInMillis)
                 startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note)
             navController.safeNavigate(EditNoteFragmentDirections.actionEditNoteFragmentToHomeFragment())
@@ -223,6 +221,8 @@ class EditNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         val timePickerDialog =
             TimePickerDialog(requireContext(), this, hourOfDay, minuteOfDay, false)
         timePickerDialog.setOnDismissListener {
+            viewModel._reminderAvailableState.value = ReminderAvailableState.HAS_REMINDER
+            viewModel._reminderCompletionState.value = ReminderCompletionState.ONGOING
             _note.reminder = pickedDateTime!!.timeInMillis
             binding.tvReminderDate.text = formatReminderDate(pickedDateTime!!.timeInMillis)
         }
@@ -256,7 +256,7 @@ class EditNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         view.apply {
             note = _note
             btnDeleteReminder.setOnClickListener {
-                viewModel._reminderCompletionState.value = ReminderCompletionState.ONGOING
+                viewModel._reminderAvailableState.value = ReminderAvailableState.NO_REMINDER
                 _note.reminder = null
                 cancelAlarm(requireContext(), _note.id)
                 bottomSheetDialog.dismiss()
@@ -289,7 +289,7 @@ class EditNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     private fun startPlayingRecording() {
         timer = TimerBuilder()
             .startTime(_note.audioLength, TimeUnit.SECONDS)
-            .startFormat("HH:MM:SS")
+            .startFormat(if (_note.audioLength >= 3600000L) "HH:MM:SS" else "MM:SS")
             .onTick { time -> binding.tvTimer.text = time }
             .actionWhen(0, TimeUnit.SECONDS) {
                 binding.btnRecord.setImageDrawable(
@@ -312,7 +312,6 @@ class EditNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                 start()
             }
             timer!!.start()
-            showToast(requireContext().getString(R.string.started_playing_recording))
         } catch (e: IOException) {
             e.printStackTrace()
             Log.d("TAG", "startPlayingRecording: ${e.localizedMessage}")
@@ -340,10 +339,9 @@ class EditNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             stop()
         }
         timer = null
-        showToast(requireContext().getString(R.string.stopped_playing_recording))
     }
 
-    private fun shareNote(note: Note) {
+    private fun shareNote() {
         if (file == null) {
             showToast(requireContext().getString(R.string.file_not_found))
             return

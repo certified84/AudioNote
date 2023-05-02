@@ -37,17 +37,20 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.certified.audionote.R
+import com.certified.audionote.databinding.DialogEditReminderBinding
 import com.certified.audionote.databinding.FragmentAddNoteBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.utils.Extensions.safeNavigate
 import com.certified.audionote.utils.Extensions.showKeyboardFor
 import com.certified.audionote.utils.Extensions.showToast
-import com.certified.audionote.utils.UIState
+import com.certified.audionote.utils.ReminderAvailableState
+import com.certified.audionote.utils.cancelAlarm
 import com.certified.audionote.utils.currentDate
 import com.certified.audionote.utils.filePath
 import com.certified.audionote.utils.formatReminderDate
 import com.certified.audionote.utils.roundOffDecimal
 import com.certified.audionote.utils.startAlarm
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import timerx.Stopwatch
@@ -121,7 +124,12 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                 }
             navController.safeNavigate(AddNoteFragmentDirections.actionAddNoteFragmentToHomeFragment())
         }
-        binding.cardAddReminder.setOnClickListener { pickDate() }
+        binding.cardAddReminder.setOnClickListener {
+            if (viewModel.reminderAvailableState.value == ReminderAvailableState.NO_REMINDER)
+                pickDate()
+            else
+                openEditReminderDialog()
+        }
         binding.btnRecord.setOnClickListener { recordAudio() }
         binding.fabSaveNote.setOnClickListener {
             if (binding.etNoteTitle.text.toString().isNotBlank())
@@ -131,8 +139,6 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                 binding.etNoteTitle.requestFocus()
             }
         }
-
-        viewModel._uiState.value = UIState.EMPTY
     }
 
     override fun onResume() {
@@ -212,6 +218,7 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         val timePickerDialog =
             TimePickerDialog(requireContext(), this, hourOfDay, minuteOfDay, false)
         timePickerDialog.setOnDismissListener {
+            viewModel._reminderAvailableState.value = ReminderAvailableState.HAS_REMINDER
             _note.reminder = pickedDateTime!!.timeInMillis
             binding.tvReminderDate.text = formatReminderDate(pickedDateTime!!.timeInMillis)
         }
@@ -237,6 +244,26 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         val datePickerDialog =
             DatePickerDialog(requireContext(), this, startYear, startMonth, startDay)
         datePickerDialog.show()
+    }
+
+    private fun openEditReminderDialog() {
+        val view = DialogEditReminderBinding.inflate(layoutInflater)
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        view.apply {
+            note = _note
+            btnDeleteReminder.setOnClickListener {
+                viewModel._reminderAvailableState.value = ReminderAvailableState.NO_REMINDER
+                _note.reminder = null
+                bottomSheetDialog.dismiss()
+            }
+            btnModifyReminder.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                pickDate()
+            }
+        }
+        bottomSheetDialog.edgeToEdgeEnabled
+        bottomSheetDialog.setContentView(view.root)
+        bottomSheetDialog.show()
     }
 
     private fun saveNote() {

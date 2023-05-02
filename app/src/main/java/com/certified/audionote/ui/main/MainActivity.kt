@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build()
             val channel = NotificationChannel(
                 getString(R.string.channelId),
-                getString(R.string.audio_notes_channel),
+                getString(R.string.app_name),
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             channel.enableVibration(true)
