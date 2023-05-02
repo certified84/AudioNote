@@ -18,7 +18,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/onboardingFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -82,24 +82,6 @@
             app:popUpTo="@id/settingsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.certified.audionote.ui.SplashFragment"
-        android:label="SplashFragment"
-        tools:layout="@layout/fragment_splash">
-        <action
-            android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_splashFragment_to_onboardingFragment"
-            app:destination="@id/onboardingFragment"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
         android:id="@+id/aboutFragment"
         android:name="com.certified.audionote.ui.AboutFragment"
         android:label="fragment_about"
@@ -120,7 +102,7 @@
         <action
             android:id="@+id/action_onboardingFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/onboardingFragment"
+            app:popUpTo="@id/navigation"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

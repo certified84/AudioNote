@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.certified.audionote.ui
+package com.certified.audionote.ui.main
 
 import android.Manifest
 import android.app.NotificationChannel
@@ -26,20 +26,33 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
 import com.certified.audionote.R
 import com.certified.audionote.databinding.ActivityMainBinding
+import com.certified.audionote.utils.Extensions.dataStore
+import com.certified.audionote.utils.PreferenceKeys
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: MainViewModel by viewModels()
+    private lateinit var navController: NavController
 
     private val requestNotificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -53,8 +66,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val splashScreen = installSplashScreen()
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager =
@@ -77,6 +95,12 @@ class MainActivity : AppCompatActivity() {
 
         isDarkModeEnabled()
         checkNotificationPermission()
+        splashScreen.setKeepOnScreenCondition { viewModel.isLoading.value }
+        lifecycleScope.launch(Dispatchers.Main) {
+            this@MainActivity.dataStore.data.map { it[PreferenceKeys.FIRST_TIME_LOGIN] }.collect {
+                if (it != null) navController.navigate(R.id.homeFragment)
+            }
+        }
     }
 
     private fun isDarkModeEnabled() {
@@ -107,6 +131,9 @@ class MainActivity : AppCompatActivity() {
             else
                 requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+    }
+
+    private suspend fun isFirstLogin() {
     }
 
     override fun onDestroy() {

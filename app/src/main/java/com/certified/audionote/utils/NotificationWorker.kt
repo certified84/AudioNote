@@ -30,7 +30,7 @@ import androidx.work.WorkerParameters
 import com.certified.audionote.R
 import com.certified.audionote.model.Note
 import com.certified.audionote.ui.EditNoteFragmentArgs
-import com.certified.audionote.ui.MainActivity
+import com.certified.audionote.ui.main.MainActivity
 
 class NotificationWorker(private val appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
