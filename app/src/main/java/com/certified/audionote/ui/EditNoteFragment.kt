@@ -46,6 +46,7 @@ import com.certified.audionote.R
 import com.certified.audionote.databinding.DialogEditReminderBinding
 import com.certified.audionote.databinding.FragmentEditNoteBinding
 import com.certified.audionote.model.Note
+import com.certified.audionote.utils.Extensions.safeNavigate
 import com.certified.audionote.utils.Extensions.showKeyboardFor
 import com.certified.audionote.utils.Extensions.showToast
 import com.certified.audionote.utils.ReminderAvailableState
@@ -119,7 +120,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
 
         navController = Navigation.findNavController(view)
 
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         args.note.let {
             _note = it
@@ -127,7 +128,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
         }
 
         binding.btnBack.setOnClickListener {
-            navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+            navController.safeNavigate(EditNoteFragmentDirections.actionEditNoteFragmentToHomeFragment())
         }
         binding.cardAddReminder.setOnClickListener {
             if (viewModel._reminderAvailableState.value == ReminderAvailableState.NO_REMINDER)
@@ -262,7 +263,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                         this@EditNoteFragment.viewModel.updateNote(note)
                         if (pickedDateTime?.timeInMillis != null && pickedDateTime?.timeInMillis != currentDateTime.timeInMillis)
                             startAlarm(requireContext(), pickedDateTime!!.timeInMillis, note)
-                        navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                        navController.safeNavigate(EditNoteFragmentDirections.actionEditNoteFragmentToHomeFragment())
                     } else {
                         showToast(requireContext().getString(R.string.title_required))
                         etNoteTitle.requestFocus()
@@ -328,7 +329,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
                         showToast(context.getString(R.string.note_saved))
                         if (pickedDateTime?.timeInMillis != null && pickedDateTime!!.timeInMillis <= currentDateTime.timeInMillis)
                             startAlarm(context, pickedDateTime!!.timeInMillis, note)
-                        navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                        navController.safeNavigate(EditNoteFragmentDirections.actionEditNoteFragmentToHomeFragment())
                     } else {
                         showToast(context.getString(R.string.title_required))
                         etNoteTitle.requestFocus()
@@ -403,7 +404,7 @@ class EditNoteFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDa
             setPositiveButton(context.getString(R.string.yes)) { _, _ ->
                 viewModel.deleteNote(_note)
                 lifecycleScope.launch(Dispatchers.IO) { file?.delete() }
-                navController.navigate(R.id.action_editNoteFragment_to_homeFragment)
+                navController.safeNavigate(EditNoteFragmentDirections.actionEditNoteFragmentToHomeFragment())
             }
             show()
         }

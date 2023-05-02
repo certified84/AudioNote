@@ -35,6 +35,7 @@ import com.certified.audionote.databinding.FragmentHomeBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.repository.Repository
 import com.certified.audionote.utils.Extensions.flags
+import com.certified.audionote.utils.Extensions.safeNavigate
 import com.certified.audionote.utils.UIState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,7 +70,7 @@ class HomeFragment : Fragment() {
         navController = Navigation.findNavController(view)
 
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val path = requireActivity().getExternalFilesDir("/")!!.absolutePath
         val files = File(path).listFiles() as Array<File>
@@ -91,11 +92,11 @@ class HomeFragment : Fragment() {
 
         binding.apply {
 
-            btnSettings.setOnClickListener { navController.navigate(R.id.action_homeFragment_to_settingsFragment) }
+            btnSettings.setOnClickListener { navController.safeNavigate(HomeFragmentDirections.actionHomeFragmentToSettingsFragment()) }
             fabAddNote.setOnClickListener {
                 val action =
                     HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(Note())
-                navController.navigate(action)
+                navController.safeNavigate(action)
             }
 
             setUpRecyclerView(recyclerViewNotes)
@@ -133,7 +134,7 @@ class HomeFragment : Fragment() {
             override fun onItemClick(item: Note) {
                 val action =
                     HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(item)
-                navController.navigate(action)
+                navController.safeNavigate(action)
             }
         })
     }
