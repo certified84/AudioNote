@@ -23,12 +23,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.databinding.ItemNoteBinding
 import com.certified.audionote.model.Note
-import java.io.File
 
-class NoteRecyclerAdapter(private val files: Array<File>) :
+class NoteRecyclerAdapter(private val onItemClick: (note: Note) -> Unit) :
     ListAdapter<Note, NoteRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
-
-    private lateinit var listener: OnItemClickedListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -51,25 +48,15 @@ class NoteRecyclerAdapter(private val files: Array<File>) :
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(getItem(position))
-                }
+                if (position != RecyclerView.NO_POSITION)
+                    onItemClick.invoke(getItem(position))
             }
         }
-    }
-
-    interface OnItemClickedListener {
-        fun onItemClick(item: Note)
-    }
-
-    fun setOnItemClickedListener(listener: OnItemClickedListener) {
-        this.listener = listener
     }
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {
             override fun areItemsTheSame(oldItem: Note, newItem: Note) = oldItem.id == newItem.id
-
             override fun areContentsTheSame(oldItem: Note, newItem: Note) = oldItem == newItem
         }
     }

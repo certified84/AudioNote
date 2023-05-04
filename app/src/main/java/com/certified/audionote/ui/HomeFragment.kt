@@ -22,25 +22,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.certified.audionote.R
 import com.certified.audionote.adapter.NoteRecyclerAdapter
 import com.certified.audionote.databinding.FragmentHomeBinding
 import com.certified.audionote.model.Note
 import com.certified.audionote.repository.Repository
 import com.certified.audionote.utils.Extensions.flags
-import com.certified.audionote.utils.UIState
+import com.certified.audionote.utils.Extensions.safeNavigate
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -53,11 +46,9 @@ class HomeFragment : Fragment() {
     lateinit var repository: Repository
     private val viewModel: NotesViewModel by viewModels()
     private lateinit var navController: NavController
-    private lateinit var adapter: NoteRecyclerAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -69,44 +60,34 @@ class HomeFragment : Fragment() {
         navController = Navigation.findNavController(view)
 
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        val path = requireActivity().getExternalFilesDir("/")!!.absolutePath
-        val files = File(path).listFiles() as Array<File>
-        adapter = NoteRecyclerAdapter(files)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.notes.collectLatest {
-                        if (!it.isNullOrEmpty())
-                            viewModel._uiState.value = UIState.HAS_DATA
-                        else
-                            viewModel._uiState.value = UIState.EMPTY
-                        adapter.submitList(it)
-                    }
-                }
+        NoteRecyclerAdapter { note ->
+            val action = HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(note)
+            navController.safeNavigate(action)
+        }.apply {
+            val layoutManager = GridLayoutManager(requireContext(), 2)
+            binding.recyclerViewNotes.also {
+                it.layoutManager = layoutManager
+                it.adapter = this
             }
         }
 
         binding.apply {
-
-            btnSettings.setOnClickListener { navController.navigate(R.id.action_homeFragment_to_settingsFragment) }
+            btnSettings.setOnClickListener { navController.safeNavigate(HomeFragmentDirections.actionHomeFragmentToSettingsFragment()) }
             fabAddNote.setOnClickListener {
                 val action =
-                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(Note())
-                navController.navigate(action)
+                    HomeFragmentDirections.actionHomeFragmentToAddNoteFragment(Note(audioLength = 0L))
+                navController.safeNavigate(action)
             }
-
-            setUpRecyclerView(recyclerViewNotes)
 
             val bottomSheetBehavior =
                 BottomSheetBehavior.from(bottomSheetDialogLayout.bottomSheetDialog)
             bottomSheetBehavior.addBottomSheetCallback(object :
                 BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (newState == BottomSheetBehavior.STATE_HIDDEN)
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    if (newState == BottomSheetBehavior.STATE_HIDDEN) bottomSheetBehavior.state =
+                        BottomSheetBehavior.STATE_COLLAPSED
                 }
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -114,28 +95,11 @@ class HomeFragment : Fragment() {
                 }
             })
             bottomSheetDialogLayout.linearLayoutCompat.setOnClickListener {
-                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED)
-                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                else
-                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) bottomSheetBehavior.state =
+                    BottomSheetBehavior.STATE_EXPANDED
+                else bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
-    }
-
-    private fun setUpRecyclerView(recyclerViewNotes: RecyclerView) {
-        val layoutManager =
-            GridLayoutManager(requireContext(), 2)
-        recyclerViewNotes.also {
-            it.layoutManager = layoutManager
-            it.adapter = adapter
-        }
-        adapter.setOnItemClickedListener(object : NoteRecyclerAdapter.OnItemClickedListener {
-            override fun onItemClick(item: Note) {
-                val action =
-                    HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(item)
-                navController.navigate(action)
-            }
-        })
     }
 
     override fun onResume() {

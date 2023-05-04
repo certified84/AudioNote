@@ -39,7 +39,7 @@ class NotesViewModel @Inject constructor(private val repository: Repository) : V
     val _reminderCompletionState = MutableStateFlow(ReminderCompletionState.ONGOING)
     val reminderCompletionState = _reminderCompletionState.asStateFlow()
 
-    val _uiState = MutableStateFlow(UIState.LOADING)
+    private val _uiState = MutableStateFlow(UIState.LOADING)
     val uiState = _uiState.asStateFlow()
 
     private val _notes = MutableStateFlow<List<Note>?>(null)
@@ -56,6 +56,10 @@ class NotesViewModel @Inject constructor(private val repository: Repository) : V
         viewModelScope.launch {
             repository.allNotes.collect {
                 _notes.value = it
+                if (it.isNullOrEmpty())
+                    _uiState.value = UIState.EMPTY
+                else
+                    _uiState.value = UIState.HAS_DATA
             }
         }
     }

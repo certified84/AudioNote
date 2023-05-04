@@ -26,6 +26,7 @@ import androidx.navigation.Navigation
 import com.certified.audionote.R
 import com.certified.audionote.databinding.FragmentSettingsBinding
 import com.certified.audionote.utils.Extensions.flags
+import com.certified.audionote.utils.Extensions.safeNavigate
 
 class SettingsFragment : Fragment() {
 
@@ -49,8 +50,8 @@ class SettingsFragment : Fragment() {
         navController = Navigation.findNavController(view)
 
         binding.apply {
-            btnBack.setOnClickListener { navController.navigate(R.id.action_settingsFragment_to_homeFragment) }
-            groupAbout.setOnClickListener { navController.navigate(R.id.action_settingsFragment_to_aboutFragment) }
+            btnBack.setOnClickListener { navController.safeNavigate(SettingsFragmentDirections.actionSettingsFragmentToHomeFragment()) }
+            groupAbout.setOnClickListener { navController.safeNavigate(SettingsFragmentDirections.actionSettingsFragmentToAboutFragment()) }
         }
     }
 

@@ -30,6 +30,7 @@ import com.certified.audionote.adapter.ViewPagerAdapter
 import com.certified.audionote.databinding.FragmentOnboardingBinding
 import com.certified.audionote.model.SliderItem
 import com.certified.audionote.utils.Extensions.dataStore
+import com.certified.audionote.utils.Extensions.safeNavigate
 import com.certified.audionote.utils.PreferenceKeys
 import kotlinx.coroutines.launch
 
@@ -40,8 +41,7 @@ class OnboardingFragment : Fragment() {
     private lateinit var sliderItem: ArrayList<SliderItem>
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentOnboardingBinding.inflate(layoutInflater, container, false)
@@ -59,7 +59,7 @@ class OnboardingFragment : Fragment() {
                 requireContext().dataStore.edit {
                     it[PreferenceKeys.FIRST_TIME_LOGIN] = false
                 }
-                findNavController().navigate(R.id.action_onboardingFragment_to_homeFragment)
+                findNavController().safeNavigate(OnboardingFragmentDirections.actionOnboardingFragmentToHomeFragment())
             }
         }
     }
@@ -73,19 +73,22 @@ class OnboardingFragment : Fragment() {
         sliderItem = ArrayList()
         sliderItem.add(
             SliderItem(
-                R.drawable.ic_undraw_empty, getString(R.string.view_pager_title_audio_recording),
+                R.drawable.ic_undraw_empty,
+                getString(R.string.view_pager_title_audio_recording),
                 getString(R.string.view_pager_description_audio_recording)
             )
         )
         sliderItem.add(
             SliderItem(
-                R.drawable.ic_undraw_empty, getString(R.string.view_pager_title_notification),
+                R.drawable.ic_undraw_empty,
+                getString(R.string.view_pager_title_notification),
                 getString(R.string.view_pager_description_notification)
             )
         )
         sliderItem.add(
             SliderItem(
-                R.drawable.ic_undraw_empty, getString(R.string.view_pager_title_dark_mode),
+                R.drawable.ic_undraw_empty,
+                getString(R.string.view_pager_title_dark_mode),
                 getString(R.string.view_pager_description_dark_mode)
             )
         )

@@ -23,8 +23,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.certified.audionote.R
 import com.certified.audionote.databinding.FragmentAboutBinding
+import com.certified.audionote.utils.Extensions.safeNavigate
 
 class AboutFragment : Fragment() {
 
@@ -46,7 +46,7 @@ class AboutFragment : Fragment() {
 
         navController = Navigation.findNavController(view)
 
-        binding.btnBack.setOnClickListener { navController.navigate(R.id.action_aboutFragment_to_settingsFragment) }
+        binding.btnBack.setOnClickListener { navController.safeNavigate(AboutFragmentDirections.actionAboutFragmentToSettingsFragment()) }
     }
 
     override fun onDestroyView() {
