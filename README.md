@@ -7,6 +7,10 @@ A simple open source audio note-taking 📝 Android application built to describ
 
 [![AudioNotes](https://github.com/certified84/AudioNote/blob/master/app/src/main/res/drawable/logo.png)](https://github.com/certified84/AudioNote/releases/latest)
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.certified.audionote/)
+
 <br />
 
 ***Find the design on figma here👇***
