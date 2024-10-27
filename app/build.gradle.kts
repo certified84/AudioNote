@@ -98,7 +98,7 @@ dependencies {
 
 //    Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-compiler:2.44")
+    kapt("com.google.dagger:hilt-compiler:2.51.1")
 
 //    TimerX
     implementation("com.github.arsvechkarev:TimerX:3.1.0")
