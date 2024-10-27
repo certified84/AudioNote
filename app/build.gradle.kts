@@ -101,8 +101,8 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.44")
 
 //    TimerX
-    implementation("com.arsvechkarev:timerx:2.3.2")
+    implementation("com.github.arsvechkarev:TimerX:3.1.0")
 
 //    page indicator
-    implementation("com.romandanylyk:pageindicatorview:1.0.3@aar")
+    implementation("com.romandanylyk:pageindicatorview:1.0.3")
 }
