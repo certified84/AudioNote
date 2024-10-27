@@ -56,6 +56,7 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        compose = true
     }
     
     namespace = "com.certified.audionote"
@@ -75,34 +76,59 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.9.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
     
+    //  Compose
+    implementation(platform("androidx.compose:compose-bom:2024.10.00"))
+    implementation("androidx.compose.material3:material3")
+    
+    // Android Studio Preview support
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    // Optional - Add full set of material icons
+    implementation("androidx.compose.material:material-icons-extended")
+    // Optional - Add window size utils
+    implementation("androidx.compose.material3.adaptive:adaptive")
+    // Optional - Integration with activities
+    implementation("androidx.activity:activity-compose:1.9.3")
+    // Optional - Integration with ViewModels
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    
+    //  Navigation compose
+    implementation("androidx.navigation:navigation-compose:2.8.3")
+    
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.truth:truth:1.1.3")
+    
+    // UI Tests
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
-//    intuit ssp/sdp
+    //    intuit ssp/sdp
     implementation("com.intuit.ssp:ssp-android:1.1.0")
     implementation("com.intuit.sdp:sdp-android:1.1.0")
 
-//    Coroutines
+    //    Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
 
-//    Room persistence library
+    //    Room persistence library
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
 
-//    Datastore
+    //    Datastore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
-//    Hilt
+    //    Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-compiler:2.51.1")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
 
-//    TimerX
+    //    TimerX
     implementation("com.github.arsvechkarev:TimerX:3.1.0")
 
-//    page indicator
+    //    page indicator
     implementation("com.romandanylyk:pageindicatorview:1.0.3")
 }
